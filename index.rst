@@ -1,22 +1,13 @@
-.. Fortran90 documentation master file, created by
-   sphinx-quickstart on Fri Jan 20 23:59:21 2012.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+Fortran 90
+==========
 
-Welcome to Fortran90's documentation!
-=====================================
+External links:
+
+* `Fortran Best Practices <https://github.com/qsnake/qsnake/wiki/Fortran-best-practices>`_
 
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
+    src/rosetta.rst
