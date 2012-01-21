@@ -11,3 +11,4 @@ Contents:
     :maxdepth: 2
 
     src/rosetta.rst
+    src/gotchas.rst
