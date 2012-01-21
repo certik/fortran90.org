@@ -4,6 +4,7 @@ set -e
 
 git checkout gh-pages
 cp -r _build/html/* .
+rm -r _build
 git add .
 git commit -a -m "Automatic commit"
 git checkout master
