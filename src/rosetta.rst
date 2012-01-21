@@ -359,4 +359,56 @@ Fortran module ``constants.f90``::
     complex(dp), parameter :: I = (0, 1)
     end module
 
+Strings and Formatting
+----------------------
+
+The functionality of both Python and Fortran is pretty much equivalent,
+only the syntax is a litte different.
+
+In both Python and Fortran, strings can be delimited by either ``"``
+or `````.
+
+There are three general ways to print formatted strings:
+
++-----------------------------------------------------------+----------------------------------------------------------------------+
+| Python                                                    |           Fortran                                                    |
++-----------------------------------------------------------+----------------------------------------------------------------------+
+|::                                                         |::                                                                    |
+|                                                           |                                                                      |
+| print "Integer", 5, "and float", 5.5, "works fine."       | use utils, only: str                                                 |
+| print "Integer " + str(5) + " and float " + str(5.5) + "."| print *, "Integer", 5, "and float", 5.5, "works fine."               |
+| print "Integer %d and float %f." % (5, 5.5)               | print *, "Integer " // str(5) // " and float " // str(5.5_dp) // "." |
+|                                                           | print '("Integer ", i0, " and float ", f0.6, ".")', 5, 5.5           |
+|                                                           |                                                                      |
+|Output::                                                   |Output::                                                              |
+|                                                           |                                                                      |
+| Integer 5 and float 5.5 works fine.                       |  Integer           5 and float   5.5000000     works fine.           |
+| Integer 5 and float 5.5.                                  |  Integer 5 and float 5.500000.                                       |
+| Integer 5 and float 5.500000.                             | Integer 5 and float 5.500000.                                        |
++-----------------------------------------------------------+----------------------------------------------------------------------+
+
+And here are some of the frequently used formats:
+
++-----------------------------------------------------------+----------------------------------------------------------------------+
+| Python                                                    |           Fortran                                                    |
++-----------------------------------------------------------+----------------------------------------------------------------------+
+|::                                                         |::                                                                    |
+|                                                           |                                                                      |
+| print "%3d" % 5                                           | print '(i3)', 5                                                      |
+| print "%03d" % 5                                          | print '(i3.3)', 5                                                    |
+| print "%s" % "text"                                       | print '(a)', "text"                                                  |
+| print "%15.7f" % 5.5                                      | print '(f15.7)', 5.5_dp                                              |
+| print "%23.16e" % -5.5                                    | print '(es23.16)', -5.5_dp                                           |
+|                                                           |                                                                      |
+|Output::                                                   |Output::                                                              |
+|                                                           |                                                                      |
+|   5                                                       |   5                                                                  |
+| 005                                                       | 005                                                                  |
+| text                                                      | text                                                                 |
+|       5.5000000                                           |       5.5000000                                                      |
+| -5.5000000000000000e+00                                   | -5.5000000000000000E+00                                              |
+|                                                           |                                                                      |
++-----------------------------------------------------------+----------------------------------------------------------------------+
+
+
 .. ::   vim: set nowrap textwidth=0 syn=off: ~
