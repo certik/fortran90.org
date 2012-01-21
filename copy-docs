@@ -1,0 +1,9 @@
+#! /bin/sh
+
+set -e
+
+git checkout gh-pages
+cp -r _build/html/* .
+git add .
+git commit -a -m "Automatic commit"
+git checkout master
