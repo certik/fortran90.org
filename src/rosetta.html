@@ -26,6 +26,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Fortran90 1.0 documentation" href="../index.html" />
+    <link rel="next" title="Gotchas" href="gotchas.html" />
     <link rel="prev" title="Fortran 90" href="../index.html" /> 
   </head>
   <body>
@@ -35,6 +36,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="gotchas.html" title="Gotchas"
+             accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="../index.html" title="Fortran 90"
              accesskey="P">previous</a> |</li>
@@ -49,6 +53,51 @@
             
   <div class="section" id="python-fortran-rosetta-stone">
 <h1>Python Fortran Rosetta Stone<a class="headerlink" href="#python-fortran-rosetta-stone" title="Permalink to this headline">¶</a></h1>
+<p>Python with NumPy and Fortran are very similar in terms
+of expressiveness and features. This rosetta stone
+shows how to implement many common idioms in both languages side by side.</p>
+<div class="section" id="arrays">
+<h2>Arrays<a class="headerlink" href="#arrays" title="Permalink to this headline">¶</a></h2>
+<p>Arrays are builtin in Fortran, and available in the NumPy module in Python.
+The usage is identical, except for the following differences:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Fortran counts from 1, NumPy from 0</li>
+<li>In C the array is stored row wise in the
+memory (by default NumPy uses C storage), while in Fortran it is stored
+column wise (this only matters in the next two points)</li>
+<li>By default <tt class="docutils literal"><span class="pre">reshape</span></tt> uses Fortran ordering in Fortran, and C ordering
+in NumPy (in both cases an optional argument <tt class="docutils literal"><span class="pre">order</span></tt> allows to use the
+other ordering). This also matters when <tt class="docutils literal"><span class="pre">reshape</span></tt> is used implicitly in
+other operations like flattening.</li>
+<li>The first index is the fastest in Fortran, while in NumPy, the last index
+is the fastest</li>
+<li>By default NumPy prints the 2d array nicely, while Fortran flattens it
+(column wise) first (you need to write a subroutine to print a 2D array
+nicely)</li>
+</ul>
+</div></blockquote>
+<p>Everything else is the same, in particular:</p>
+<blockquote>
+<div><ul class="simple">
+<li>There is one-to-one correspondence between NumPy and Fortran array
+operations and things can be expressed
+the same easily/naturally in both languages</li>
+<li>For 2D arrays, the first index is a row index, the second is the column
+index (just like in mathematics)</li>
+<li>NumPy and Fortran arrays are equivalent if they have the same shape and
+same elements corresponding to the same index (it doesn&#8217;t matter what the
+internal memory storage is)</li>
+<li>Any array expression involving mathematical functions is allowed, for
+example <tt class="docutils literal"><span class="pre">a**2</span> <span class="pre">+</span> <span class="pre">2*a</span> <span class="pre">+</span> <span class="pre">exp(a)</span></tt>, <tt class="docutils literal"><span class="pre">sin(a)</span></tt>, <tt class="docutils literal"><span class="pre">a</span> <span class="pre">*</span> <span class="pre">b</span></tt> and
+<tt class="docutils literal"><span class="pre">a</span> <span class="pre">+</span> <span class="pre">b</span></tt> (it operates element wise)</li>
+<li>You need to use a function to multiply two matrices using matrix
+multiplication</li>
+<li>Advanced indexing/slicing</li>
+<li>Arrays can be of any integer, real or complex type</li>
+<li>...</li>
+</ul>
+</div></blockquote>
 <table border="1" class="docutils">
 <colgroup>
 <col width="49%" />
@@ -68,7 +117,7 @@
 </pre></div>
 </div>
 </td>
-<td><div class="first last highlight-python"><pre>real(dp) :: a(3)
+<td><div class="first last highlight-python"><pre>integer :: a(3)
 a = [1, 2, 3]
 print *, shape(a)
 print *, size(a)
@@ -78,64 +127,576 @@ print *, sum(a)</pre>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><div class="first last highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="nb">min</span>
+<tr class="row-odd"><td><div class="first highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">reshape</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">order</span><span class="o">=</span><span class="s">&quot;F&quot;</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+<span class="k">print</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+<span class="k">print</span>
+<span class="k">print</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+<span class="k">print</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="last highlight-python"><pre>[1 2 3]
+[4 5 6]
+
+[1 3 5]
+[2 4 6]</pre>
+</div>
+</td>
+<td><div class="first highlight-python"><pre>integer :: a(2, 3), b(2, 3)
+a = reshape([1, 2, 3, 4, 5, 6], [2, 3], order=[2, 1])
+b = reshape([1, 2, 3, 4, 5, 6], [2, 3])
+print *, a(1, :)
+print *, a(2, :)
+print *
+print *, b(1, :)
+print *, b(2, :)</pre>
+</div>
+<p>Output:</p>
+<div class="last highlight-python"><pre>1           2           3
+4           5           6
+
+1           3           5
+2           4           6</pre>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="first highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="nb">min</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]])</span>
 <span class="k">print</span> <span class="n">shape</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 <span class="k">print</span> <span class="n">size</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="k">print</span> <span class="n">size</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="k">print</span> <span class="nb">max</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 <span class="k">print</span> <span class="nb">min</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="k">print</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="k">print</span> <span class="n">a</span>
 </pre></div>
 </div>
+<p>Output:</p>
+<div class="last highlight-python"><pre>(2, 3)
+2
+3
+6
+1
+1 2 3
+4 5 6
+[[1 2 3]
+ [4 5 6]]</pre>
+</div>
 </td>
-<td><div class="first last highlight-python"><pre>real(dp) :: a(2, 3)
-a = reshape([1, 2, 3, 4, 5, 6], [2, 3])
+<td><div class="first highlight-python"><pre>integer :: a(2, 3)
+a = reshape([1, 2, 3, 4, 5, 6], [2, 3], order=[2, 1]))
 print *, shape(a)
 print *, size(a, 1)
 print *, size(a, 2)
+print *, maxval(a)
 print *, minval(a)
-print *, maxval(a)</pre>
+print *, a(1, 1), a(1, 2), a(1, 3)
+print *, a(2, 1), a(2, 2), a(2, 3)
+print *, a</pre>
+</div>
+<p>Output (whitespace trimmed):</p>
+<div class="last highlight-python"><pre>2 3
+2
+3
+6
+1
+1 2 3
+4 5 6
+1 4 2 5 3 6</pre>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td>&nbsp;</td>
-<td><div class="first last highlight-python"><pre>where (evalues &lt; ef - fdtol*kbt)
-   eweights = 1._dp
-elsewhere( evalues &gt; ef + fdtol*kbt)
-   eweights = 0._dp
+<tr class="row-odd"><td><div class="first last highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="nb">all</span><span class="p">,</span> <span class="nb">any</span>
+<span class="n">i</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="nb">all</span><span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="nb">any</span><span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+</pre></div>
+</div>
+</td>
+<td><div class="first last highlight-python"><pre>integer :: i(3)
+i = [1, 2, 3]
+all(i == [1, 2, 3])
+any(i == [2, 2, 3])</pre>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="first last highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">empty</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">empty</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">b</span><span class="p">[:]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">b</span><span class="p">[</span><span class="n">a</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">b</span><span class="p">[</span><span class="n">a</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">a</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">]</span> <span class="o">-</span> <span class="mi">3</span>
+</pre></div>
+</div>
+</td>
+<td><div class="first last highlight-python"><pre>integer :: a(10), b(10)
+a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+where (a &gt; 5)
+    b = a - 3
+elsewhere (a &gt; 2)
+    b = 1
 elsewhere
-   eweights = evalues + 1._dp
+    b = 0
 end where</pre>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td>&nbsp;</td>
-<td><div class="first last highlight-python"><div class="highlight"><pre><span class="n">idos</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">matmul</span><span class="p">(</span><span class="n">eweights</span><span class="p">,</span><span class="n">kweights</span><span class="p">))</span>
+<tr class="row-odd"><td><div class="first last highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">empty</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">empty</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="mi">3</span>
+    <span class="k">elif</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 </pre></div>
 </div>
 </td>
-</tr>
-<tr class="row-even"><td>&nbsp;</td>
-<td><div class="first last highlight-python"><pre>integer :: i(3)
-i = [1, 2, 3]
-all(i == [1, 2, 3])</pre>
+<td><div class="first last highlight-python"><pre>integer :: a(10), b(10)
+a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+where (a &gt; 5)
+    b = a - 3
+elsewhere (a &gt; 2)
+    b = 1
+elsewhere
+    b = 0
+end where</pre>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><div class="first last highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">shape</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">]])</span>
-<span class="k">print</span> <span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<tr class="row-even"><td><div class="first last highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="nb">sum</span><span class="p">,</span> <span class="n">logical_and</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="n">size</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+<span class="k">print</span> <span class="nb">sum</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="k">print</span> <span class="nb">sum</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">logical_and</span><span class="p">(</span><span class="n">a</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">,</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">)])</span>
+<span class="n">o</span> <span class="o">=</span> <span class="n">ones</span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&quot;int&quot;</span><span class="p">)</span>
+<span class="k">print</span> <span class="nb">sum</span><span class="p">(</span><span class="n">o</span><span class="p">[</span><span class="n">logical_and</span><span class="p">(</span><span class="n">a</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">,</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">)])</span>
 </pre></div>
 </div>
 </td>
-<td><div class="first last highlight-python"><pre>integer :: x(5, 2)
-x = reshape([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], shape(x))
-print *, shape(x)</pre>
+<td><div class="first last highlight-python"><pre>integer :: a(10)
+a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+print *, sum(a)
+print *, sum(a, mask=a &gt; 2 .and. a &lt; 6)
+print *, count(a &gt; 2 .and. a &lt; 6)</pre>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="first highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">dot</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]])</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">array</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]])</span>
+<span class="k">print</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span>
+<span class="k">print</span> <span class="n">dot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="last highlight-python"><pre>[[ 2  6]
+ [12 20]]
+[[10 13]
+ [22 29]]</pre>
+</div>
+</td>
+<td><div class="first highlight-python"><pre>integer :: a(2, 2), b(2, 2)
+a = reshape([1, 2, 3, 4], [2, 2], order=[2, 1])
+b = reshape([2, 3, 4, 5], [2, 2], order=[2, 1])
+print *, a * b
+print *, matmul(a, b)</pre>
+</div>
+<p>Output:</p>
+<div class="last highlight-python"><pre> 2          12           6          20
+10          22          13          29</pre>
 </div>
 </td>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="section" id="modules">
+<h2>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h2>
+<p>Fortran modules work just like Python modules. Differences:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Fortran modules cannot be nested</li>
+<li>One can specify private module symbols in Fortran</li>
+</ul>
+</div></blockquote>
+<p>Identical features:</p>
+<blockquote>
+<div><ul class="simple">
+<li>A module contains variables, types and functions/subroutines</li>
+<li>By default all variables/types/functions can be accessed from other
+modules, but one can change this by explicitly specifying which symbols
+are private or public (in Python this only works for implicit imports)</li>
+<li>Symbols that are public don&#8217;t pollute the global namespace, but need
+to be explicitly imported from the module in order to use them</li>
+<li>One can use explicit or implicit imports (explicit imports are
+recommended)</li>
+</ul>
+</div></blockquote>
+<p>One creates the module:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="49%" />
+<col width="51%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Python</td>
+<td>Fortran</td>
+</tr>
+<tr class="row-even"><td><p class="first">File <tt class="docutils literal"><span class="pre">a.py</span></tt>:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="n">i</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">5</span>
+
+<span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">5</span>
+</pre></div>
+</div>
+</td>
+<td><p class="first">File <tt class="docutils literal"><span class="pre">a.f90</span></tt>:</p>
+<div class="last highlight-python"><pre>module a
+implicit none
+
+integer :: i = 5
+
+contains
+
+integer function f(x) result(r)
+integer, intent(in) :: x
+r = x + 5
+end function
+
+integer function g(x) result(r)
+integer, intent(in) :: x
+r = x - 5
+end function
+
+end module</pre>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>And uses it from the main program as follows:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="49%" />
+<col width="51%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Python</td>
+<td>Fortran</td>
+</tr>
+<tr class="row-even"><td><p class="first">File <tt class="docutils literal"><span class="pre">main.py</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">a</span> <span class="kn">import</span> <span class="n">f</span><span class="p">,</span> <span class="n">i</span>
+
+<span class="k">print</span> <span class="n">f</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">i</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="mi">8</span>
+<span class="mi">5</span>
+</pre></div>
+</div>
+</td>
+<td><p class="first">File <tt class="docutils literal"><span class="pre">main.f90</span></tt>:</p>
+<div class="highlight-python"><pre>program main
+use a, only: f, i
+implicit none
+print *, f(3)
+print *, i
+end program</pre>
+</div>
+<p>Output:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="mi">8</span>
+<span class="mi">5</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>In order to specify which symbols are public and private, one would use:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="49%" />
+<col width="51%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Python</td>
+<td>Fortran</td>
+</tr>
+<tr class="row-even"><td><p class="first">File <tt class="docutils literal"><span class="pre">a.py</span></tt>:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;i&quot;</span><span class="p">,</span> <span class="s">&quot;f&quot;</span><span class="p">]</span>
+
+<span class="n">i</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">5</span>
+
+<span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">5</span>
+</pre></div>
+</div>
+</td>
+<td><p class="first">File <tt class="docutils literal"><span class="pre">a.f90</span></tt>:</p>
+<div class="last highlight-python"><pre>module a
+implicit none
+private
+public i, f
+
+integer :: i = 5
+
+contains
+
+integer function f(x) result(r)
+integer, intent(in) :: x
+r = x + 5
+end function
+
+integer function g(x) result(r)
+integer, intent(in) :: x
+r = x - 5
+end function
+
+end module</pre>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>There is a difference though. In Fortran, the symbol <tt class="docutils literal"><span class="pre">g</span></tt> will be private (not
+possible to import from other modules no matter if we use explicit or implicit
+import), <tt class="docutils literal"><span class="pre">f</span></tt> and <tt class="docutils literal"><span class="pre">i</span></tt> public. In Python, when implicit import is used, the
+symbol <tt class="docutils literal"><span class="pre">g</span></tt> will not be imported, but when explicit import is used, the
+symbols <tt class="docutils literal"><span class="pre">g</span></tt> can still be imported.</p>
+</div>
+<div class="section" id="floating-point-numbers">
+<h2>Floating Point Numbers<a class="headerlink" href="#floating-point-numbers" title="Permalink to this headline">¶</a></h2>
+<p>Both NumPy and Fortran can work with any specified precision and
+if no precision is specified, then the default platform precision is used.</p>
+<p>In Python, the default precision is typically double precision,
+while in Fortran it is single precision.
+See also the relevant
+<a class="reference external" href="http://docs.python.org/tutorial/floatingpoint.html">Python</a>
+and <a class="reference external" href="http://docs.scipy.org/doc/numpy/user/basics.types.html">NumPy</a>
+documentation.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="49%" />
+<col width="51%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Python 2.x</td>
+<td>Fortran</td>
+</tr>
+<tr class="row-even"><td><p class="first">Single precision:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">float32</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="mf">1.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+<td><p class="first">Single precision:</p>
+<div class="last highlight-python"><pre>real :: f
+f = 1.1</pre>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p class="first">Double precision:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="n">f</span> <span class="o">=</span> <span class="mf">1.1</span>            <span class="c"># 1.1</span>
+<span class="n">f</span> <span class="o">=</span> <span class="mf">1e8</span>            <span class="c"># 100000000.0</span>
+<span class="n">f</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>   <span class="c"># 0.5</span>
+<span class="n">f</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>   <span class="c"># 0.0</span>
+<span class="n">f</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>       <span class="c"># 5.0</span>
+</pre></div>
+</div>
+</td>
+<td><p class="first">Double precision:</p>
+<div class="last highlight-python"><pre>integer, parameter :: dp=kind(0.d0)
+real(dp) :: f
+f = 1.1_dp             ! 1.1
+f = 1e8_dp             ! 100000000.0
+f = real(1, dp) / 2    ! 0.5
+f = 1 / 2              ! 0.0
+f = 5                  ! 5.0</pre>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>In Fortran the habit is to always specify the precision using
+the <tt class="docutils literal"><span class="pre">_dp</span></tt> suffix, where <tt class="docutils literal"><span class="pre">dp</span></tt> is defined
+in the <tt class="docutils literal"><span class="pre">types.f90</span></tt> module below as
+<tt class="docutils literal"><span class="pre">integer,</span> <span class="pre">parameter</span> <span class="pre">::</span> <span class="pre">dp=kind(0.d0)</span></tt> (so that one can change
+the precision at one place if needed). If no precision is specified,
+then single precision is used (and as such, this leads to single/double
+corruption), so one <em>always</em> needs to specify the precision.</p>
+<p>In all
+Fortran code snippets below, it is assumed, that you did
+<tt class="docutils literal"><span class="pre">use</span> <span class="pre">types,</span> <span class="pre">only:</span> <span class="pre">dp</span></tt>. The <tt class="docutils literal"><span class="pre">types.f90</span></tt> module is:</p>
+<div class="highlight-python"><pre>module types
+implicit none
+private
+public dp, hp
+integer, parameter :: dp=kind(0.d0), &amp;          ! double precision
+                      hp=selected_real_kind(15) ! high precision
+end module</pre>
+</div>
+</div>
+<div class="section" id="math-and-complex-numbers">
+<h2>Math and Complex Numbers<a class="headerlink" href="#math-and-complex-numbers" title="Permalink to this headline">¶</a></h2>
+<p>Fortran has builtin mathematical functions, in Python one has to import them
+from the <tt class="docutils literal"><span class="pre">math</span></tt> module or (for the more advanced functions) from the SciPy
+package. Fortran doesn&#8217;t include constants, so one has to use the
+<tt class="docutils literal"><span class="pre">constants.f90</span></tt> module (included below).</p>
+<p>Otherwise the usage is identical.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="49%" />
+<col width="51%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Python</td>
+<td>Fortran</td>
+</tr>
+<tr class="row-even"><td><div class="first highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">cos</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">e</span>
+<span class="n">I</span> <span class="o">=</span> <span class="mi">1</span><span class="n">j</span>
+<span class="k">print</span> <span class="n">e</span><span class="o">**</span><span class="p">(</span><span class="n">I</span><span class="o">*</span><span class="n">pi</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="k">print</span> <span class="n">cos</span><span class="p">(</span><span class="n">pi</span><span class="p">)</span>
+<span class="k">print</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">5</span><span class="n">j</span>
+<span class="k">print</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">5</span><span class="o">*</span><span class="n">I</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="mf">1.22460635382e-16</span><span class="n">j</span>
+<span class="o">-</span><span class="mf">1.0</span>
+<span class="p">(</span><span class="mi">4</span><span class="o">+</span><span class="mi">5</span><span class="n">j</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">4</span><span class="o">+</span><span class="mi">5</span><span class="n">j</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+<td><div class="first highlight-python"><pre>use constants, only: pi, e
+complex(dp) :: I = (0, 1)
+print *, e**(I*pi) + 1
+print *, cos(pi)
+print *, (4, 5)
+print *, 4 + 5*I</pre>
+</div>
+<p>Output:</p>
+<div class="last highlight-python"><pre>(  0.0000000000000000     , 1.22460635382237726E-016)
+ -1.0000000000000000
+(  4.0000000    ,  5.0000000    )
+(  4.0000000000000000     ,  5.0000000000000000     )</pre>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Fortran module <tt class="docutils literal"><span class="pre">constants.f90</span></tt>:</p>
+<div class="highlight-python"><pre>module constants
+use types, only: dp
+implicit none
+private
+public pi, e, I
+! Constants contain more digits than double precision, so that
+! they are rounded correctly:
+real(dp), parameter :: pi   = 3.1415926535897932384626433832795_dp
+real(dp), parameter :: e    = 2.7182818284590452353602874713527_dp
+complex(dp), parameter :: I = (0, 1)
+end module</pre>
+</div>
+</div>
+<div class="section" id="strings-and-formatting">
+<h2>Strings and Formatting<a class="headerlink" href="#strings-and-formatting" title="Permalink to this headline">¶</a></h2>
+<p>The functionality of both Python and Fortran is pretty much equivalent,
+only the syntax is a litte different.</p>
+<p>In both Python and Fortran, strings can be delimited by either <tt class="docutils literal"><span class="pre">&quot;</span></tt>
+or <tt class="docutils literal"><span class="pre">`</span></tt>.</p>
+<p>There are three general ways to print formatted strings:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="46%" />
+<col width="54%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Python</td>
+<td>Fortran</td>
+</tr>
+<tr class="row-even"><td><div class="first highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="s">&quot;Integer&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="s">&quot;and float&quot;</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">,</span> <span class="s">&quot;works fine.&quot;</span>
+<span class="k">print</span> <span class="s">&quot;Integer &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; and float &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="mf">5.5</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;.&quot;</span>
+<span class="k">print</span> <span class="s">&quot;Integer </span><span class="si">%d</span><span class="s"> and float </span><span class="si">%f</span><span class="s">.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="last highlight-python"><pre>Integer 5 and float 5.5 works fine.
+Integer 5 and float 5.5.
+Integer 5 and float 5.500000.</pre>
+</div>
+</td>
+<td><div class="first highlight-python"><pre>use utils, only: str
+print *, "Integer", 5, "and float", 5.5, "works fine."
+print *, "Integer " // str(5) // " and float " // str(5.5_dp) // "."
+print '("Integer ", i0, " and float ", f0.6, ".")', 5, 5.5</pre>
+</div>
+<p>Output:</p>
+<div class="last highlight-python"><pre> Integer           5 and float   5.5000000     works fine.
+ Integer 5 and float 5.500000.
+Integer 5 and float 5.500000.</pre>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>And here are some of the frequently used formats:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="46%" />
+<col width="54%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Python</td>
+<td>Fortran</td>
+</tr>
+<tr class="row-even"><td><div class="first highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="s">&quot;</span><span class="si">%3d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="mi">5</span>
+<span class="k">print</span> <span class="s">&quot;</span><span class="si">%03d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="mi">5</span>
+<span class="k">print</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="s">&quot;text&quot;</span>
+<span class="k">print</span> <span class="s">&quot;</span><span class="si">%15.7f</span><span class="s">&quot;</span> <span class="o">%</span> <span class="mf">5.5</span>
+<span class="k">print</span> <span class="s">&quot;</span><span class="si">%23.16e</span><span class="s">&quot;</span> <span class="o">%</span> <span class="o">-</span><span class="mf">5.5</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="last highlight-python"><pre>  5
+005
+text
+      5.5000000
+-5.5000000000000000e+00</pre>
+</div>
+</td>
+<td><div class="first highlight-python"><pre>print '(i3)', 5
+print '(i3.3)', 5
+print '(a)', "text"
+print '(f15.7)', 5.5_dp
+print '(es23.16)', -5.5_dp</pre>
+</div>
+<p>Output:</p>
+<div class="last highlight-python"><pre>  5
+005
+text
+      5.5000000
+-5.5000000000000000E+00</pre>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 
 
@@ -144,9 +705,24 @@ print *, shape(x)</pre>
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Python Fortran Rosetta Stone</a><ul>
+<li><a class="reference internal" href="#arrays">Arrays</a></li>
+<li><a class="reference internal" href="#modules">Modules</a></li>
+<li><a class="reference internal" href="#floating-point-numbers">Floating Point Numbers</a></li>
+<li><a class="reference internal" href="#math-and-complex-numbers">Math and Complex Numbers</a></li>
+<li><a class="reference internal" href="#strings-and-formatting">Strings and Formatting</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="../index.html"
                         title="previous chapter">Fortran 90</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="gotchas.html"
+                        title="next chapter">Gotchas</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/src/rosetta.txt"
@@ -175,6 +751,9 @@ print *, shape(x)</pre>
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="gotchas.html" title="Gotchas"
+             >next</a> |</li>
         <li class="right" >
           <a href="../index.html" title="Fortran 90"
              >previous</a> |</li>
