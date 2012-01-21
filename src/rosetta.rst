@@ -6,7 +6,7 @@ Python Fortran Rosetta Stone
 +-----------------------------------------------------+--------------------------------------------------------+
 |::                                                   |::                                                      |
 |                                                     |                                                        |
-| from numpy import array, size, shape, min, max, sum | real(dp) :: a(3)                                       |
+| from numpy import array, size, shape, min, max, sum | integer :: a(3)                                        |
 | a = array([1, 2, 3])                                | a = [1, 2, 3]                                          |
 | print shape(a)                                      | print *, shape(a)                                      |
 | print size(a)                                       | print *, size(a)                                       |
@@ -16,7 +16,7 @@ Python Fortran Rosetta Stone
 +-----------------------------------------------------+--------------------------------------------------------+
 |::                                                   |::                                                      |
 |                                                     |                                                        |
-| from numpy import array, size, shape, max, min      | real(dp) :: a(2, 3)                                    |
+| from numpy import array, size, shape, max, min      | integer :: a(2, 3)                                     |
 | a = array([[1, 2, 3], [4, 5, 6]])                   | a = reshape([1, 2, 3, 4, 5, 6], [2, 3])                |
 | print shape(a)                                      | print *, shape(a)                                      |
 | print size(a, 0)                                    | print *, size(a, 1)                                    |
@@ -38,11 +38,12 @@ Python Fortran Rosetta Stone
 |                                                     |                                                        |
 |                                                     | idos = sum(matmul(eweights,kweights))                  |
 +-----------------------------------------------------+--------------------------------------------------------+
-|                                                     |::                                                      |
+|::                                                   |::                                                      |
 |                                                     |                                                        |
-|                                                     | integer :: i(3)                                        |
-|                                                     | i = [1, 2, 3]                                          |
-|                                                     | all(i == [1, 2, 3])                                    |
+| from numpy import array, all, any                   | integer :: i(3)                                        |
+| i = array([1, 2, 3])                                | i = [1, 2, 3]                                          |
+| all(i == [1, 2, 3])                                 | all(i == [1, 2, 3])                                    |
+| any(i == [2, 2, 3])                                 | any(i == [2, 2, 3])                                    |
 +-----------------------------------------------------+--------------------------------------------------------+
 |::                                                   |::                                                      |
 |                                                     |                                                        |
