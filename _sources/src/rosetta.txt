@@ -137,12 +137,12 @@ Everything else is the same, in particular:
 +------------------------------------------------------+--------------------------------------------------------+
 |::                                                    |::                                                      |
 |                                                      |                                                        |
-| from numpy import array, sum, logical_and, ones, size| integer :: a(10)                                       |
+| from numpy import array, sum, ones, size             | integer :: a(10)                                       |
 | a = array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])           | a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]                    |
 | print sum(a)                                         | print *, sum(a)                                        |
-| print sum(a[logical_and(a > 2, a < 6)])              | print *, sum(a, mask=a > 2 .and. a < 6)                |
+| print sum(a[(a > 2) & (a < 6)])                      | print *, sum(a, mask=a > 2 .and. a < 6)                |
 | o = ones(size(a), dtype="int")                       | print *, count(a > 2 .and. a < 6)                      |
-| print sum(o[logical_and(a > 2, a < 6)])              |                                                        |
+| print sum(o[(a > 2) & (a < 6)])                      |                                                        |
 +------------------------------------------------------+--------------------------------------------------------+
 |::                                                    |::                                                      |
 |                                                      |                                                        |
@@ -410,5 +410,89 @@ And here are some of the frequently used formats:
 |                                                           |                                                                      |
 +-----------------------------------------------------------+----------------------------------------------------------------------+
 
+
+Examples
+--------
+
+Mandelbrot Set
+~~~~~~~~~~~~~~
+
+Here is a real world program written in NumPy and translated to Fortran.
+
++-----------------------------------------------------------------+---------------------------------------------------------------------------------+
+| Python                                                          |           Fortran                                                               |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------+
+|::                                                               |::                                                                               |
+|                                                                 |                                                                                 |
+| import numpy as np                                              | program Mandelbrot                                                              |
+|                                                                 | use types, only: dp                                                             |
+| ITERATIONS = 100                                                | use constants, only: I                                                          |
+| DENSITY = 1000                                                  | use utils, only: savetxt, linspace, meshgrid                                    |
+| x_min, x_max = -2.68, 1.32                                      | implicit none                                                                   |
+| y_min, y_max = -1.5, 1.5                                        |                                                                                 |
+|                                                                 | integer, parameter :: ITERATIONS = 100                                          |
+| x, y = np.meshgrid(np.linspace(x_min, x_max, DENSITY),          | integer, parameter :: DENSITY = 1000                                            |
+|                    np.linspace(y_min, y_max, DENSITY))          | real(dp) :: x_min, x_max, y_min, y_max                                          |
+| c = x + 1j*y                                                    | real(dp), dimension(DENSITY, DENSITY) :: x, y                                   |
+| z = c.copy()                                                    | complex(dp), dimension(DENSITY, DENSITY) :: c, z                                |
+| fractal = np.zeros(z.shape, dtype=np.uint8) + 255               | integer, dimension(DENSITY, DENSITY) :: fractal                                 |
+|                                                                 | integer :: n                                                                    |
+| for n in range(ITERATIONS):                                     | x_min = -2.68_dp                                                                |
+|     print "Iteration %d" % n                                    | x_max = 1.32_dp                                                                 |
+|     mask = abs(z) <= 10                                         | y_min = -1.5_dp                                                                 |
+|     z[mask] *= z[mask]                                          | y_max = 1.5_dp                                                                  |
+|     z[mask] += c[mask]                                          |                                                                                 |
+|     fractal[(fractal == 255) & (-mask)] = 254. * n / ITERATIONS | call meshgrid(linspace(x_min, x_max, DENSITY), &                                |
+|                                                                 |     linspace(y_min, y_max, DENSITY), x, y)                                      |
+| print "Saving..."                                               | c = x + I*y                                                                     |
+| np.savetxt("fractal.dat", np.log(fractal))                      | z = c                                                                           |
+| np.savetxt("coord.dat", [x_min, x_max, y_min, y_max])           | fractal = 255                                                                   |
+|                                                                 |                                                                                 |
+|                                                                 | do n = 1, ITERATIONS                                                            |
+|                                                                 |     print "('Iteration ', i0)", n                                               |
+|                                                                 |     where (abs(z) <= 10) z = z**2 + c                                           |
+|                                                                 |     where (fractal == 255 .and. abs(z) > 10) fractal = 254 * (n-1) / ITERATIONS |
+|                                                                 | end do                                                                          |
+|                                                                 |                                                                                 |
+|                                                                 | print *, "Saving..."                                                            |
+|                                                                 | call savetxt("fractal.dat", log(real(fractal, dp)))                             |
+|                                                                 | call savetxt("coord.dat", reshape([x_min, x_max, y_min, y_max], [4, 1]))        |
+|                                                                 | end program                                                                     |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------+
+
+To run the Python version, you need Python and NumPy.
+To run the Fortran version, you need ``types.f90``, ``constants.f90``
+and ``utils.f90`` from the
+`fortran-utils <https://github.com/certik/fortran-utils>`_ package.
+Both versions generate equivalent ``fractal.dat`` and ``coord.dat`` files.
+
+The generated fractal can be viewed by (you need matplotlib)::
+
+    from numpy import loadtxt
+    import matplotlib.pyplot as plt
+
+    fractal = loadtxt("fractal.dat")
+    x_min, x_max, y_min, y_max = loadtxt("coord.dat")
+
+    plt.imshow(fractal, cmap=plt.cm.hot,
+               extent=(x_min, x_max, y_min, y_max))
+    plt.title('Mandelbrot Set')
+    plt.xlabel('Re(z)')
+    plt.ylabel('Im(z)')
+    plt.savefig("mandelbrot.png")
+
+.. image:: /images/mandelbrot.png
+
+Timings on Acer 1830T with gfortran 4.6.1 are:
+
++-------------+--------+---------+---------+
+|             | Python | Fortran | Speedup |
++-------------+--------+---------+---------+
+| Calculation | 12.749 | 00.784  | 16.3x   |
++-------------+--------+---------+---------+
+| Saving      | 01.904 | 01.456  |  1.3x   |
++-------------+--------+---------+---------+
+| Total       | 14.653 | 02.240  |  6.5x   |
++-------------+--------+---------+---------+
 
 .. ::   vim: set nowrap textwidth=0 syn=off: ~

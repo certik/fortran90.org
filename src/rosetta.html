@@ -270,12 +270,12 @@ end where</pre>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><div class="first last highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="nb">sum</span><span class="p">,</span> <span class="n">logical_and</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="n">size</span>
+<tr class="row-even"><td><div class="first last highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="nb">sum</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="n">size</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
 <span class="k">print</span> <span class="nb">sum</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-<span class="k">print</span> <span class="nb">sum</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">logical_and</span><span class="p">(</span><span class="n">a</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">,</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">)])</span>
+<span class="k">print</span> <span class="nb">sum</span><span class="p">(</span><span class="n">a</span><span class="p">[(</span><span class="n">a</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">a</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">)])</span>
 <span class="n">o</span> <span class="o">=</span> <span class="n">ones</span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&quot;int&quot;</span><span class="p">)</span>
-<span class="k">print</span> <span class="nb">sum</span><span class="p">(</span><span class="n">o</span><span class="p">[</span><span class="n">logical_and</span><span class="p">(</span><span class="n">a</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">,</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">)])</span>
+<span class="k">print</span> <span class="nb">sum</span><span class="p">(</span><span class="n">o</span><span class="p">[(</span><span class="n">a</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">a</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">)])</span>
 </pre></div>
 </div>
 </td>
@@ -697,6 +697,139 @@ text
 </tbody>
 </table>
 </div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="mandelbrot-set">
+<h3>Mandelbrot Set<a class="headerlink" href="#mandelbrot-set" title="Permalink to this headline">¶</a></h3>
+<p>Here is a real world program written in NumPy and translated to Fortran.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="45%" />
+<col width="55%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Python</td>
+<td>Fortran</td>
+</tr>
+<tr class="row-even"><td><div class="first last highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="n">ITERATIONS</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">DENSITY</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.68</span><span class="p">,</span> <span class="mf">1.32</span>
+<span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.5</span>
+
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">DENSITY</span><span class="p">),</span>
+                   <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">,</span> <span class="n">DENSITY</span><span class="p">))</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">y</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">fractal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span> <span class="o">+</span> <span class="mi">255</span>
+
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ITERATIONS</span><span class="p">):</span>
+    <span class="k">print</span> <span class="s">&quot;Iteration </span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">n</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">z</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">10</span>
+    <span class="n">z</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">*=</span> <span class="n">z</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+    <span class="n">z</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">+=</span> <span class="n">c</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+    <span class="n">fractal</span><span class="p">[(</span><span class="n">fractal</span> <span class="o">==</span> <span class="mi">255</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">-</span><span class="n">mask</span><span class="p">)]</span> <span class="o">=</span> <span class="mf">254.</span> <span class="o">*</span> <span class="n">n</span> <span class="o">/</span> <span class="n">ITERATIONS</span>
+
+<span class="k">print</span> <span class="s">&quot;Saving...&quot;</span>
+<span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s">&quot;fractal.dat&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">fractal</span><span class="p">))</span>
+<span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s">&quot;coord.dat&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">])</span>
+</pre></div>
+</div>
+</td>
+<td><div class="first last highlight-python"><pre>program Mandelbrot
+use types, only: dp
+use constants, only: I
+use utils, only: savetxt, linspace, meshgrid
+implicit none
+
+integer, parameter :: ITERATIONS = 100
+integer, parameter :: DENSITY = 1000
+real(dp) :: x_min, x_max, y_min, y_max
+real(dp), dimension(DENSITY, DENSITY) :: x, y
+complex(dp), dimension(DENSITY, DENSITY) :: c, z
+integer, dimension(DENSITY, DENSITY) :: fractal
+integer :: n
+x_min = -2.68_dp
+x_max = 1.32_dp
+y_min = -1.5_dp
+y_max = 1.5_dp
+
+call meshgrid(linspace(x_min, x_max, DENSITY), &amp;
+    linspace(y_min, y_max, DENSITY), x, y)
+c = x + I*y
+z = c
+fractal = 255
+
+do n = 1, ITERATIONS
+    print "('Iteration ', i0)", n
+    where (abs(z) &lt;= 10) z = z**2 + c
+    where (fractal == 255 .and. abs(z) &gt; 10) fractal = 254 * (n-1) / ITERATIONS
+end do
+
+print *, "Saving..."
+call savetxt("fractal.dat", log(real(fractal, dp)))
+call savetxt("coord.dat", reshape([x_min, x_max, y_min, y_max], [4, 1]))
+end program</pre>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>To run the Python version, you need Python and NumPy.
+To run the Fortran version, you need <tt class="docutils literal"><span class="pre">types.f90</span></tt>, <tt class="docutils literal"><span class="pre">constants.f90</span></tt>
+and <tt class="docutils literal"><span class="pre">utils.f90</span></tt> from the
+<a class="reference external" href="https://github.com/certik/fortran-utils">fortran-utils</a> package.
+Both versions generate equivalent <tt class="docutils literal"><span class="pre">fractal.dat</span></tt> and <tt class="docutils literal"><span class="pre">coord.dat</span></tt> files.</p>
+<p>The generated fractal can be viewed by (you need matplotlib):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">loadtxt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+<span class="n">fractal</span> <span class="o">=</span> <span class="n">loadtxt</span><span class="p">(</span><span class="s">&quot;fractal.dat&quot;</span><span class="p">)</span>
+<span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="n">loadtxt</span><span class="p">(</span><span class="s">&quot;coord.dat&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">fractal</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">hot</span><span class="p">,</span>
+           <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Mandelbrot Set&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Re(z)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Im(z)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&quot;mandelbrot.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/mandelbrot.png" src="../_images/mandelbrot.png" />
+<p>Timings on Acer 1830T with gfortran 4.6.1 are:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="21%" />
+<col width="23%" />
+<col width="23%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>&nbsp;</td>
+<td>Python</td>
+<td>Fortran</td>
+<td>Speedup</td>
+</tr>
+<tr class="row-even"><td>Calculation</td>
+<td>12.749</td>
+<td>00.784</td>
+<td>16.3x</td>
+</tr>
+<tr class="row-odd"><td>Saving</td>
+<td>01.904</td>
+<td>01.456</td>
+<td>1.3x</td>
+</tr>
+<tr class="row-even"><td>Total</td>
+<td>14.653</td>
+<td>02.240</td>
+<td>6.5x</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 
 
@@ -713,6 +846,10 @@ text
 <li><a class="reference internal" href="#floating-point-numbers">Floating Point Numbers</a></li>
 <li><a class="reference internal" href="#math-and-complex-numbers">Math and Complex Numbers</a></li>
 <li><a class="reference internal" href="#strings-and-formatting">Strings and Formatting</a></li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#mandelbrot-set">Mandelbrot Set</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
