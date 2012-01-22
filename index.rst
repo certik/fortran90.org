@@ -1,9 +1,11 @@
 Fortran 90
 ==========
 
-External links:
+Quick links:
 
-* `Fortran Best Practices <https://github.com/qsnake/qsnake/wiki/Fortran-best-practices>`_
+    * Summary of the language: http://www.cs.umbc.edu/~squire/fortranclass/summary.shtml
+
+    * Fortran 2003 standard: http://www.j3-fortran.org/doc/year/04/04-007.pdf
 
 Contents:
 
