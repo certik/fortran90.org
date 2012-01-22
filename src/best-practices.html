@@ -1,0 +1,428 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Fortran Best Practices &mdash; Fortran90 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Fortran90 1.0 documentation" href="../index.html" />
+    <link rel="next" title="Python Fortran Rosetta Stone" href="rosetta.html" />
+    <link rel="prev" title="Fortran 90" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="rosetta.html" title="Python Fortran Rosetta Stone"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="Fortran 90"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Fortran90 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="fortran-best-practices">
+<h1>Fortran Best Practices<a class="headerlink" href="#fortran-best-practices" title="Permalink to this headline">¶</a></h1>
+<p>This page collects a modern canonical way of doing things in Fortran. It is meant to be short, and it is assumed that you already know how to program in other languages (like Python, C/C++, ...) and also know Fortran syntax a bit. Some things in Fortran are obsolete, so this guide only shows the &#8220;one correct/canonical modern way&#8221; how to do things.</p>
+<p>Summary of the language: <a class="reference external" href="http://www.cs.umbc.edu/~squire/fortranclass/summary.shtml">http://www.cs.umbc.edu/~squire/fortranclass/summary.shtml</a></p>
+<p>Language features are explained at: <a class="reference external" href="http://en.wikipedia.org/wiki/Fortran_language_features">http://en.wikipedia.org/wiki/Fortran_language_features</a></p>
+<p>The best resource is a recent Fortran standard, for example the Fortran 2003 standard: <a class="reference external" href="http://www.j3-fortran.org/doc/year/04/04-007.pdf">http://www.j3-fortran.org/doc/year/04/04-007.pdf</a></p>
+<div class="section" id="floating-point-numbers">
+<h2>Floating Point Numbers<a class="headerlink" href="#floating-point-numbers" title="Permalink to this headline">¶</a></h2>
+<p>Somewhere create and export a parameter <tt class="docutils literal"><span class="pre">dp</span></tt>:</p>
+<div class="highlight-python"><pre>integer, parameter:: dp=kind(0.d0)</pre>
+</div>
+<p>and declare floats as:</p>
+<div class="highlight-python"><pre>real(dp) :: a, b, c</pre>
+</div>
+<p>Always write all floating point constants as:</p>
+<div class="highlight-python"><pre>1.0_dp, 3.5_dp, 1.34e8_dp</pre>
+</div>
+<p>and never any other way. To print floating point double precision numbers without loosing precision, use the <tt class="docutils literal"><span class="pre">(es23.16)</span></tt> format (see <a class="reference external" href="http://stackoverflow.com/questions/6118231/why-do-i-need-17-significant-digits-and-not-16-to-represent-a-double/">http://stackoverflow.com/questions/6118231/why-do-i-need-17-significant-digits-and-not-16-to-represent-a-double/</a>).</p>
+</div>
+<div class="section" id="integer-division">
+<h2>Integer Division<a class="headerlink" href="#integer-division" title="Permalink to this headline">¶</a></h2>
+<p>Just like in Python 2.x or C, when doing things like <tt class="docutils literal"><span class="pre">(N-1)/N</span></tt> where <tt class="docutils literal"><span class="pre">N</span></tt> is an integer and you want a floating point division, force the compiler to use floats at the right hand side, for example by:</p>
+<div class="highlight-python"><pre>(N - 1.0_dp)/N</pre>
+</div>
+<p>As long as one of the <tt class="docutils literal"><span class="pre">/</span></tt> operands is a float, a floating point division will be used.</p>
+</div>
+<div class="section" id="modules-and-programs">
+<h2>Modules and Programs<a class="headerlink" href="#modules-and-programs" title="Permalink to this headline">¶</a></h2>
+<p>Only use modules and programs. Always setup a module in the following way:</p>
+<div class="highlight-python"><pre>module ode1d
+use types, only: dp, pi
+use utils, only: stop_error
+implicit none
+private
+public integrate, normalize, parsefunction, get_val, rk4step, eulerstep, &amp;
+        rk4step2, get_midpoints, rk4_integrate, rk4_integrate_inward, &amp;
+        rk4_integrate_inward2, rk4_integrate3, rk4_integrate4, &amp;
+        rk4_integrate_inward4
+
+contains
+
+subroutine get_val(...)
+...
+end subroutine
+...
+
+end module</pre>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">implicit</span> <span class="pre">none</span></tt> statement works for the whole module (so you don&#8217;t need to worry about it). By keeping the <tt class="docutils literal"><span class="pre">private</span></tt> empty, all your subroutines/data types will be private to the module by default. Then you export things by putting it into the <tt class="docutils literal"><span class="pre">public</span></tt> clause.</p>
+<p>Setup programs in the following way:</p>
+<div class="highlight-python"><pre>program uranium
+use fmesh, only: mesh_exp
+use utils, only: stop_error, dp
+use dft, only: atom
+implicit none
+
+integer, parameter :: Z = 92
+real(dp), parameter :: r_min = 8e-9_dp, r_max = 50.0_dp, a = 1e7_dp
+...
+print *, "I am running"
+end program</pre>
+</div>
+<p>Notice the &#8220;explicit imports&#8221; (using Python terminology) in the <tt class="docutils literal"><span class="pre">use</span></tt> statements. You can also use &#8220;implicit imports&#8221; like:</p>
+<div class="highlight-python"><pre>use fmesh</pre>
+</div>
+<p>But just like in Python, this should be avoided (&#8220;explicit is better than implicit&#8221;) in most cases.</p>
+</div>
+<div class="section" id="arrays">
+<h2>Arrays<a class="headerlink" href="#arrays" title="Permalink to this headline">¶</a></h2>
+<p>When passing arrays in and out of a subroutine/function, use the following pattern for 1D arrays:</p>
+<div class="highlight-python"><pre>subroutine f(r)
+real(dp), intent(in) :: r(:)
+
+integer :: n
+n = size(r)
+do i = 1, n
+    r(i) = 1.0_dp / i**2
+enddo
+end subroutine</pre>
+</div>
+<p>2D arrays:</p>
+<div class="highlight-python"><pre>subroutine g(A)
+real(dp), intent(in) :: A(:, :)
+...
+end subroutine</pre>
+</div>
+<p>and call it like this:</p>
+<div class="highlight-python"><pre>real(dp) :: r(5)
+call f(r)</pre>
+</div>
+<p>Always declare the arrays as assume shape (<tt class="docutils literal"><span class="pre">r(:)</span></tt>), never any other way. If you want to enforce/check the size of the arrays, put at the beginning of the function:</p>
+<div class="highlight-python"><pre>if (size(r) != 4) stop "Incorrect size of 'r'"</pre>
+</div>
+<p>No array copying is done above. To initialize an array, do:</p>
+<div class="highlight-python"><pre>integer :: r(5)
+r = [1, 2, 3, 4, 5]</pre>
+</div>
+</div>
+<div class="section" id="multidimensional-arrays">
+<h2>Multidimensional Arrays<a class="headerlink" href="#multidimensional-arrays" title="Permalink to this headline">¶</a></h2>
+<p>Always access slices as <tt class="docutils literal"><span class="pre">V(:,</span> <span class="pre">1)</span></tt>, <tt class="docutils literal"><span class="pre">V(:,</span> <span class="pre">2)</span></tt>, or <tt class="docutils literal"><span class="pre">V(:,</span> <span class="pre">:,</span> <span class="pre">1)</span></tt>, e.g. the colons should be on the left. That way the stride is contiguous and it will be fast. So when you need some slice in your algorithm, always setup the array in a way, so that you call it as above. If you put the colon on the right, it will be slow.</p>
+<p>Example:</p>
+<div class="highlight-python"><pre>dydx = matmul(C(:, :, i), y) ! fast
+dydx = matmul(C(i, :, :), y) ! slow</pre>
+</div>
+<p>In other words, the &#8220;fortran storage order&#8221; is: smallest/fastest changing/innermost-loop index first, largest/slowest/outermost-loop index last (&#8220;Inner-most are left-most.&#8221;). So the elements of a 3D array <tt class="docutils literal"><span class="pre">A(N1,N2,N3)</span></tt> are stored, and thus most efficiently accessed, as:</p>
+<div class="highlight-python"><pre>do i3 = 1, N3
+    do i2 = 1, N2
+        do i1 = 1, N1
+            A(i1, i2, i3)
+        end do
+    end do
+end do</pre>
+</div>
+<p>Associated array of vectors would then be most efficiently accessed as:</p>
+<div class="highlight-python"><pre>do i3 = 1, N3
+    do i2 = 1, N2
+        A(:, i2, i3)
+    end do
+end do</pre>
+</div>
+<p>And associated set of matrices would be most efficiently accessed as:</p>
+<div class="highlight-python"><pre>do i3 = 1, N3
+    A(:, :, i3)
+end do</pre>
+</div>
+<p>Storing/accessing as above then accesses always contiguous blocks of memory, directly adjacent to one another; no skips/strides.</p>
+<p>When not sure, always rewrite (in your head) the algorithm to use strides, for example the first loop would become:</p>
+<div class="highlight-python"><pre>do i3 = 1, N3
+    Ai3 = A(:, :, i3)
+    do i2 = 1, N2
+        Ai2i3 = Ai3(:, i2)
+        do i1 = 1, N1
+            Ai2i3(i1)
+        end do
+    end do
+end do</pre>
+</div>
+<p>the second loop would become:</p>
+<div class="highlight-python"><pre>do i3 = 1, N3
+    Ai3 = A(:, :, i3)
+    do i2 = 1, N2
+        Ai3(:, i2)
+    end do
+end do</pre>
+</div>
+<p>And then make sure that all the strides are always on the left. Then it will be fast.</p>
+</div>
+<div class="section" id="file-input-output">
+<h2>File Input/Output<a class="headerlink" href="#file-input-output" title="Permalink to this headline">¶</a></h2>
+<p>To read from a file:</p>
+<div class="highlight-python"><pre>integer :: u
+open(newunit=u, file="log.txt", status="old")
+read(u, *) a, b
+close(u)</pre>
+</div>
+<p>Write to a file:</p>
+<div class="highlight-python"><pre>integer :: u
+open(newunit=u, file="log.txt", status="replace")
+write(u, *) a, b
+close(u)</pre>
+</div>
+<p>To append to an existing file:</p>
+<div class="highlight-python"><pre>integer :: u
+open(newunit=u, file="log.txt", position="append", status="old")
+write(u, *) N, V(N)
+close(u)</pre>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">newunit</span></tt> keyword argument to <tt class="docutils literal"><span class="pre">open</span></tt> is a Fortran 2008 standard, in older compilers, just replace
+<tt class="docutils literal"><span class="pre">open(newunit=u,</span> <span class="pre">...)</span></tt> by:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">open</span><span class="p">(</span><span class="n">newunit</span><span class="p">(</span><span class="n">u</span><span class="p">),</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where the <tt class="docutils literal"><span class="pre">newunit</span></tt> function is defined by:</p>
+<div class="highlight-python"><pre>integer function newunit(unit) result(n)
+! returns lowest i/o unit number not in use
+integer, intent(out), optional :: unit
+logical inuse
+integer, parameter :: nmin=10   ! avoid lower numbers which are sometimes reserved
+integer, parameter :: nmax=999  ! may be system-dependent
+do n = nmin, nmax
+    inquire(unit=n, opened=inuse)
+    if (.not. inuse) then
+        if (present(unit)) unit=n
+        return
+    end if
+end do
+call stop_error("newunit ERROR: available unit not found.")
+end function</pre>
+</div>
+</div>
+<div class="section" id="interfacing-with-c">
+<h2>Interfacing with C<a class="headerlink" href="#interfacing-with-c" title="Permalink to this headline">¶</a></h2>
+<p>Write a C wrapper using the <tt class="docutils literal"><span class="pre">iso_c_binding</span></tt> module:</p>
+<div class="highlight-python"><pre>module fmesh_wrapper
+
+use iso_c_binding, only: c_double, c_int
+use fmesh, only: mesh_exp
+
+implicit none
+
+contains
+
+subroutine c_mesh_exp(r_min, r_max, a, N, mesh) bind(c)
+real(c_double), intent(in) :: r_min
+real(c_double), intent(in) :: r_max
+real(c_double), intent(in) :: a
+integer(c_int), intent(in) :: N
+real(c_double), intent(out) :: mesh(N)
+call mesh_exp(r_min, r_max, a, N, mesh)
+end subroutine
+
+! wrap more functions here
+! ...
+
+end module</pre>
+</div>
+<p>You need to declare the length of all arrays (<tt class="docutils literal"><span class="pre">mesh(N)</span></tt>) and pass it as a parameter. The Fortran compiler will check that the C and Fortran types match. If it compiles, you can then trust it, and call it from C using the following declaration:</p>
+<div class="highlight-python"><pre>void c_mesh_exp(double *r_min, double *r_max, double *a, int *N,
+        double *mesh);</pre>
+</div>
+<p>use it as:</p>
+<div class="highlight-python"><pre>int N=5;
+double r_min, r_max, a, mesh[N];
+c_mesh_exp(&amp;r_min, &amp;r_max, &amp;a, &amp;N, mesh);</pre>
+</div>
+<p>No matter if you are passing arrays in or out, always allocate them in C first, and you are (in C) responsible for the memory management. Use Fortran to fill (or use) your arrays (that you own in C).</p>
+<p>If calling the Fortran <tt class="docutils literal"><span class="pre">exp_mesh</span></tt> subroutine from the <tt class="docutils literal"><span class="pre">c_exp_mesh</span></tt> subroutine is a problem (CPU efficiency), you can simply implement whatever the routine does directly in the <tt class="docutils literal"><span class="pre">c_exp_mesh</span></tt> subroutine. In other words, use the <tt class="docutils literal"><span class="pre">iso_c_binding</span></tt> module as a direct way to call Fortran code from C, and you can make it as fast as needed.</p>
+</div>
+<div class="section" id="interfacing-with-python">
+<h2>Interfacing with Python<a class="headerlink" href="#interfacing-with-python" title="Permalink to this headline">¶</a></h2>
+<p>To wrap Fortran code in Python, export it to C first (see above) and then write this Cython code:</p>
+<div class="highlight-python"><pre>from numpy cimport ndarray
+from numpy import empty
+
+cdef extern:
+    void c_mesh_exp(double *r_min, double *r_max, double *a, int *N,
+            double *mesh)
+
+def mesh_exp(double r_min, double r_max, double a, int N):
+    cdef ndarray[double, mode="c"] mesh = empty(N, dtype="double")
+    c_mesh_exp(&amp;r_min, &amp;r_max, &amp;a, &amp;N, &amp;mesh[0])
+    return mesh</pre>
+</div>
+<p>The memory is allocated and owned (reference counted) by Python, and a pointer is given to the Fortran code. Use this approach for both &#8220;in&#8221; and &#8220;out&#8221; arrays.</p>
+<p>Notice that we didn&#8217;t write any C code &#8212; we only told fortran to use the C calling convention when producing the &#8221;.o&#8221; files, and then we pretended in Cython, that the function is implemented in C, but in fact, it is linked in from Fortran directly. So this is the most direct way of calling Fortran from Python. There is no intermediate step, and no unnecessary processing/wrapping involved.</p>
+</div>
+<div class="section" id="type-casting-and-callbacks">
+<h2>Type Casting and Callbacks<a class="headerlink" href="#type-casting-and-callbacks" title="Permalink to this headline">¶</a></h2>
+<p>There are essentially four different wasy to do that, each with its own
+advantages and disadvantages.</p>
+<div class="section" id="work-arrays">
+<h3>Work Arrays<a class="headerlink" href="#work-arrays" title="Permalink to this headline">¶</a></h3>
+<p>Pass a &#8220;work array&#8221; or two which are packed with everything needed by the
+caller and unpacked by the called routine. This is the old way &#8211; e.g., how
+LAPACK does it.</p>
+</div>
+<div class="section" id="general-structure">
+<h3>General Structure<a class="headerlink" href="#general-structure" title="Permalink to this headline">¶</a></h3>
+<p>Define general structure or two which encompass the variations you actually
+need (or are even remotely likely to need going forward). This single structure
+type or two can then change if needed as future needs/ideas permit but won&#8217;t
+likely need to change from passing, say, real numbers to, say, and
+instantiation of a text editor.</p>
+<p>There is only so much flexibility really
+needed. For example, you could define two structure types for this purpose, one
+for Schroedinger and one for Dirac. Each would then be sufficiently general and
+contain all the needed pieces with all the right labels.</p>
+<p>Point is: it needn&#8217;t
+be &#8220;one abstract type to encompass all&#8221; or bust. There are natural and viable
+options between &#8220;all&#8221; and &#8220;none&#8221;.</p>
+</div>
+<div class="section" id="private-module-variables">
+<h3>Private Module Variables<a class="headerlink" href="#private-module-variables" title="Permalink to this headline">¶</a></h3>
+<p>Hide the variable arguments completely by passing in module variables.  However
+it is best to avoid such global variables &#8211; even though really just
+semi-global &#8211; if possible. But sometimes it may be the simplest cleanest way.
+However, with a bit of thought, usually there is a better, safer, more explicit
+way along the lines of the previous option &#8220;General Structure&#8221;.</p>
+</div>
+<div class="section" id="transfer-intrinsic-function">
+<h3>Transfer Intrinsic Function<a class="headerlink" href="#transfer-intrinsic-function" title="Permalink to this headline">¶</a></h3>
+<p>Type casting can be done with the <tt class="docutils literal"><span class="pre">transfer</span></tt> intrinsic function. Examples:</p>
+<p><a class="reference external" href="http://jblevins.org/log/transfer">http://jblevins.org/log/transfer</a></p>
+<p><a class="reference external" href="http://www.macresearch.org/advanced_fortran_90_callbacks_with_the_transfer_function">http://www.macresearch.org/advanced_fortran_90_callbacks_with_the_transfer_function</a></p>
+<p>In any case, as always, with the advantages of such re-casting, as f90 lets you
+do if you really want to, come also the disadvantages that fewer compile- and
+run-time checks are possible to catch errors; and with that, inevitably more
+leaky, bug-prone code. So one always has to balance the costs and benefits.
+Usually, in the context of scientific programming, where the main thrust
+represent and solve precise mathematical formulations (as opposed to create a
+GUI with some untold number of buttons, drop-downs, and other interface
+elements), simplest, least bug-prone, and fastest is to use
+one of the first three approaches above.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Fortran Best Practices</a><ul>
+<li><a class="reference internal" href="#floating-point-numbers">Floating Point Numbers</a></li>
+<li><a class="reference internal" href="#integer-division">Integer Division</a></li>
+<li><a class="reference internal" href="#modules-and-programs">Modules and Programs</a></li>
+<li><a class="reference internal" href="#arrays">Arrays</a></li>
+<li><a class="reference internal" href="#multidimensional-arrays">Multidimensional Arrays</a></li>
+<li><a class="reference internal" href="#file-input-output">File Input/Output</a></li>
+<li><a class="reference internal" href="#interfacing-with-c">Interfacing with C</a></li>
+<li><a class="reference internal" href="#interfacing-with-python">Interfacing with Python</a></li>
+<li><a class="reference internal" href="#type-casting-and-callbacks">Type Casting and Callbacks</a><ul>
+<li><a class="reference internal" href="#work-arrays">Work Arrays</a></li>
+<li><a class="reference internal" href="#general-structure">General Structure</a></li>
+<li><a class="reference internal" href="#private-module-variables">Private Module Variables</a></li>
+<li><a class="reference internal" href="#transfer-intrinsic-function">Transfer Intrinsic Function</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../index.html"
+                        title="previous chapter">Fortran 90</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="rosetta.html"
+                        title="next chapter">Python Fortran Rosetta Stone</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/src/best-practices.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="rosetta.html" title="Python Fortran Rosetta Stone"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="Fortran 90"
+             >previous</a> |</li>
+        <li><a href="../index.html">Fortran90 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Ondřej Čertík.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.
+    </div>
+  </body>
+</html>
