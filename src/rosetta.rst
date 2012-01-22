@@ -137,12 +137,12 @@ Everything else is the same, in particular:
 +------------------------------------------------------+--------------------------------------------------------+
 |::                                                    |::                                                      |
 |                                                      |                                                        |
-| from numpy import array, sum, logical_and, ones, size| integer :: a(10)                                       |
+| from numpy import array, sum, ones, size             | integer :: a(10)                                       |
 | a = array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])           | a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]                    |
 | print sum(a)                                         | print *, sum(a)                                        |
-| print sum(a[logical_and(a > 2, a < 6)])              | print *, sum(a, mask=a > 2 .and. a < 6)                |
+| print sum(a[(a > 2) & (a < 6)])                      | print *, sum(a, mask=a > 2 .and. a < 6)                |
 | o = ones(size(a), dtype="int")                       | print *, count(a > 2 .and. a < 6)                      |
-| print sum(o[logical_and(a > 2, a < 6)])              |                                                        |
+| print sum(o[(a > 2) & (a < 6)])                      |                                                        |
 +------------------------------------------------------+--------------------------------------------------------+
 |::                                                    |::                                                      |
 |                                                      |                                                        |
