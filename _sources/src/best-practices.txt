@@ -336,6 +336,8 @@ Type casting can be done with the ``transfer`` intrinsic function. Examples:
 
 http://jblevins.org/log/transfer
 
+http://jblevins.org/research/generic-list.pdf
+
 http://www.macresearch.org/advanced_fortran_90_callbacks_with_the_transfer_function
 
 In any case, as always, with the advantages of such re-casting, as f90 lets you
