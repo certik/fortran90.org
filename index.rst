@@ -10,6 +10,7 @@ Contents:
 .. toctree::
     :maxdepth: 2
 
+    src/best-practices.rst
     src/rosetta.rst
     src/gotchas.rst
 
