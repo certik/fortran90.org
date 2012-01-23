@@ -88,7 +88,7 @@ When passing arrays in and out of a subroutine/function, use the following patte
 
     subroutine f(r)
     real(dp), intent(in) :: r(:)
-    
+
     integer :: n
     n = size(r)
     do i = 1, n
@@ -116,6 +116,18 @@ No array copying is done above. To initialize an array, do::
 
     integer :: r(5)
     r = [1, 2, 3, 4, 5]
+
+In order for the array to start with different index than 1, do::
+
+    subroutine print_eigenvalues(kappa_min, lam)
+    integer, intent(in) :: kappa_min
+    real(dp), intent(in) :: lam(kappa_min:)
+
+    integer :: kappa
+    do kappa = kappa_min, ubound(lam, 1)
+        print *, kappa, lam(kappa)
+    end do
+    end subroutine
 
 Multidimensional Arrays
 -----------------------
