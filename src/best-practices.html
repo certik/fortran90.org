@@ -148,6 +148,17 @@ call f(r)</pre>
 <div class="highlight-python"><pre>integer :: r(5)
 r = [1, 2, 3, 4, 5]</pre>
 </div>
+<p>In order for the array to start with different index than 1, do:</p>
+<div class="highlight-python"><pre>subroutine print_eigenvalues(kappa_min, lam)
+integer, intent(in) :: kappa_min
+real(dp), intent(in) :: lam(kappa_min:)
+
+integer :: kappa
+do kappa = kappa_min, ubound(lam, 1)
+    print *, kappa, lam(kappa)
+end do
+end subroutine</pre>
+</div>
 </div>
 <div class="section" id="multidimensional-arrays">
 <h2>Multidimensional Arrays<a class="headerlink" href="#multidimensional-arrays" title="Permalink to this headline">¶</a></h2>
@@ -300,21 +311,145 @@ def mesh_exp(double r_min, double r_max, double a, int N):
 </div>
 <div class="section" id="type-casting-and-callbacks">
 <h2>Type Casting and Callbacks<a class="headerlink" href="#type-casting-and-callbacks" title="Permalink to this headline">¶</a></h2>
-<p>There are essentially four different wasy to do that, each with its own
-advantages and disadvantages.</p>
-<div class="section" id="work-arrays">
-<h3>Work Arrays<a class="headerlink" href="#work-arrays" title="Permalink to this headline">¶</a></h3>
+<p>There are essentially five different ways to do that, each
+with its own advantages and disadvantages.</p>
+<p>The methods I, II and V can be used both in C and Fortran.
+The methods III and IV are only available in Fortran.
+The method VI is obsolete and should not be used.</p>
+<div class="section" id="i-work-arrays">
+<h3>I: Work Arrays<a class="headerlink" href="#i-work-arrays" title="Permalink to this headline">¶</a></h3>
 <p>Pass a &#8220;work array&#8221; or two which are packed with everything needed by the
 caller and unpacked by the called routine. This is the old way &#8211; e.g., how
 LAPACK does it.</p>
+<p>Integrator:</p>
+<div class="highlight-python"><pre>module integrals
+use types, only: dp
+implicit none
+private
+public simpson
+
+contains
+
+real(dp) function simpson(f, a, b, data) result(s)
+real(dp), intent(in) :: a, b
+abstract interface
+    real(dp) function func(x, data)
+    use types, only: dp
+    implicit none
+    real(dp), intent(in) :: x
+    real(dp), intent(inout) :: data(:)
+    end function
+end interface
+procedure(func) :: f
+real(dp), intent(inout) :: data(:)
+s = (b-a) / 6 * (f(a, data) + 4*f((a+b)/2, data) + f(b, data))
+end function
+
+end module</pre>
 </div>
-<div class="section" id="general-structure">
-<h3>General Structure<a class="headerlink" href="#general-structure" title="Permalink to this headline">¶</a></h3>
+<p>Usage:</p>
+<div class="highlight-python"><pre>module test
+use types, only: dp
+use integrals, only: simpson
+implicit none
+private
+public foo
+
+contains
+
+real(dp) function f(x, data) result(y)
+real(dp), intent(in) :: x
+real(dp), intent(inout) :: data(:)
+real(dp) :: a, k
+a = data(1)
+k = data(2)
+y = a*sin(k*x)
+end function
+
+subroutine foo(a, k)
+real(dp) :: a, k
+real(dp) :: data(2)
+data(1) = a
+data(2) = k
+print *, simpson(f, 0._dp, pi, data)
+print *, simpson(f, 0._dp, 2*pi, data)
+end subroutine
+
+end module</pre>
+</div>
+</div>
+<div class="section" id="ii-general-structure">
+<h3>II: General Structure<a class="headerlink" href="#ii-general-structure" title="Permalink to this headline">¶</a></h3>
 <p>Define general structure or two which encompass the variations you actually
 need (or are even remotely likely to need going forward). This single structure
 type or two can then change if needed as future needs/ideas permit but won&#8217;t
 likely need to change from passing, say, real numbers to, say, and
 instantiation of a text editor.</p>
+<p>Integrator:</p>
+<div class="highlight-python"><pre>module integrals
+use types, only: dp
+implicit none
+private
+public simpson, context
+
+type context
+    ! This would be adjusted according to the problem to be solved.
+    ! For example:
+    real(dp) :: a, b, c, d
+    integer :: i, j, k, l
+    real(dp), pointer :: x(:), y(:)
+    integer, pointer :: z(:)
+end type
+
+contains
+
+real(dp) function simpson(f, a, b, data) result(s)
+real(dp), intent(in) :: a, b
+abstract interface
+    real(dp) function func(x, data)
+    use types, only: dp
+    implicit none
+    real(dp), intent(in) :: x
+    type(context), intent(inout) :: data
+    end function
+end interface
+procedure(func) :: f
+type(context), intent(inout) :: data
+s = (b-a) / 6 * (f(a, data) + 4*f((a+b)/2, data) + f(b, data))
+end function
+
+end module</pre>
+</div>
+<p>Usage:</p>
+<div class="highlight-python"><pre>module test
+use types, only: dp
+use integrals, only: simpson, context
+implicit none
+private
+public foo
+
+contains
+
+real(dp) function f(x, data) result(y)
+real(dp), intent(in) :: x
+type(context), intent(inout) :: data
+real(dp) :: a, k
+a = data%a
+k = data%b
+y = a*sin(k*x)
+end function
+
+subroutine foo(a, k)
+real(dp) :: a, k
+type(context) :: data
+data%a = a
+data%b = k
+print *, simpson(f, 0._dp, pi, data)
+print *, simpson(f, 0._dp, 2*pi, data)
+end subroutine
+
+end module</pre>
+</div>
 <p>There is only so much flexibility really
 needed. For example, you could define two structure types for this purpose, one
 for Schroedinger and one for Dirac. Each would then be sufficiently general and
@@ -323,29 +458,234 @@ contain all the needed pieces with all the right labels.</p>
 be &#8220;one abstract type to encompass all&#8221; or bust. There are natural and viable
 options between &#8220;all&#8221; and &#8220;none&#8221;.</p>
 </div>
-<div class="section" id="private-module-variables">
-<h3>Private Module Variables<a class="headerlink" href="#private-module-variables" title="Permalink to this headline">¶</a></h3>
-<p>Hide the variable arguments completely by passing in module variables.  However
-it is best to avoid such global variables &#8211; even though really just
+<div class="section" id="iii-private-module-variables">
+<h3>III: Private Module Variables<a class="headerlink" href="#iii-private-module-variables" title="Permalink to this headline">¶</a></h3>
+<p>Hide the variable arguments completely by passing in module variables.</p>
+<p>Integrator:</p>
+<div class="highlight-python"><pre>module integrals
+use types, only: dp
+implicit none
+private
+public simpson
+
+contains
+
+real(dp) function simpson(f, a, b) result(s)
+real(dp), intent(in) :: a, b
+abstract interface
+    real(dp) function func(x)
+    use types, only: dp
+    implicit none
+    real(dp), intent(in) :: x
+    end function
+end interface
+procedure(func) :: f
+s = (b-a) / 6 * (f(a) + 4*f((a+b)/2) + f(b))
+end function
+
+end module</pre>
+</div>
+<p>Usage:</p>
+<div class="highlight-python"><pre>module test
+use types, only: dp
+use integrals, only: simpson
+implicit none
+private
+public foo
+
+real(dp) :: global_a, global_k
+
+contains
+
+real(dp) function f(x) result(y)
+real(dp), intent(in) :: x
+y = global_a*sin(global_k*x)
+end function
+
+subroutine foo(a, k)
+real(dp) :: a, k
+global_a = a
+global_k = k
+print *, simpson(f, 0._dp, pi)
+print *, simpson(f, 0._dp, 2*pi)
+end subroutine
+
+end module</pre>
+</div>
+<p>However it is best to avoid such global variables &#8211; even though really just
 semi-global &#8211; if possible. But sometimes it may be the simplest cleanest way.
 However, with a bit of thought, usually there is a better, safer, more explicit
-way along the lines of the previous option &#8220;General Structure&#8221;.</p>
+way along the lines of II or IV.</p>
 </div>
-<div class="section" id="transfer-intrinsic-function">
-<h3>Transfer Intrinsic Function<a class="headerlink" href="#transfer-intrinsic-function" title="Permalink to this headline">¶</a></h3>
-<p>Type casting can be done with the <tt class="docutils literal"><span class="pre">transfer</span></tt> intrinsic function. Examples:</p>
+<div class="section" id="iv-nested-functions">
+<h3>IV: Nested functions<a class="headerlink" href="#iv-nested-functions" title="Permalink to this headline">¶</a></h3>
+<p>Integrator:</p>
+<div class="highlight-python"><pre>module integrals
+use types, only: dp
+implicit none
+private
+public simpson
+
+contains
+
+real(dp) function simpson(f, a, b) result(s)
+real(dp), intent(in) :: a, b
+abstract interface
+    real(dp) function func(x)
+    use types, only: dp
+    implicit none
+    real(dp), intent(in) :: x
+    end function
+end interface
+procedure(func) :: f
+s = (b-a) / 6 * (f(a) + 4*f((a+b)/2) + f(b))
+end function
+
+end module</pre>
+</div>
+<p>Usage:</p>
+<div class="highlight-python"><pre>subroutine foo(a, k)
+use integrals, only: simpson
+real(dp) :: a, k
+print *, simpson(f, 0._dp, pi)
+print *, simpson(f, 0._dp, 2*pi)
+
+contains
+
+real(dp) function f(x) result(y)
+real(dp), intent(in) :: x
+y = a*sin(k*x)
+end function f
+
+end subroutine foo</pre>
+</div>
+</div>
+<div class="section" id="v-using-type-c-ptr-pointer">
+<h3>V: Using type(c_ptr) Pointer<a class="headerlink" href="#v-using-type-c-ptr-pointer" title="Permalink to this headline">¶</a></h3>
+<p>In C, one would use the <tt class="docutils literal"><span class="pre">void</span> <span class="pre">*</span></tt> pointer. In Fortran, one
+can use <tt class="docutils literal"><span class="pre">type(c_ptr)</span></tt> for exactly the same purpose.</p>
+<p>Integrator:</p>
+<div class="highlight-python"><pre>module integrals
+use types, only: dp
+use iso_c_binding, only: c_ptr
+implicit none
+private
+public simpson
+
+contains
+
+real(dp) function simpson(f, a, b, data) result(s)
+real(dp), intent(in) :: a, b
+abstract interface
+    real(dp) function func(x, data)
+    use types, only: dp
+    implicit none
+    real(dp), intent(in) :: x
+    type(c_ptr), intent(in) :: data
+    end function
+end interface
+procedure(func) :: f
+type(c_ptr), intent(in) :: data
+s = (b-a) / 6 * (f(a, data) + 4*f((a+b)/2, data) + f(b, data))
+end function
+
+end module</pre>
+</div>
+<p>Usage:</p>
+<div class="highlight-python"><pre>module test
+use types, only: dp
+use integrals, only: simpson
+use iso_c_binding, only: c_ptr, c_loc, c_f_pointer
+implicit none
+private
+public foo
+
+type f_data
+    ! Only contains data that we need for our particular callback.
+    real(dp) :: a, k
+end type
+
+contains
+
+real(dp) function f(x, data) result(y)
+real(dp), intent(in) :: x
+type(c_ptr), intent(in) :: data
+type(f_data), pointer :: d
+call c_f_pointer(data, d)
+y = d%a * sin(d%k * x)
+end function
+
+subroutine foo(a, k)
+real(dp) :: a, k
+type(f_data), target :: data
+data%a = a
+data%k = k
+print *, simpson(f, 0._dp, pi, c_loc(data))
+print *, simpson(f, 0._dp, 2*pi, c_loc(data))
+end subroutine
+
+end module</pre>
+</div>
+<p>As always, with the advantages of such re-casting, as Fortran lets you
+do if you really want to, come also the disadvantages that fewer compile- and
+run-time checks are possible to catch errors; and with that, inevitably more
+leaky, bug-prone code. So one always has to balance the costs and benefits.</p>
+<p>Usually, in the context of scientific programming, where the main thrust
+is to represent and solve precise mathematical formulations (as opposed to
+create a GUI with some untold number of buttons, drop-downs, and other
+interface elements), simplest, least bug-prone, and fastest is to use one of
+the previous approaches.</p>
+</div>
+<div class="section" id="vi-transfer-intrinsic-function">
+<h3>VI: transfer() Intrinsic Function<a class="headerlink" href="#vi-transfer-intrinsic-function" title="Permalink to this headline">¶</a></h3>
+<p>Before Fortran 2003, the only way to do type casting
+was using the <tt class="docutils literal"><span class="pre">transfer</span></tt> intrinsic function. It is functionally equivalent to
+the method V, but more verbose and more error prone.
+It is now obsolete and one should use the method V instead.</p>
+<p>Examples:</p>
 <p><a class="reference external" href="http://jblevins.org/log/transfer">http://jblevins.org/log/transfer</a></p>
 <p><a class="reference external" href="http://jblevins.org/research/generic-list.pdf">http://jblevins.org/research/generic-list.pdf</a></p>
 <p><a class="reference external" href="http://www.macresearch.org/advanced_fortran_90_callbacks_with_the_transfer_function">http://www.macresearch.org/advanced_fortran_90_callbacks_with_the_transfer_function</a></p>
-<p>In any case, as always, with the advantages of such re-casting, as f90 lets you
-do if you really want to, come also the disadvantages that fewer compile- and
-run-time checks are possible to catch errors; and with that, inevitably more
-leaky, bug-prone code. So one always has to balance the costs and benefits.
-Usually, in the context of scientific programming, where the main thrust
-represent and solve precise mathematical formulations (as opposed to create a
-GUI with some untold number of buttons, drop-downs, and other interface
-elements), simplest, least bug-prone, and fastest is to use
-one of the first three approaches above.</p>
+</div>
+<div class="section" id="complete-example-of-void-vs-type-c-ptr-and-transfer">
+<h3>Complete Example of void * vs type(c_ptr) and transfer()<a class="headerlink" href="#complete-example-of-void-vs-type-c-ptr-and-transfer" title="Permalink to this headline">¶</a></h3>
+<p>Here are three equivalent codes: one in C using <tt class="docutils literal"><span class="pre">void</span> <span class="pre">*</span></tt> and two codes in
+Fortran using <tt class="docutils literal"><span class="pre">type(c_ptr)</span></tt> and <tt class="docutils literal"><span class="pre">transfer()</span></tt>:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="28%" />
+<col width="57%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Language</th>
+<th class="head">Method</th>
+<th class="head">Link</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>C</td>
+<td><tt class="docutils literal"><span class="pre">void</span> <span class="pre">*</span></tt></td>
+<td><a class="reference external" href="https://gist.github.com/1665641">https://gist.github.com/1665641</a></td>
+</tr>
+<tr class="row-odd"><td>Fortran</td>
+<td><tt class="docutils literal"><span class="pre">type(c_ptr)</span></tt></td>
+<td><a class="reference external" href="https://gist.github.com/1665626">https://gist.github.com/1665626</a></td>
+</tr>
+<tr class="row-even"><td>Fortran</td>
+<td><tt class="docutils literal"><span class="pre">transfer()</span></tt></td>
+<td><a class="reference external" href="https://gist.github.com/1665630">https://gist.github.com/1665630</a></td>
+</tr>
+</tbody>
+</table>
+<p>The C code uses the standard C approach for writing extensible libraries that
+accept callbacks and contexts. The two Fortran codes show how to do the same.
+The <tt class="docutils literal"><span class="pre">type(c_ptr)</span></tt> method is equivalent to the C version and that is the
+approach that should be used.</p>
+<p>The <tt class="docutils literal"><span class="pre">transfer()</span></tt> method is here for completeness only (before Fortran 2003,
+it was the only way) and it is a little cumbersome, because the user needs to
+create auxiliary conversion functions for each of his types.
+As such, the <tt class="docutils literal"><span class="pre">type(c_ptr)</span></tt> method should be used instead.</p>
 </div>
 </div>
 </div>
@@ -368,10 +708,13 @@ one of the first three approaches above.</p>
 <li><a class="reference internal" href="#interfacing-with-c">Interfacing with C</a></li>
 <li><a class="reference internal" href="#interfacing-with-python">Interfacing with Python</a></li>
 <li><a class="reference internal" href="#type-casting-and-callbacks">Type Casting and Callbacks</a><ul>
-<li><a class="reference internal" href="#work-arrays">Work Arrays</a></li>
-<li><a class="reference internal" href="#general-structure">General Structure</a></li>
-<li><a class="reference internal" href="#private-module-variables">Private Module Variables</a></li>
-<li><a class="reference internal" href="#transfer-intrinsic-function">Transfer Intrinsic Function</a></li>
+<li><a class="reference internal" href="#i-work-arrays">I: Work Arrays</a></li>
+<li><a class="reference internal" href="#ii-general-structure">II: General Structure</a></li>
+<li><a class="reference internal" href="#iii-private-module-variables">III: Private Module Variables</a></li>
+<li><a class="reference internal" href="#iv-nested-functions">IV: Nested functions</a></li>
+<li><a class="reference internal" href="#v-using-type-c-ptr-pointer">V: Using type(c_ptr) Pointer</a></li>
+<li><a class="reference internal" href="#vi-transfer-intrinsic-function">VI: transfer() Intrinsic Function</a></li>
+<li><a class="reference internal" href="#complete-example-of-void-vs-type-c-ptr-and-transfer">Complete Example of void * vs type(c_ptr) and transfer()</a></li>
 </ul>
 </li>
 </ul>
