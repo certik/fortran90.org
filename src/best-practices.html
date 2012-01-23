@@ -210,6 +210,28 @@ end do</pre>
 </div>
 <p>And then make sure that all the strides are always on the left. Then it will be fast.</p>
 </div>
+<div class="section" id="allocatable-arrays">
+<h2>Allocatable Arrays<a class="headerlink" href="#allocatable-arrays" title="Permalink to this headline">¶</a></h2>
+<p>When using allocatable arrays (as opposed to pointers), Fortran manages the
+memory automatically and it is not possible to create memory leaks.</p>
+<p>For example you can allocate it inside a subroutine:</p>
+<div class="highlight-python"><pre>subroutine foo(lam)
+real(dp), allocatable, intent(out) :: lam
+allocate(lam(5))
+end subroutine</pre>
+</div>
+<p>And use somewhere else:</p>
+<div class="highlight-python"><pre>real(dp), allocatable :: lam
+call foo(lam)</pre>
+</div>
+<p>When the <tt class="docutils literal"><span class="pre">lam</span></tt> symbol goes out of scope, Fortran will deallocate it. If
+<tt class="docutils literal"><span class="pre">allocate</span></tt> is called twice on the same array, Fortran will abort with a
+runtime error. One can check if <tt class="docutils literal"><span class="pre">lam</span></tt> is already allocated and deallocate it
+if needed (before another allocation):</p>
+<div class="highlight-python"><pre>if (allocated(lam)) deallocate(lam)
+allocate(lam(10))</pre>
+</div>
+</div>
 <div class="section" id="file-input-output">
 <h2>File Input/Output<a class="headerlink" href="#file-input-output" title="Permalink to this headline">¶</a></h2>
 <p>To read from a file:</p>
@@ -254,7 +276,7 @@ end function</pre>
 </div>
 </div>
 <div class="section" id="interfacing-with-c">
-<h2>Interfacing with C<a class="headerlink" href="#interfacing-with-c" title="Permalink to this headline">¶</a></h2>
+<span id="c-interface"></span><h2>Interfacing with C<a class="headerlink" href="#interfacing-with-c" title="Permalink to this headline">¶</a></h2>
 <p>Write a C wrapper using the <tt class="docutils literal"><span class="pre">iso_c_binding</span></tt> module:</p>
 <div class="highlight-python"><pre>module fmesh_wrapper
 
@@ -292,7 +314,7 @@ c_mesh_exp(&amp;r_min, &amp;r_max, &amp;a, &amp;N, mesh);</pre>
 <p>If calling the Fortran <tt class="docutils literal"><span class="pre">exp_mesh</span></tt> subroutine from the <tt class="docutils literal"><span class="pre">c_exp_mesh</span></tt> subroutine is a problem (CPU efficiency), you can simply implement whatever the routine does directly in the <tt class="docutils literal"><span class="pre">c_exp_mesh</span></tt> subroutine. In other words, use the <tt class="docutils literal"><span class="pre">iso_c_binding</span></tt> module as a direct way to call Fortran code from C, and you can make it as fast as needed.</p>
 </div>
 <div class="section" id="interfacing-with-python">
-<h2>Interfacing with Python<a class="headerlink" href="#interfacing-with-python" title="Permalink to this headline">¶</a></h2>
+<span id="python-interface"></span><h2>Interfacing with Python<a class="headerlink" href="#interfacing-with-python" title="Permalink to this headline">¶</a></h2>
 <p>To wrap Fortran code in Python, export it to C first (see above) and then write this Cython code:</p>
 <div class="highlight-python"><pre>from numpy cimport ndarray
 from numpy import empty
@@ -310,7 +332,7 @@ def mesh_exp(double r_min, double r_max, double a, int N):
 <p>Notice that we didn&#8217;t write any C code &#8212; we only told fortran to use the C calling convention when producing the &#8221;.o&#8221; files, and then we pretended in Cython, that the function is implemented in C, but in fact, it is linked in from Fortran directly. So this is the most direct way of calling Fortran from Python. There is no intermediate step, and no unnecessary processing/wrapping involved.</p>
 </div>
 <div class="section" id="type-casting-and-callbacks">
-<h2>Type Casting and Callbacks<a class="headerlink" href="#type-casting-and-callbacks" title="Permalink to this headline">¶</a></h2>
+<span id="callbacks"></span><h2>Type Casting and Callbacks<a class="headerlink" href="#type-casting-and-callbacks" title="Permalink to this headline">¶</a></h2>
 <p>There are essentially five different ways to do that, each
 with its own advantages and disadvantages.</p>
 <p>The methods I, II and V can be used both in C and Fortran.
@@ -704,6 +726,7 @@ As such, the <tt class="docutils literal"><span class="pre">type(c_ptr)</span></
 <li><a class="reference internal" href="#modules-and-programs">Modules and Programs</a></li>
 <li><a class="reference internal" href="#arrays">Arrays</a></li>
 <li><a class="reference internal" href="#multidimensional-arrays">Multidimensional Arrays</a></li>
+<li><a class="reference internal" href="#allocatable-arrays">Allocatable Arrays</a></li>
 <li><a class="reference internal" href="#file-input-output">File Input/Output</a></li>
 <li><a class="reference internal" href="#interfacing-with-c">Interfacing with C</a></li>
 <li><a class="reference internal" href="#interfacing-with-python">Interfacing with Python</a></li>
