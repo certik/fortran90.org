@@ -53,9 +53,13 @@ You can also use `f2py <http://www.f2py.com/>`_ or
 Does Fortran support closures?
 ------------------------------
 
-Fortran doesn't support `closures <http://en.wikipedia.org/wiki/Closure_(computer_science)>`_
-but it does support nested functions.
-See :ref:`nested_functions` for examples of usage.
+No. Fortran doesn't support
+`closures <http://en.wikipedia.org/wiki/Closure_(computer_science)>`_.
+
+Does Fortran support nested functions?
+--------------------------------------
+
+Yes, see :ref:`nested_functions` for examples of usage.
 
 Are Fortran compilers ABI compatible?
 -------------------------------------
