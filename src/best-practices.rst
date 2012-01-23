@@ -262,6 +262,7 @@ where the ``newunit`` function is defined by::
     call stop_error("newunit ERROR: available unit not found.")
     end function
 
+.. _c_interface:
 
 Interfacing with C
 ------------------
@@ -306,6 +307,8 @@ No matter if you are passing arrays in or out, always allocate them in C first, 
 
 If calling the Fortran ``exp_mesh`` subroutine from the ``c_exp_mesh`` subroutine is a problem (CPU efficiency), you can simply implement whatever the routine does directly in the ``c_exp_mesh`` subroutine. In other words, use the ``iso_c_binding`` module as a direct way to call Fortran code from C, and you can make it as fast as needed.
 
+.. _python_interface:
+
 Interfacing with Python
 -----------------------
 
@@ -327,6 +330,7 @@ The memory is allocated and owned (reference counted) by Python, and a pointer i
 
 Notice that we didn't write any C code --- we only told fortran to use the C calling convention when producing the ".o" files, and then we pretended in Cython, that the function is implemented in C, but in fact, it is linked in from Fortran directly. So this is the most direct way of calling Fortran from Python. There is no intermediate step, and no unnecessary processing/wrapping involved.
 
+.. _callbacks:
 
 Type Casting and Callbacks
 --------------------------
