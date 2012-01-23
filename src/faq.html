@@ -98,6 +98,29 @@ for more information.</p>
 <p>Create a module and use it from other places. The compiler will check all the
 types.</p>
 </div>
+<div class="section" id="what-compiler-options-should-i-use-for-development">
+<h2>What compiler options should I use for development?<a class="headerlink" href="#what-compiler-options-should-i-use-for-development" title="Permalink to this headline">¶</a></h2>
+<p>One possibility for gfortran is:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">-</span><span class="n">Wall</span> <span class="o">-</span><span class="n">Wextra</span> <span class="o">-</span><span class="n">Wimplicit</span><span class="o">-</span><span class="n">interface</span> <span class="o">-</span><span class="n">fPIC</span> <span class="o">-</span><span class="n">Werror</span> <span class="o">-</span><span class="n">fmax</span><span class="o">-</span><span class="n">errors</span><span class="o">=</span><span class="mi">1</span> <span class="o">-</span><span class="n">g</span> <span class="o">-</span><span class="n">fbounds</span><span class="o">-</span><span class="n">check</span> <span class="o">-</span><span class="n">fcheck</span><span class="o">-</span><span class="n">array</span><span class="o">-</span><span class="n">temporaries</span> <span class="o">-</span><span class="n">fbacktrace</span>
+</pre></div>
+</div>
+<p>This warns about undefined symbols, turns warnings into errors (so that the
+compilation stops when undefined symbol is used), stops at the first error,
+turns on bounds checks and array temporaries, and turns on backtrace printing
+when something fails at runtime (typically accessing an array out of bounds).</p>
+</div>
+<div class="section" id="what-compiler-options-should-i-use-for-production-run">
+<h2>What compiler options should I use for production run?<a class="headerlink" href="#what-compiler-options-should-i-use-for-production-run" title="Permalink to this headline">¶</a></h2>
+<p>One possibility for gfortran is:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">-</span><span class="n">Wall</span> <span class="o">-</span><span class="n">Wextra</span> <span class="o">-</span><span class="n">Wimplicit</span><span class="o">-</span><span class="n">interface</span> <span class="o">-</span><span class="n">fPIC</span> <span class="o">-</span><span class="n">Werror</span> <span class="o">-</span><span class="n">fmax</span><span class="o">-</span><span class="n">errors</span><span class="o">=</span><span class="mi">1</span> <span class="o">-</span><span class="n">O3</span> <span class="o">-</span><span class="n">march</span><span class="o">=</span><span class="n">native</span> <span class="o">-</span><span class="n">ffast</span><span class="o">-</span><span class="n">math</span> <span class="o">-</span><span class="n">funroll</span><span class="o">-</span><span class="n">loops</span>
+</pre></div>
+</div>
+<p>This turns off all debugging options (like bounds checks)
+and turns on optimizing options (fast math and platform dependent code
+generation).</p>
+<p>It still warns about undefined symbols, turns warnings into errors (so that the
+compilation stops when undefined symbol is used) and stops at the first error.</p>
+</div>
 </div>
 
 
@@ -116,6 +139,8 @@ types.</p>
 <li><a class="reference internal" href="#what-is-the-best-way-to-distribute-and-install-fortran-libraries">What is the best way to distribute and install Fortran libraries?</a></li>
 <li><a class="reference internal" href="#does-fortran-warn-you-about-undefined-symbols">Does Fortran warn you about undefined symbols?</a></li>
 <li><a class="reference internal" href="#what-is-the-equivalent-of-the-c-header-files-in-fortran">What is the equivalent of the C header files in Fortran?</a></li>
+<li><a class="reference internal" href="#what-compiler-options-should-i-use-for-development">What compiler options should I use for development?</a></li>
+<li><a class="reference internal" href="#what-compiler-options-should-i-use-for-production-run">What compiler options should I use for production run?</a></li>
 </ul>
 </li>
 </ul>

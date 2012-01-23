@@ -55,3 +55,29 @@ What is the equivalent of the C header files in Fortran?
 
 Create a module and use it from other places. The compiler will check all the
 types.
+
+What compiler options should I use for development?
+---------------------------------------------------
+
+One possibility for gfortran is::
+
+    -Wall -Wextra -Wimplicit-interface -fPIC -Werror -fmax-errors=1 -g -fbounds-check -fcheck-array-temporaries -fbacktrace
+
+This warns about undefined symbols, turns warnings into errors (so that the
+compilation stops when undefined symbol is used), stops at the first error,
+turns on bounds checks and array temporaries, and turns on backtrace printing
+when something fails at runtime (typically accessing an array out of bounds).
+
+What compiler options should I use for production run?
+------------------------------------------------------
+
+One possibility for gfortran is::
+
+    -Wall -Wextra -Wimplicit-interface -fPIC -Werror -fmax-errors=1 -O3 -march=native -ffast-math -funroll-loops
+
+This turns off all debugging options (like bounds checks)
+and turns on optimizing options (fast math and platform dependent code
+generation).
+
+It still warns about undefined symbols, turns warnings into errors (so that the
+compilation stops when undefined symbol is used) and stops at the first error.
