@@ -53,7 +53,29 @@
             
   <div class="section" id="faq">
 <h1>FAQ<a class="headerlink" href="#faq" title="Permalink to this headline">¶</a></h1>
-<p>We try to answer here some commonly asked questions about Fortran.</p>
+<p>We try to answer here some commonly asked questions about Fortran.
+If the answers are subjective or incorrect, please let us know (preferably by
+sending a pull request fixing it, see the <a class="reference external" href="http://fortran90.org/">main</a> page).</p>
+<div class="section" id="what-is-the-advantage-of-using-fortran-as-opposed-to-for-example-c-c">
+<h2>What is the advantage of using Fortran (as opposed to for example C/C++)?<a class="headerlink" href="#what-is-the-advantage-of-using-fortran-as-opposed-to-for-example-c-c" title="Permalink to this headline">¶</a></h2>
+<p>The Fortran language has been designed with the following goals:</p>
+<ul class="simple">
+<li>Contain basic mathematics in the core language (rich array operations,
+complex numbers, exponentiation)</li>
+<li>Be more restricting (and higher level) than languages like C/C++, so that the
+resulting code is easier to maintain and write. There is one canonical way
+to do things and you don’t have to worry about memory allocation (most of
+the times).</li>
+<li>Speed</li>
+</ul>
+<p>The key bottom line is: Fortran is <em>not</em> a general purpose language.  Rather,
+it is built from the ground up to translate mathematics into simple, readable,
+and fast code &#8211; straightforwardly maintainable by the gamut of scientists who
+actually produce/apply that mathematics. If that is the task at hand, it is the
+right tool for the job and, as right tools tend to do, can save enormous time
+and pain, with most excellent results in the end. If, however, mathematics is
+not the task, then almost certainly C++ will be much, much better.</p>
+</div>
 <div class="section" id="how-to-do-dynamic-dispatch-in-fortran-like-void-in-c">
 <h2>How to do dynamic dispatch in Fortran (like &#8216;void *&#8217; in C)?<a class="headerlink" href="#how-to-do-dynamic-dispatch-in-fortran-like-void-in-c" title="Permalink to this headline">¶</a></h2>
 <p>The equivalent of <tt class="docutils literal"><span class="pre">void</span> <span class="pre">*</span></tt> in Fortran is <tt class="docutils literal"><span class="pre">type(c_ptr)</span></tt>, see
@@ -132,6 +154,7 @@ compilation stops when undefined symbol is used) and stops at the first error.</
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">FAQ</a><ul>
+<li><a class="reference internal" href="#what-is-the-advantage-of-using-fortran-as-opposed-to-for-example-c-c">What is the advantage of using Fortran (as opposed to for example C/C++)?</a></li>
 <li><a class="reference internal" href="#how-to-do-dynamic-dispatch-in-fortran-like-void-in-c">How to do dynamic dispatch in Fortran (like &#8216;void *&#8217; in C)?</a></li>
 <li><a class="reference internal" href="#how-to-interface-fortran-with-c-and-python">How to interface Fortran with C and Python?</a></li>
 <li><a class="reference internal" href="#does-fortran-support-closures">Does Fortran support closures?</a></li>

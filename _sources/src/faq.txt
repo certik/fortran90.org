@@ -3,6 +3,33 @@ FAQ
 ===
 
 We try to answer here some commonly asked questions about Fortran.
+If the answers are subjective or incorrect, please let us know (preferably by
+sending a pull request fixing it, see the `main <http://fortran90.org/>`_ page).
+
+What is the advantage of using Fortran (as opposed to for example C/C++)?
+-------------------------------------------------------------------------
+
+The Fortran language has been designed with the following goals:
+
+* Contain basic mathematics in the core language (rich array operations,
+  complex numbers, exponentiation)
+
+* Be more restricting (and higher level) than languages like C/C++, so that the
+  resulting code is easier to maintain and write. There is one canonical way
+  to do things and you don’t have to worry about memory allocation (most of
+  the times).
+
+* Speed
+
+
+The key bottom line is: Fortran is *not* a general purpose language.  Rather,
+it is built from the ground up to translate mathematics into simple, readable,
+and fast code -- straightforwardly maintainable by the gamut of scientists who
+actually produce/apply that mathematics. If that is the task at hand, it is the
+right tool for the job and, as right tools tend to do, can save enormous time
+and pain, with most excellent results in the end. If, however, mathematics is
+not the task, then almost certainly C++ will be much, much better.
+
 
 How to do dynamic dispatch in Fortran (like 'void \*' in C)?
 ------------------------------------------------------------
