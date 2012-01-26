@@ -73,7 +73,7 @@ Things that are different:
   most of the time the library is backward compatible (for example
   libgfortran of GCC 4.7 is compatible with 4.6, 4.5, 4.4 and 4.3; 4.5 is
   compatible with 4.4 and 4.3. But 4.2 has a different .so version and is
-  incompatible with with either 4.1 and 4.3.)
+  incompatible with either 4.1 and 4.3.)
 * Modules: convention for naming and symbol mangling
 * Trailing underscores (zero, one (most common), two)
 * Calling convention: Whether real is passed as double, whether
