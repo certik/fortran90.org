@@ -102,7 +102,7 @@ You can also use <a class="reference external" href="http://www.f2py.com/">f2py<
 <p>Yes, see <a class="reference internal" href="rosetta.html#nested-functions"><em>Nested Functions</em></a> for examples of usage.</p>
 </div>
 <div class="section" id="are-fortran-compilers-abi-compatible">
-<h2>Are Fortran compilers ABI compatible?<a class="headerlink" href="#are-fortran-compilers-abi-compatible" title="Permalink to this headline">¶</a></h2>
+<span id="abi"></span><h2>Are Fortran compilers ABI compatible?<a class="headerlink" href="#are-fortran-compilers-abi-compatible" title="Permalink to this headline">¶</a></h2>
 <p>No, in general Fortran compilers are not ABI compatible.
 Things that are different:</p>
 <ul class="simple">
@@ -126,14 +126,14 @@ gfortran only looks at one bit, hence <tt class="docutils literal"><span class="
 with GCC and Clang.</p>
 </div>
 <div class="section" id="what-is-the-best-way-to-distribute-and-install-fortran-libraries">
-<h2>What is the best way to distribute and install Fortran libraries?<a class="headerlink" href="#what-is-the-best-way-to-distribute-and-install-fortran-libraries" title="Permalink to this headline">¶</a></h2>
+<span id="distribute-libraries"></span><h2>What is the best way to distribute and install Fortran libraries?<a class="headerlink" href="#what-is-the-best-way-to-distribute-and-install-fortran-libraries" title="Permalink to this headline">¶</a></h2>
 <p>Due to ABI incompatibility, in general the <tt class="docutils literal"><span class="pre">.so</span></tt>/<tt class="docutils literal"><span class="pre">.a</span></tt> libraries compiled
 with one compiler version cannot be used with any other compiler or version.</p>
 <p>As such, the only two options are:</p>
 <ol class="arabic">
 <li><p class="first">Distribute different <tt class="docutils literal"><span class="pre">.so</span></tt>/<tt class="docutils literal"><span class="pre">.a</span></tt> for each compiler (to some extent,
-they can be used with different versions of the same compiler, see the
-previous question).</p>
+they can be used with different versions of the same compiler, see
+<a class="reference internal" href="#abi"><em>Are Fortran compilers ABI compatible?</em></a>).</p>
 <p>This means to either provide source code and the user compiles it using
 his compiler, or precompile it with each compiler version (for commercial
 libraries). Either way, once we have <tt class="docutils literal"><span class="pre">.so</span></tt>/<tt class="docutils literal"><span class="pre">.a</span></tt> compatible with our
@@ -178,8 +178,10 @@ for more information.</p>
 </div>
 <div class="section" id="what-is-the-equivalent-of-the-c-header-files-in-fortran">
 <h2>What is the equivalent of the C header files in Fortran?<a class="headerlink" href="#what-is-the-equivalent-of-the-c-header-files-in-fortran" title="Permalink to this headline">¶</a></h2>
-<p>Create a module and use it from other places. The compiler will check all the
-types.</p>
+<p>Create a module and use it from other places
+(see <a class="reference internal" href="best-practices.html#modules"><em>Modules and Programs</em></a> for more information). The compiler will check all the
+types. However, there is a difference from C in how to distribute Fortran
+libraries, see <a class="reference internal" href="#distribute-libraries"><em>What is the best way to distribute and install Fortran libraries?</em></a> for more information.</p>
 </div>
 <div class="section" id="what-compiler-options-should-i-use-for-development">
 <h2>What compiler options should I use for development?<a class="headerlink" href="#what-compiler-options-should-i-use-for-development" title="Permalink to this headline">¶</a></h2>

@@ -61,6 +61,8 @@ Does Fortran support nested functions?
 
 Yes, see :ref:`nested_functions` for examples of usage.
 
+.. _ABI:
+
 Are Fortran compilers ABI compatible?
 -------------------------------------
 
@@ -86,6 +88,8 @@ On the other hand, Intel C and C++ compilers are
 `ABI-compatible <http://software.intel.com/sites/products/collateral/hpc/compilers/intel_linux_compiler_compatibility_with_gnu_compilers.pdf>`_
 with GCC and Clang.
 
+.. _distribute_libraries:
+
 What is the best way to distribute and install Fortran libraries?
 -----------------------------------------------------------------
 
@@ -95,8 +99,8 @@ with one compiler version cannot be used with any other compiler or version.
 As such, the only two options are:
 
 1.  Distribute different ``.so``/``.a`` for each compiler (to some extent,
-    they can be used with different versions of the same compiler, see the
-    previous question).
+    they can be used with different versions of the same compiler, see
+    :ref:`ABI`).
 
     This means to either provide source code and the user compiles it using
     his compiler, or precompile it with each compiler version (for commercial
@@ -148,8 +152,10 @@ Yes, it does. For gfortran, you need to use the ``-Wimplicit-interface`` option.
 What is the equivalent of the C header files in Fortran?
 --------------------------------------------------------
 
-Create a module and use it from other places. The compiler will check all the
-types.
+Create a module and use it from other places
+(see :ref:`modules` for more information). The compiler will check all the
+types. However, there is a difference from C in how to distribute Fortran
+libraries, see :ref:`distribute_libraries` for more information.
 
 What compiler options should I use for development?
 ---------------------------------------------------
