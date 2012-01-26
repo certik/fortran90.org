@@ -35,6 +35,8 @@ Just like in Python 2.x or C, when doing things like ``(N-1)/N`` where ``N`` is 
 
 As long as one of the ``/`` operands is a float, a floating point division will be used.
 
+.. _modules:
+
 Modules and Programs
 --------------------
 
