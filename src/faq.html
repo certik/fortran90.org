@@ -103,14 +103,72 @@ You can also use <a class="reference external" href="http://www.f2py.com/">f2py<
 </div>
 <div class="section" id="are-fortran-compilers-abi-compatible">
 <h2>Are Fortran compilers ABI compatible?<a class="headerlink" href="#are-fortran-compilers-abi-compatible" title="Permalink to this headline">¶</a></h2>
-<p>Intel C and C++ compilers are
+<p>No, in general Fortran compilers are not ABI compatible.
+Things that are different:</p>
+<ul class="simple">
+<li>Run-time library: different for each compiler. For the given compiler,
+most of the time the library is backward compatible (for example
+libgfortran of GCC 4.7 is compatible with 4.6, 4.5, 4.4 and 4.3; 4.5 is
+compatible with 4.4 and 4.3. But 4.2 has a different .so version and is
+incompatible with with either 4.1 and 4.3.)</li>
+<li>Modules: convention for naming and symbol mangling</li>
+<li>Trailing underscores (zero, one (most common), two)</li>
+<li>Calling convention: Whether real is passed as double, whether
+a function returns the value as first argument, etc. (see for
+example the <tt class="docutils literal"><span class="pre">-ff2c</span></tt> option in gfortran)</li>
+<li>Logical: Special Intel vs. gfortran problem: Intel has <tt class="docutils literal"><span class="pre">-1</span></tt> as
+<tt class="docutils literal"><span class="pre">.true.</span></tt> and gfortran <tt class="docutils literal"><span class="pre">1</span></tt>. With higher optimization levels,
+gfortran only looks at one bit, hence <tt class="docutils literal"><span class="pre">-1</span></tt> is <tt class="docutils literal"><span class="pre">.false.</span></tt>.</li>
+<li>...</li>
+</ul>
+<p>On the other hand, Intel C and C++ compilers are
 <a class="reference external" href="http://software.intel.com/sites/products/collateral/hpc/compilers/intel_linux_compiler_compatibility_with_gnu_compilers.pdf">ABI-compatible</a>
-with GCC and Clang. Fortran compilers in general are not ABI compatible.</p>
+with GCC and Clang.</p>
 </div>
 <div class="section" id="what-is-the-best-way-to-distribute-and-install-fortran-libraries">
 <h2>What is the best way to distribute and install Fortran libraries?<a class="headerlink" href="#what-is-the-best-way-to-distribute-and-install-fortran-libraries" title="Permalink to this headline">¶</a></h2>
-<p>Unfortunately it is not as easy as in C/C++ due to the ABI incompatibility
-across Fortran compilers. See this
+<p>Due to ABI incompatibility, in general the <tt class="docutils literal"><span class="pre">.so</span></tt>/<tt class="docutils literal"><span class="pre">.a</span></tt> libraries compiled
+with one compiler version cannot be used with any other compiler or version.</p>
+<p>As such, the only two options are:</p>
+<ol class="arabic">
+<li><p class="first">Distribute different <tt class="docutils literal"><span class="pre">.so</span></tt>/<tt class="docutils literal"><span class="pre">.a</span></tt> for each compiler (to some extent,
+they can be used with different versions of the same compiler, see the
+previous question).</p>
+<p>This means to either provide source code and the user compiles it using
+his compiler, or precompile it with each compiler version (for commercial
+libraries). Either way, once we have <tt class="docutils literal"><span class="pre">.so</span></tt>/<tt class="docutils literal"><span class="pre">.a</span></tt> compatible with our
+compiler, there are generally two ways to call it from a program:</p>
+<blockquote>
+<div><p>1.1. Distribute <tt class="docutils literal"><span class="pre">.mod</span></tt> files, that are compiler version dependent (In
+case of gfortran, they are only compatible between releases (4.5.0 and
+4.5.2) but not between minor versions (4.5 vs 4.6))</p>
+<p>1.2. Distribute interface <tt class="docutils literal"><span class="pre">.f90</span></tt> files, that contain the &#8220;abstract
+interface&#8221; for each subroutine/function, those are compiler
+independent, but they don&#8217;t work for modules. The upcoming Fortran
+standard for &#8220;submodules&#8221; will make this work for modules as well.</p>
+</div></blockquote>
+</li>
+<li><p class="first">Provide C interface (see <a class="reference internal" href="best-practices.html#c-interface"><em>Interfacing with C</em></a>) and distribute just one
+<tt class="docutils literal"><span class="pre">.so</span></tt>/<tt class="docutils literal"><span class="pre">.a</span></tt>.</p>
+<p>The library would be indistinguishable from any other C
+library, and it would be used from Fortran like any other C library. This of
+course means that one cannot use Fortran features not available through the C
+interface (currently: assume shape arrays, allocatable arrays, pointer arrays,
+but those will all be eventually available in future Fortran standards).</p>
+</li>
+</ol>
+<p>Unless the ABI becomes compatible across compilers, the easiest
+is to use 1.1. for Fortran usage, and 2. for C/Python usage.
+(If the ABI became compatible let&#8217;s say at least between ifort and gfortran,
+it might make sense to use 1.2. and distribute only one <tt class="docutils literal"><span class="pre">.so</span></tt>/<tt class="docutils literal"><span class="pre">.a</span></tt>).</p>
+<p>Note I: Distributing the <tt class="docutils literal"><span class="pre">.a</span></tt> file only (as opposed to both <tt class="docutils literal"><span class="pre">.so</span></tt> and
+<tt class="docutils literal"><span class="pre">.a</span></tt> files) for the given platform/compiler should be enough in many cases as
+it is faster and the number of programs sharing the library on any given system
+is typically fairly low.</p>
+<p>Note II: The advantage of distributing the sources is that it allows to
+optimize for the system at hand (e.g. GCC&#8217;s <tt class="docutils literal"><span class="pre">-march=native</span></tt> option), as well
+as for more specialized machines like BlueGene.</p>
+<p>See this
 <a class="reference external" href="http://gcc.gnu.org/ml/fortran/2011-06/msg00114.html">thread</a>
 for more information.</p>
 </div>
