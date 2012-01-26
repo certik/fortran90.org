@@ -64,15 +64,79 @@ Yes, see :ref:`nested_functions` for examples of usage.
 Are Fortran compilers ABI compatible?
 -------------------------------------
 
-Intel C and C++ compilers are
+No, in general Fortran compilers are not ABI compatible.
+Things that are different:
+
+* Run-time library: different for each compiler. For the given compiler,
+  most of the time the library is backward compatible (for example
+  libgfortran of GCC 4.7 is compatible with 4.6, 4.5, 4.4 and 4.3; 4.5 is
+  compatible with 4.4 and 4.3. But 4.2 has a different .so version and is
+  incompatible with with either 4.1 and 4.3.)
+* Modules: convention for naming and symbol mangling
+* Trailing underscores (zero, one (most common), two)
+* Calling convention: Whether real is passed as double, whether
+  a function returns the value as first argument, etc. (see for
+  example the ``-ff2c`` option in gfortran)
+* Logical: Special Intel vs. gfortran problem: Intel has ``-1`` as
+  ``.true.`` and gfortran ``1``. With higher optimization levels,
+  gfortran only looks at one bit, hence ``-1`` is ``.false.``.
+* ...
+
+On the other hand, Intel C and C++ compilers are
 `ABI-compatible <http://software.intel.com/sites/products/collateral/hpc/compilers/intel_linux_compiler_compatibility_with_gnu_compilers.pdf>`_
-with GCC and Clang. Fortran compilers in general are not ABI compatible.
+with GCC and Clang.
 
 What is the best way to distribute and install Fortran libraries?
 -----------------------------------------------------------------
 
-Unfortunately it is not as easy as in C/C++ due to the ABI incompatibility
-across Fortran compilers. See this
+Due to ABI incompatibility, in general the ``.so``/``.a`` libraries compiled
+with one compiler version cannot be used with any other compiler or version.
+
+As such, the only two options are:
+
+1.  Distribute different ``.so``/``.a`` for each compiler (to some extent,
+    they can be used with different versions of the same compiler, see the
+    previous question).
+
+    This means to either provide source code and the user compiles it using
+    his compiler, or precompile it with each compiler version (for commercial
+    libraries). Either way, once we have ``.so``/``.a`` compatible with our
+    compiler, there are generally two ways to call it from a program:
+
+        1.1. Distribute ``.mod`` files, that are compiler version dependent (In
+        case of gfortran, they are only compatible between releases (4.5.0 and
+        4.5.2) but not between minor versions (4.5 vs 4.6))
+
+        1.2. Distribute interface ``.f90`` files, that contain the "abstract
+        interface" for each subroutine/function, those are compiler
+        independent, but they don't work for modules. The upcoming Fortran
+        standard for "submodules" will make this work for modules as well.
+
+2.  Provide C interface (see :ref:`c_interface`) and distribute just one
+    ``.so``/``.a``.
+
+    The library would be indistinguishable from any other C
+    library, and it would be used from Fortran like any other C library. This of
+    course means that one cannot use Fortran features not available through the C
+    interface (currently: assume shape arrays, allocatable arrays, pointer arrays,
+    but those will all be eventually available in future Fortran standards).
+
+
+Unless the ABI becomes compatible across compilers, the easiest
+is to use 1.1. for Fortran usage, and 2. for C/Python usage.
+(If the ABI became compatible let's say at least between ifort and gfortran,
+it might make sense to use 1.2. and distribute only one ``.so``/``.a``).
+
+Note I: Distributing the ``.a`` file only (as opposed to both ``.so`` and
+``.a`` files) for the given platform/compiler should be enough in many cases as
+it is faster and the number of programs sharing the library on any given system
+is typically fairly low.
+
+Note II: The advantage of distributing the sources is that it allows to
+optimize for the system at hand (e.g. GCC's ``-march=native`` option), as well
+as for more specialized machines like BlueGene.
+
+See this
 `thread <http://gcc.gnu.org/ml/fortran/2011-06/msg00114.html>`_
 for more information.
 
