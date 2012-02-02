@@ -363,7 +363,7 @@ Integrator::
 
     real(dp) function simpson(f, a, b, data) result(s)
     real(dp), intent(in) :: a, b
-    abstract interface
+    interface
         real(dp) function func(x, data)
         use types, only: dp
         implicit none
@@ -440,7 +440,7 @@ Integrator::
 
     real(dp) function simpson(f, a, b, data) result(s)
     real(dp), intent(in) :: a, b
-    abstract interface
+    interface
         real(dp) function func(x, data)
         use types, only: dp
         implicit none
@@ -513,7 +513,7 @@ Integrator::
 
     real(dp) function simpson(f, a, b) result(s)
     real(dp), intent(in) :: a, b
-    abstract interface
+    interface
         real(dp) function func(x)
         use types, only: dp
         implicit none
@@ -575,7 +575,7 @@ Integrator::
 
     real(dp) function simpson(f, a, b) result(s)
     real(dp), intent(in) :: a, b
-    abstract interface
+    interface
         real(dp) function func(x)
         use types, only: dp
         implicit none
@@ -626,7 +626,7 @@ Integrator::
 
     real(dp) function simpson(f, a, b, data) result(s)
     real(dp), intent(in) :: a, b
-    abstract interface
+    interface
         real(dp) function func(x, data)
         use types, only: dp
         implicit none
