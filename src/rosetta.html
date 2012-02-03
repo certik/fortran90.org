@@ -787,14 +787,13 @@ call foo(2._dp, 2._dp, 1._dp)</pre>
 </td>
 <td><div class="first last highlight-python"><pre>real(dp) function simpson(f, a, b) result(s)
 real(dp), intent(in) :: a, b
-abstract interface
-    real(dp) function func(x)
+interface
+    real(dp) function f(x)
     use types, only: dp
     implicit none
     real(dp), intent(in) :: x
     end function
 end interface
-procedure(func) :: f
 s = (b-a) / 6 * (f(a) + 4*f((a+b)/2) + f(b))
 end function
 

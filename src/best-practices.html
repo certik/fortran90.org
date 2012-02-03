@@ -329,10 +329,116 @@ def mesh_exp(double r_min, double r_max, double a, int N):
     return mesh</pre>
 </div>
 <p>The memory is allocated and owned (reference counted) by Python, and a pointer is given to the Fortran code. Use this approach for both &#8220;in&#8221; and &#8220;out&#8221; arrays.</p>
-<p>Notice that we didn&#8217;t write any C code &#8212; we only told fortran to use the C calling convention when producing the &#8221;.o&#8221; files, and then we pretended in Cython, that the function is implemented in C, but in fact, it is linked in from Fortran directly. So this is the most direct way of calling Fortran from Python. There is no intermediate step, and no unnecessary processing/wrapping involved.</p>
+<p>Notice that we didn&#8217;t write any C code &#8212; we only told fortran to use the C
+calling convention when producing the &#8221;.o&#8221; files, and then we pretended in
+Cython, that the function is implemented in C, but in fact, it is linked in
+from Fortran directly. So this is the most direct way of calling Fortran from
+Python. There is no intermediate step, and no unnecessary processing/wrapping
+involved.</p>
 </div>
-<div class="section" id="type-casting-and-callbacks">
-<span id="callbacks"></span><h2>Type Casting and Callbacks<a class="headerlink" href="#type-casting-and-callbacks" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="callbacks">
+<h2>Callbacks<a class="headerlink" href="#callbacks" title="Permalink to this headline">¶</a></h2>
+<p>There are two ways to implement callbacks to be used like this:</p>
+<div class="highlight-python"><pre>subroutine foo(a, k)
+use integrals, only: simpson
+real(dp) :: a, k
+print *, simpson(f, 0._dp, pi)
+print *, simpson(f, 0._dp, 2*pi)
+
+contains
+
+real(dp) function f(x) result(y)
+real(dp), intent(in) :: x
+y = a*sin(k*x)
+end function f
+
+end subroutine foo</pre>
+</div>
+<p>The traditional approach is to simply declare the <tt class="docutils literal"><span class="pre">f</span></tt> dummy variable as a
+subroutine/function using:</p>
+<div class="highlight-python"><pre>module integrals
+use types, only: dp
+implicit none
+private
+public simpson
+
+contains
+
+real(dp) function simpson(f, a, b) result(s)
+real(dp), intent(in) :: a, b
+interface
+    real(dp) function f(x)
+    use types, only: dp
+    implicit none
+    real(dp), intent(in) :: x
+    end function
+end interface
+s = (b-a) / 6 * (f(a) + 4*f((a+b)/2) + f(b))
+end function
+
+end module</pre>
+</div>
+<p>The other approach since f2003 is to first define a new type for our callback,
+and then use <tt class="docutils literal"><span class="pre">procedure(func)</span></tt> as the type of the dummy argument:</p>
+<div class="highlight-python"><pre>module integrals
+use types, only: dp
+implicit none
+private
+public simpson
+
+contains
+
+real(dp) function simpson(f, a, b) result(s)
+real(dp), intent(in) :: a, b
+interface
+    real(dp) function func(x)
+    use types, only: dp
+    implicit none
+    real(dp), intent(in) :: x
+    end function
+end interface
+procedure(func) :: f
+s = (b-a) / 6 * (f(a) + 4*f((a+b)/2) + f(b))
+end function
+
+end module</pre>
+</div>
+<p>The new type can also be defined outside of the function (and reused), like:</p>
+<div class="highlight-python"><pre>module integrals
+use types, only: dp
+implicit none
+private
+public simpson
+
+interface
+    real(dp) function func(x)
+    use types, only: dp
+    implicit none
+    real(dp), intent(in) :: x
+    end function
+end interface
+
+contains
+
+real(dp) function simpson(f, a, b) result(s)
+real(dp), intent(in) :: a, b
+procedure(func) :: f
+s = (b-a) / 6 * (f(a) + 4*f((a+b)/2) + f(b))
+end function
+
+real(dp) function simpson2(f, a, b) result(s)
+real(dp), intent(in) :: a, b
+procedure(func) :: f
+real(dp) :: mid
+mid = (a + b)/2
+s = simpson(f, a, mid) + simpson(f, mid, b)
+end function
+
+end module</pre>
+</div>
+</div>
+<div class="section" id="type-casting-in-callbacks">
+<span id="id1"></span><h2>Type Casting in Callbacks<a class="headerlink" href="#type-casting-in-callbacks" title="Permalink to this headline">¶</a></h2>
 <p>There are essentially five different ways to do that, each
 with its own advantages and disadvantages.</p>
 <p>The methods I, II and V can be used both in C and Fortran.
@@ -354,7 +460,7 @@ contains
 
 real(dp) function simpson(f, a, b, data) result(s)
 real(dp), intent(in) :: a, b
-abstract interface
+interface
     real(dp) function func(x, data)
     use types, only: dp
     implicit none
@@ -427,7 +533,7 @@ contains
 
 real(dp) function simpson(f, a, b, data) result(s)
 real(dp), intent(in) :: a, b
-abstract interface
+interface
     real(dp) function func(x, data)
     use types, only: dp
     implicit none
@@ -494,7 +600,7 @@ contains
 
 real(dp) function simpson(f, a, b) result(s)
 real(dp), intent(in) :: a, b
-abstract interface
+interface
     real(dp) function func(x)
     use types, only: dp
     implicit none
@@ -552,7 +658,7 @@ contains
 
 real(dp) function simpson(f, a, b) result(s)
 real(dp), intent(in) :: a, b
-abstract interface
+interface
     real(dp) function func(x)
     use types, only: dp
     implicit none
@@ -598,7 +704,7 @@ contains
 
 real(dp) function simpson(f, a, b, data) result(s)
 real(dp), intent(in) :: a, b
-abstract interface
+interface
     real(dp) function func(x, data)
     use types, only: dp
     implicit none
@@ -730,7 +836,8 @@ As such, the <tt class="docutils literal"><span class="pre">type(c_ptr)</span></
 <li><a class="reference internal" href="#file-input-output">File Input/Output</a></li>
 <li><a class="reference internal" href="#interfacing-with-c">Interfacing with C</a></li>
 <li><a class="reference internal" href="#interfacing-with-python">Interfacing with Python</a></li>
-<li><a class="reference internal" href="#type-casting-and-callbacks">Type Casting and Callbacks</a><ul>
+<li><a class="reference internal" href="#callbacks">Callbacks</a></li>
+<li><a class="reference internal" href="#type-casting-in-callbacks">Type Casting in Callbacks</a><ul>
 <li><a class="reference internal" href="#i-work-arrays">I: Work Arrays</a></li>
 <li><a class="reference internal" href="#ii-general-structure">II: General Structure</a></li>
 <li><a class="reference internal" href="#iii-private-module-variables">III: Private Module Variables</a></li>

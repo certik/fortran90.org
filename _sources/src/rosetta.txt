@@ -463,14 +463,13 @@ You can use the nested functions in callbacks to pass context:
 |                                                           |                                                                      |
 | def simpson(f, a, b):                                     | real(dp) function simpson(f, a, b) result(s)                         |
 |     return (b-a) / 6 * (f(a) + 4*f((a+b)/2) + f(b))       | real(dp), intent(in) :: a, b                                         |
-|                                                           | abstract interface                                                   |
-| def foo(a, k):                                            |     real(dp) function func(x)                                        |
+|                                                           | interface                                                            |
+| def foo(a, k):                                            |     real(dp) function f(x)                                           |
 |     def f(x):                                             |     use types, only: dp                                              |
 |         return a*sin(k*x)                                 |     implicit none                                                    |
 |     print simpson(f, 0., pi)                              |     real(dp), intent(in) :: x                                        |
 |     print simpson(f, 0., 2*pi)                            |     end function                                                     |
 |                                                           | end interface                                                        |
-|                                                           | procedure(func) :: f                                                 |
 |                                                           | s = (b-a) / 6 * (f(a) + 4*f((a+b)/2) + f(b))                         |
 |                                                           | end function                                                         |
 |                                                           |                                                                      |
