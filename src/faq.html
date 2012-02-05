@@ -189,10 +189,15 @@ libraries, see <a class="reference internal" href="#distribute-libraries"><em>Wh
 <div class="highlight-python"><div class="highlight"><pre><span class="o">-</span><span class="n">Wall</span> <span class="o">-</span><span class="n">Wextra</span> <span class="o">-</span><span class="n">Wimplicit</span><span class="o">-</span><span class="n">interface</span> <span class="o">-</span><span class="n">fPIC</span> <span class="o">-</span><span class="n">Werror</span> <span class="o">-</span><span class="n">fmax</span><span class="o">-</span><span class="n">errors</span><span class="o">=</span><span class="mi">1</span> <span class="o">-</span><span class="n">g</span> <span class="o">-</span><span class="n">fbounds</span><span class="o">-</span><span class="n">check</span> <span class="o">-</span><span class="n">fcheck</span><span class="o">-</span><span class="n">array</span><span class="o">-</span><span class="n">temporaries</span> <span class="o">-</span><span class="n">fbacktrace</span>
 </pre></div>
 </div>
+<p>With gfortran 4.5 and newer, you can use <tt class="docutils literal"><span class="pre">fcheck=all</span></tt>, which turns
+on <tt class="docutils literal"><span class="pre">-fbounds-check</span> <span class="pre">-fcheck-array-temporaries</span></tt> and other checks.</p>
 <p>This warns about undefined symbols, turns warnings into errors (so that the
 compilation stops when undefined symbol is used), stops at the first error,
 turns on bounds checks and array temporaries, and turns on backtrace printing
 when something fails at runtime (typically accessing an array out of bounds).</p>
+<p>For Intel ifort:</p>
+<div class="highlight-python"><pre>-warn all -check all</pre>
+</div>
 </div>
 <div class="section" id="what-compiler-options-should-i-use-for-production-run">
 <h2>What compiler options should I use for production run?<a class="headerlink" href="#what-compiler-options-should-i-use-for-production-run" title="Permalink to this headline">¶</a></h2>
@@ -205,6 +210,9 @@ and turns on optimizing options (fast math and platform dependent code
 generation).</p>
 <p>It still warns about undefined symbols, turns warnings into errors (so that the
 compilation stops when undefined symbol is used) and stops at the first error.</p>
+<p>For Intel ifort:</p>
+<div class="highlight-python"><pre>-warn all -fast</pre>
+</div>
 </div>
 </div>
 

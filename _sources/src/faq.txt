@@ -164,10 +164,17 @@ One possibility for gfortran is::
 
     -Wall -Wextra -Wimplicit-interface -fPIC -Werror -fmax-errors=1 -g -fbounds-check -fcheck-array-temporaries -fbacktrace
 
+With gfortran 4.5 and newer, you can use ``fcheck=all``, which turns
+on ``-fbounds-check -fcheck-array-temporaries`` and other checks.
+
 This warns about undefined symbols, turns warnings into errors (so that the
 compilation stops when undefined symbol is used), stops at the first error,
 turns on bounds checks and array temporaries, and turns on backtrace printing
 when something fails at runtime (typically accessing an array out of bounds).
+
+For Intel ifort::
+
+    -warn all -check all
 
 What compiler options should I use for production run?
 ------------------------------------------------------
@@ -182,3 +189,8 @@ generation).
 
 It still warns about undefined symbols, turns warnings into errors (so that the
 compilation stops when undefined symbol is used) and stops at the first error.
+
+For Intel ifort::
+
+    -warn all -fast
+
