@@ -210,6 +210,81 @@ end do</pre>
 </div>
 <p>And then make sure that all the strides are always on the left. Then it will be fast.</p>
 </div>
+<div class="section" id="element-wise-operations-on-arrays-using-subroutines-functions">
+<span id="elemental"></span><h2>Element-wise Operations on Arrays Using Subroutines/Functions<a class="headerlink" href="#element-wise-operations-on-arrays-using-subroutines-functions" title="Permalink to this headline">¶</a></h2>
+<p>There are two approaches: <tt class="docutils literal"><span class="pre">elemental</span></tt> subroutines or implementing the
+operation for vectors and using <tt class="docutils literal"><span class="pre">reshape</span></tt>.</p>
+<p>In the first approach,
+one uses the <tt class="docutils literal"><span class="pre">elemental</span></tt> keyword to create a function like this:</p>
+<div class="highlight-python"><pre>real(dp) elemental function nroot(n, x) result(y)
+integer, intent(in) :: n
+real(dp), intent(in) :: x
+y = x**(1._dp / n)
+end function</pre>
+</div>
+<p>All arguments (in and out) must be scalars. You can then use
+this function with arrays of any (compatible) shape, for example:</p>
+<div class="highlight-python"><pre>print *, nroot(2, 9._dp)
+print *, nroot(2, [1._dp, 4._dp, 9._dp, 10._dp])
+print *, nroot(2, reshape([1._dp, 4._dp, 9._dp, 10._dp], [2, 2]))
+print *, nroot([2, 3, 4, 5], [1._dp, 4._dp, 9._dp, 10._dp])
+print *, nroot([2, 3, 4, 5], 4._dp)</pre>
+</div>
+<p>The output will be:</p>
+<div class="highlight-python"><pre>3.0000000000000000
+1.0000000000000000        2.0000000000000000        3.0000000000000000        3.1622776601683795
+1.0000000000000000        2.0000000000000000        3.0000000000000000        3.1622776601683795
+1.0000000000000000        1.5874010519681994        1.7320508075688772        1.5848931924611136
+2.0000000000000000        1.5874010519681994        1.4142135623730951        1.3195079107728942</pre>
+</div>
+<p>In the above, typically <tt class="docutils literal"><span class="pre">n</span></tt> is a parameter and <tt class="docutils literal"><span class="pre">x</span></tt> is the array of an
+arbitrary shape, but as you can see, Fortran does not care as long as the final
+operation makes sense (if one argument is an array, then the other arguments
+must be either arrays of the same shape or scalars). If it does not, you will
+get a compiler error.</p>
+<p>The <tt class="docutils literal"><span class="pre">elemental</span></tt> keyword implies the <tt class="docutils literal"><span class="pre">pure</span></tt> keyword, so the subroutine must
+be pure (can only use <tt class="docutils literal"><span class="pre">pure</span></tt> subroutines and have no side effects).</p>
+<p>If the elemental function&#8217;s algorithm can be made faster using array operations
+inside, or if for some reason the arguments must be arrays of incompatible
+shapes,
+then the best is to make <tt class="docutils literal"><span class="pre">nroot</span></tt> operate
+on a vector and write a simple wrappers for other dimensions:</p>
+<div class="highlight-python"><pre>function nroot(n, x) result(y)
+integer, intent(in) :: n
+real(dp), intent(in) :: x(:)
+real(dp) :: y(size(x))
+y = x**(1._dp / n)
+end function
+
+function nroot_0d(n, x) result(y)
+integer, intent(in) :: n
+real(dp), intent(in) :: x
+real(dp) :: y
+real(dp) :: tmp(1)
+tmp = nroot(n, [x])
+y = tmp(1)
+end function
+
+function nroot_2d(n, x) result(y)
+integer, intent(in) :: n
+real(dp), intent(in) :: x(:, :)
+real(dp) :: y(size(x, 1), size(x, 2))
+real(dp) :: tmp(size(x))
+tmp = nroot(n, reshape(x, [size(x)]))
+y = reshape(tmp, [size(x, 1), size(x, 2)])
+end function</pre>
+</div>
+<p>And use as follows:</p>
+<div class="highlight-python"><pre>print *, nroot_0d(2, 9._dp)
+print *, nroot(2, [1._dp, 4._dp, 9._dp, 10._dp])
+print *, nroot_2d(2, reshape([1._dp, 4._dp, 9._dp, 10._dp], [2, 2]))</pre>
+</div>
+<p>This will print:</p>
+<div class="highlight-python"><pre>3.0000000000000000
+1.0000000000000000        2.0000000000000000        3.0000000000000000        3.1622776601683795
+1.0000000000000000        2.0000000000000000        3.0000000000000000        3.1622776601683795</pre>
+</div>
+</div>
 <div class="section" id="allocatable-arrays">
 <h2>Allocatable Arrays<a class="headerlink" href="#allocatable-arrays" title="Permalink to this headline">¶</a></h2>
 <p>When using allocatable arrays (as opposed to pointers), Fortran manages the
@@ -832,6 +907,7 @@ As such, the <tt class="docutils literal"><span class="pre">type(c_ptr)</span></
 <li><a class="reference internal" href="#modules-and-programs">Modules and Programs</a></li>
 <li><a class="reference internal" href="#arrays">Arrays</a></li>
 <li><a class="reference internal" href="#multidimensional-arrays">Multidimensional Arrays</a></li>
+<li><a class="reference internal" href="#element-wise-operations-on-arrays-using-subroutines-functions">Element-wise Operations on Arrays Using Subroutines/Functions</a></li>
 <li><a class="reference internal" href="#allocatable-arrays">Allocatable Arrays</a></li>
 <li><a class="reference internal" href="#file-input-output">File Input/Output</a></li>
 <li><a class="reference internal" href="#interfacing-with-c">Interfacing with C</a></li>

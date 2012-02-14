@@ -101,6 +101,12 @@ You can also use <a class="reference external" href="http://www.f2py.com/">f2py<
 <h2>Does Fortran support nested functions?<a class="headerlink" href="#does-fortran-support-nested-functions" title="Permalink to this headline">¶</a></h2>
 <p>Yes, see <a class="reference internal" href="rosetta.html#nested-functions"><em>Nested Functions</em></a> for examples of usage.</p>
 </div>
+<div class="section" id="how-to-implement-functions-that-operate-on-arbitrary-shape-arrays">
+<h2>How to implement functions that operate on arbitrary shape arrays?<a class="headerlink" href="#how-to-implement-functions-that-operate-on-arbitrary-shape-arrays" title="Permalink to this headline">¶</a></h2>
+<p>You can use the <tt class="docutils literal"><span class="pre">elemental</span></tt> keyword to implement subroutines/functions that
+can operate on arrays of any shape. The other approach is to use <tt class="docutils literal"><span class="pre">reshape</span></tt>.
+See <a class="reference internal" href="best-practices.html#elemental"><em>Element-wise Operations on Arrays Using Subroutines/Functions</em></a> for examples of usage of both approaches.</p>
+</div>
 <div class="section" id="are-fortran-compilers-abi-compatible">
 <span id="abi"></span><h2>Are Fortran compilers ABI compatible?<a class="headerlink" href="#are-fortran-compilers-abi-compatible" title="Permalink to this headline">¶</a></h2>
 <p>No, in general Fortran compilers are not ABI compatible.
@@ -230,6 +236,7 @@ compilation stops when undefined symbol is used) and stops at the first error.</
 <li><a class="reference internal" href="#how-to-interface-fortran-with-c-and-python">How to interface Fortran with C and Python?</a></li>
 <li><a class="reference internal" href="#does-fortran-support-closures">Does Fortran support closures?</a></li>
 <li><a class="reference internal" href="#does-fortran-support-nested-functions">Does Fortran support nested functions?</a></li>
+<li><a class="reference internal" href="#how-to-implement-functions-that-operate-on-arbitrary-shape-arrays">How to implement functions that operate on arbitrary shape arrays?</a></li>
 <li><a class="reference internal" href="#are-fortran-compilers-abi-compatible">Are Fortran compilers ABI compatible?</a></li>
 <li><a class="reference internal" href="#what-is-the-best-way-to-distribute-and-install-fortran-libraries">What is the best way to distribute and install Fortran libraries?</a></li>
 <li><a class="reference internal" href="#does-fortran-warn-you-about-undefined-symbols">Does Fortran warn you about undefined symbols?</a></li>
