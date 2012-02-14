@@ -190,6 +190,8 @@ the second loop would become::
 
 And then make sure that all the strides are always on the left. Then it will be fast.
 
+.. _elemental:
+
 Element-wise Operations on Arrays Using Subroutines/Functions
 -------------------------------------------------------------
 
