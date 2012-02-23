@@ -86,12 +86,12 @@ But just like in Python, this should be avoided ("explicit is better than implic
 Arrays
 ------
 
-When passing arrays in and out of a subroutine/function, use the following pattern for 1D arrays::
+When passing arrays in and out of a subroutine/function, use
+the following pattern for 1D arrays (it is called `assumed-shape`)::
 
     subroutine f(r)
     real(dp), intent(in) :: r(:)
-
-    integer :: n
+    integer :: n, i
     n = size(r)
     do i = 1, n
         r(i) = 1.0_dp / i**2
@@ -110,11 +110,62 @@ and call it like this::
     real(dp) :: r(5)
     call f(r)
 
-Always declare the arrays as assume shape (``r(:)``), never any other way. If you want to enforce/check the size of the arrays, put at the beginning of the function::
+No array copying is done above. It has the following
+advantages:
+
+* the shape and size of the array is passed in automatically
+* the shape is checked at compile time, the size optionally at runtime
+* allows to use strides and all kinds of array
+  arithmetic without actually copying any data.
+
+This should always be your default
+way of passing arrays in and out of subroutines. However
+in the following cases one can (or has to) use `explicit-shape` arrays:
+
+* returning an array from a function
+* interfacing with C code or legacy Fortran (like Lapack)
+* operating on arbitrary shape array with the given function (however there are
+  also other ways to do that, see :ref:`elemental` for more information)
+
+To use `explicit-shape` arrays, do::
+
+    subroutine f(n, r)
+    real(dp), intent(in) :: r(n)
+    integer :: i
+    do i = 1, n
+        r(i) = 1.0_dp / i**2
+    enddo
+    end subroutine
+
+2D arrays::
+
+    subroutine g(m, n, A)
+    real(dp), intent(in) :: A(m, n)
+    ...
+    end subroutine
+
+and call it like this::
+
+    real(dp) :: r(5)
+    call f(size(r), r)
+
+In order to return an array from a function, do::
+
+    function f(n) result(r)
+    integer, intent(in) :: n
+    real(dp) :: r(n)
+    integer :: i
+    do i = 1, n
+        r(i) = 1.0_dp / i**2
+    enddo
+    end function
+
+If you want to enforce/check the size of the arrays, put at the beginning of
+the function::
 
     if (size(r) != 4) stop "Incorrect size of 'r'"
 
-No array copying is done above. To initialize an array, do::
+To initialize an array, do::
 
     integer :: r(5)
     r = [1, 2, 3, 4, 5]
@@ -195,8 +246,12 @@ And then make sure that all the strides are always on the left. Then it will be 
 Element-wise Operations on Arrays Using Subroutines/Functions
 -------------------------------------------------------------
 
-There are two approaches: ``elemental`` subroutines or implementing the
-operation for vectors and using ``reshape``.
+There are three approaches:
+
+* ``elemental`` subroutines
+* `explicit-shape` arrays
+* implementing the operation for vectors and write simple wrapper subroutines
+  (that use ``reshape`` internally) for each array shape
 
 In the first approach,
 one uses the ``elemental`` keyword to create a function like this::
@@ -236,8 +291,9 @@ be pure (can only use ``pure`` subroutines and have no side effects).
 If the elemental function's algorithm can be made faster using array operations
 inside, or if for some reason the arguments must be arrays of incompatible
 shapes,
-then the best is to make ``nroot`` operate
-on a vector and write a simple wrappers for other dimensions::
+then one should use the other two approaches.
+One can make ``nroot`` operate
+on a vector and write a simple wrappers for other array shapes::
 
     function nroot(n, x) result(y)
     integer, intent(in) :: n
@@ -259,11 +315,8 @@ on a vector and write a simple wrappers for other dimensions::
     integer, intent(in) :: n
     real(dp), intent(in) :: x(:, :)
     real(dp) :: y(size(x, 1), size(x, 2))
-    real(dp) :: tmp(size(x))
-    tmp = nroot(n, reshape(x, [size(x)]))
-    y = reshape(tmp, [size(x, 1), size(x, 2)])
+    y = reshape(nroot(n, reshape(x, [size(x)])), [size(x, 1), size(x, 2)])
     end function
-
 
 And use as follows::
 
@@ -276,6 +329,34 @@ This will print::
     3.0000000000000000     
     1.0000000000000000        2.0000000000000000        3.0000000000000000        3.1622776601683795     
     1.0000000000000000        2.0000000000000000        3.0000000000000000        3.1622776601683795     
+
+
+Or one can use `explicit-shape` arrays as follows::
+
+    program test
+
+    integer, parameter :: dp = kind(0d0)
+
+    print *, nroot(2, 1, [9._dp])
+    print *, nroot(2, 4, [1._dp, 4._dp, 9._dp, 10._dp])
+    print *, nroot(2, 4, reshape([1._dp, 4._dp, 9._dp, 10._dp], [2, 2]))
+
+    contains
+
+    function nroot(n, k, x) result(y)
+    integer, intent(in) :: n, k
+    real(dp), intent(in) :: x(k)
+    real(dp) :: y(size(x))
+    y = x**(1._dp / n)
+    end function
+
+    end program
+
+The output is the same as before::
+
+       3.0000000000000000     
+       1.0000000000000000        2.0000000000000000        3.0000000000000000        3.1622776601683795     
+       1.0000000000000000        2.0000000000000000        3.0000000000000000        3.1622776601683795     
 
 
 Allocatable Arrays

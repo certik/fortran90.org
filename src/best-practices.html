@@ -120,11 +120,11 @@ end program</pre>
 </div>
 <div class="section" id="arrays">
 <h2>Arrays<a class="headerlink" href="#arrays" title="Permalink to this headline">¶</a></h2>
-<p>When passing arrays in and out of a subroutine/function, use the following pattern for 1D arrays:</p>
+<p>When passing arrays in and out of a subroutine/function, use
+the following pattern for 1D arrays (it is called <cite>assumed-shape</cite>):</p>
 <div class="highlight-python"><pre>subroutine f(r)
 real(dp), intent(in) :: r(:)
-
-integer :: n
+integer :: n, i
 n = size(r)
 do i = 1, n
     r(i) = 1.0_dp / i**2
@@ -141,10 +141,57 @@ end subroutine</pre>
 <div class="highlight-python"><pre>real(dp) :: r(5)
 call f(r)</pre>
 </div>
-<p>Always declare the arrays as assume shape (<tt class="docutils literal"><span class="pre">r(:)</span></tt>), never any other way. If you want to enforce/check the size of the arrays, put at the beginning of the function:</p>
+<p>No array copying is done above. It has the following
+advantages:</p>
+<ul class="simple">
+<li>the shape and size of the array is passed in automatically</li>
+<li>the shape is checked at compile time, the size optionally at runtime</li>
+<li>allows to use strides and all kinds of array
+arithmetic without actually copying any data.</li>
+</ul>
+<p>This should always be your default
+way of passing arrays in and out of subroutines. However
+in the following cases one can (or has to) use <cite>explicit-shape</cite> arrays:</p>
+<ul class="simple">
+<li>returning an array from a function</li>
+<li>interfacing with C code or legacy Fortran (like Lapack)</li>
+<li>operating on arbitrary shape array with the given function (however there are
+also other ways to do that, see <a class="reference internal" href="#elemental"><em>Element-wise Operations on Arrays Using Subroutines/Functions</em></a> for more information)</li>
+</ul>
+<p>To use <cite>explicit-shape</cite> arrays, do:</p>
+<div class="highlight-python"><pre>subroutine f(n, r)
+real(dp), intent(in) :: r(n)
+integer :: i
+do i = 1, n
+    r(i) = 1.0_dp / i**2
+enddo
+end subroutine</pre>
+</div>
+<p>2D arrays:</p>
+<div class="highlight-python"><pre>subroutine g(m, n, A)
+real(dp), intent(in) :: A(m, n)
+...
+end subroutine</pre>
+</div>
+<p>and call it like this:</p>
+<div class="highlight-python"><pre>real(dp) :: r(5)
+call f(size(r), r)</pre>
+</div>
+<p>In order to return an array from a function, do:</p>
+<div class="highlight-python"><pre>function f(n) result(r)
+integer, intent(in) :: n
+real(dp) :: r(n)
+integer :: i
+do i = 1, n
+    r(i) = 1.0_dp / i**2
+enddo
+end function</pre>
+</div>
+<p>If you want to enforce/check the size of the arrays, put at the beginning of
+the function:</p>
 <div class="highlight-python"><pre>if (size(r) != 4) stop "Incorrect size of 'r'"</pre>
 </div>
-<p>No array copying is done above. To initialize an array, do:</p>
+<p>To initialize an array, do:</p>
 <div class="highlight-python"><pre>integer :: r(5)
 r = [1, 2, 3, 4, 5]</pre>
 </div>
@@ -212,8 +259,13 @@ end do</pre>
 </div>
 <div class="section" id="element-wise-operations-on-arrays-using-subroutines-functions">
 <span id="elemental"></span><h2>Element-wise Operations on Arrays Using Subroutines/Functions<a class="headerlink" href="#element-wise-operations-on-arrays-using-subroutines-functions" title="Permalink to this headline">¶</a></h2>
-<p>There are two approaches: <tt class="docutils literal"><span class="pre">elemental</span></tt> subroutines or implementing the
-operation for vectors and using <tt class="docutils literal"><span class="pre">reshape</span></tt>.</p>
+<p>There are three approaches:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">elemental</span></tt> subroutines</li>
+<li><cite>explicit-shape</cite> arrays</li>
+<li>implementing the operation for vectors and write simple wrapper subroutines
+(that use <tt class="docutils literal"><span class="pre">reshape</span></tt> internally) for each array shape</li>
+</ul>
 <p>In the first approach,
 one uses the <tt class="docutils literal"><span class="pre">elemental</span></tt> keyword to create a function like this:</p>
 <div class="highlight-python"><pre>real(dp) elemental function nroot(n, x) result(y)
@@ -247,8 +299,9 @@ be pure (can only use <tt class="docutils literal"><span class="pre">pure</span>
 <p>If the elemental function&#8217;s algorithm can be made faster using array operations
 inside, or if for some reason the arguments must be arrays of incompatible
 shapes,
-then the best is to make <tt class="docutils literal"><span class="pre">nroot</span></tt> operate
-on a vector and write a simple wrappers for other dimensions:</p>
+then one should use the other two approaches.
+One can make <tt class="docutils literal"><span class="pre">nroot</span></tt> operate
+on a vector and write a simple wrappers for other array shapes:</p>
 <div class="highlight-python"><pre>function nroot(n, x) result(y)
 integer, intent(in) :: n
 real(dp), intent(in) :: x(:)
@@ -269,9 +322,7 @@ function nroot_2d(n, x) result(y)
 integer, intent(in) :: n
 real(dp), intent(in) :: x(:, :)
 real(dp) :: y(size(x, 1), size(x, 2))
-real(dp) :: tmp(size(x))
-tmp = nroot(n, reshape(x, [size(x)]))
-y = reshape(tmp, [size(x, 1), size(x, 2)])
+y = reshape(nroot(n, reshape(x, [size(x)])), [size(x, 1), size(x, 2)])
 end function</pre>
 </div>
 <p>And use as follows:</p>
@@ -280,6 +331,31 @@ print *, nroot(2, [1._dp, 4._dp, 9._dp, 10._dp])
 print *, nroot_2d(2, reshape([1._dp, 4._dp, 9._dp, 10._dp], [2, 2]))</pre>
 </div>
 <p>This will print:</p>
+<div class="highlight-python"><pre>3.0000000000000000
+1.0000000000000000        2.0000000000000000        3.0000000000000000        3.1622776601683795
+1.0000000000000000        2.0000000000000000        3.0000000000000000        3.1622776601683795</pre>
+</div>
+<p>Or one can use <cite>explicit-shape</cite> arrays as follows:</p>
+<div class="highlight-python"><pre>program test
+
+integer, parameter :: dp = kind(0d0)
+
+print *, nroot(2, 1, [9._dp])
+print *, nroot(2, 4, [1._dp, 4._dp, 9._dp, 10._dp])
+print *, nroot(2, 4, reshape([1._dp, 4._dp, 9._dp, 10._dp], [2, 2]))
+
+contains
+
+function nroot(n, k, x) result(y)
+integer, intent(in) :: n, k
+real(dp), intent(in) :: x(k)
+real(dp) :: y(size(x))
+y = x**(1._dp / n)
+end function
+
+end program</pre>
+</div>
+<p>The output is the same as before:</p>
 <div class="highlight-python"><pre>3.0000000000000000
 1.0000000000000000        2.0000000000000000        3.0000000000000000        3.1622776601683795
 1.0000000000000000        2.0000000000000000        3.0000000000000000        3.1622776601683795</pre>
