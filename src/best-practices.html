@@ -336,24 +336,17 @@ print *, nroot_2d(2, reshape([1._dp, 4._dp, 9._dp, 10._dp], [2, 2]))</pre>
 1.0000000000000000        2.0000000000000000        3.0000000000000000        3.1622776601683795</pre>
 </div>
 <p>Or one can use <cite>explicit-shape</cite> arrays as follows:</p>
-<div class="highlight-python"><pre>program test
-
-integer, parameter :: dp = kind(0d0)
-
-print *, nroot(2, 1, [9._dp])
-print *, nroot(2, 4, [1._dp, 4._dp, 9._dp, 10._dp])
-print *, nroot(2, 4, reshape([1._dp, 4._dp, 9._dp, 10._dp], [2, 2]))
-
-contains
-
-function nroot(n, k, x) result(y)
+<div class="highlight-python"><pre>function nroot(n, k, x) result(y)
 integer, intent(in) :: n, k
 real(dp), intent(in) :: x(k)
 real(dp) :: y(size(x))
 y = x**(1._dp / n)
-end function
-
-end program</pre>
+end function</pre>
+</div>
+<p>Use as follows:</p>
+<div class="highlight-python"><pre>print *, nroot(2, 1, [9._dp])
+print *, nroot(2, 4, [1._dp, 4._dp, 9._dp, 10._dp])
+print *, nroot(2, 4, reshape([1._dp, 4._dp, 9._dp, 10._dp], [2, 2]))</pre>
 </div>
 <p>The output is the same as before:</p>
 <div class="highlight-python"><pre>3.0000000000000000

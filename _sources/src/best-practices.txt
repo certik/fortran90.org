@@ -333,16 +333,6 @@ This will print::
 
 Or one can use `explicit-shape` arrays as follows::
 
-    program test
-
-    integer, parameter :: dp = kind(0d0)
-
-    print *, nroot(2, 1, [9._dp])
-    print *, nroot(2, 4, [1._dp, 4._dp, 9._dp, 10._dp])
-    print *, nroot(2, 4, reshape([1._dp, 4._dp, 9._dp, 10._dp], [2, 2]))
-
-    contains
-
     function nroot(n, k, x) result(y)
     integer, intent(in) :: n, k
     real(dp), intent(in) :: x(k)
@@ -350,7 +340,11 @@ Or one can use `explicit-shape` arrays as follows::
     y = x**(1._dp / n)
     end function
 
-    end program
+Use as follows::
+
+    print *, nroot(2, 1, [9._dp])
+    print *, nroot(2, 4, [1._dp, 4._dp, 9._dp, 10._dp])
+    print *, nroot(2, 4, reshape([1._dp, 4._dp, 9._dp, 10._dp], [2, 2]))
 
 The output is the same as before::
 
