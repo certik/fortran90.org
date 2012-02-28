@@ -57,6 +57,56 @@
 <p>Summary of the language: <a class="reference external" href="http://www.cs.umbc.edu/~squire/fortranclass/summary.shtml">http://www.cs.umbc.edu/~squire/fortranclass/summary.shtml</a></p>
 <p>Language features are explained at: <a class="reference external" href="http://en.wikipedia.org/wiki/Fortran_language_features">http://en.wikipedia.org/wiki/Fortran_language_features</a></p>
 <p>The best resource is a recent Fortran standard, for example the Fortran 2003 standard: <a class="reference external" href="http://www.j3-fortran.org/doc/year/04/04-007.pdf">http://www.j3-fortran.org/doc/year/04/04-007.pdf</a></p>
+<div class="section" id="fortran-style-guide">
+<h2>Fortran Style Guide<a class="headerlink" href="#fortran-style-guide" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="naming-convention">
+<h3>Naming Convention<a class="headerlink" href="#naming-convention" title="Permalink to this headline">¶</a></h3>
+<p>Ultimately this is a matter of preference. Here is a style guide that we like
+and that seems to be prevalent in most scientific codes (as well as the Fortran
+standard library) and you are welcome to follow it.</p>
+<ol class="arabic simple">
+<li>Use lowercase for all Fortran constructs (<tt class="docutils literal"><span class="pre">do</span></tt>, <tt class="docutils literal"><span class="pre">subroutine</span></tt>, <tt class="docutils literal"><span class="pre">module</span></tt>,
+...).</li>
+<li>Follow short mathematical notation for mathematical variables/functions
+(<tt class="docutils literal"><span class="pre">Ylm</span></tt>, <tt class="docutils literal"><span class="pre">Gamma</span></tt>, <tt class="docutils literal"><span class="pre">gamma</span></tt>, <tt class="docutils literal"><span class="pre">Enl</span></tt>, <tt class="docutils literal"><span class="pre">Rnl</span></tt>, ...).</li>
+<li>For other names use all lowercase: try to keep names to 2 syllables or less
+(typically by indicative word truncations); if more syllables are needed,
+use underscores to clarify (<tt class="docutils literal"><span class="pre">sortpair</span></tt>, <tt class="docutils literal"><span class="pre">whitechar</span></tt>,
+<tt class="docutils literal"><span class="pre">meshexp</span></tt>, <tt class="docutils literal"><span class="pre">numstrings</span></tt>, <tt class="docutils literal"><span class="pre">linspace</span></tt>, <tt class="docutils literal"><span class="pre">meshgrid</span></tt>, <tt class="docutils literal"><span class="pre">argsort</span></tt>,
+<tt class="docutils literal"><span class="pre">spline</span></tt>, <tt class="docutils literal"><span class="pre">spline_interp</span></tt>, <tt class="docutils literal"><span class="pre">spline_interpolate</span></tt>,
+<tt class="docutils literal"><span class="pre">stoperr</span></tt>, <tt class="docutils literal"><span class="pre">stop_error</span></tt>, <tt class="docutils literal"><span class="pre">meshexp_der</span></tt>).</li>
+</ol>
+<p>For example &#8220;spline interpolation&#8221; can be shortened to
+<tt class="docutils literal"><span class="pre">spline_interpolation</span></tt>, <tt class="docutils literal"><span class="pre">spline_interpolate</span></tt>, <tt class="docutils literal"><span class="pre">spline_interp</span></tt>,
+<tt class="docutils literal"><span class="pre">spline</span></tt>, but not to <tt class="docutils literal"><span class="pre">splineint</span></tt> (&#8220;int&#8221; could mean integration, integer,
+etc. &#8212; too much ambiguity, even in the clear context of a computational
+code). This is in contrast to <tt class="docutils literal"><span class="pre">get_argument()</span></tt> where <tt class="docutils literal"><span class="pre">getarg()</span></tt> is
+perfectly clean and clear.</p>
+<p>The above are general guidelines.  In general, choosing the right name
+certainly depends on the word being truncated as to whether the first syllable
+is sufficient. Usually it is but clearly not always. Thus some thought should
+go into step &#8220;try to keep names to 2 syllables or less&#8221; since it can really
+affect the indicativeness and simplicity. Simple consistent naming rules are a
+real help in this regard &#8211; for both collaboration and for one&#8217;s own sanity
+when going back to some old code you haven&#8217;t seen in while.</p>
+</div>
+<div class="section" id="indentation">
+<h3>Indentation<a class="headerlink" href="#indentation" title="Permalink to this headline">¶</a></h3>
+<p>Use 4 spaces indentation (this is again a matter of preference as
+some people prefer 2 or 3 spaces).</p>
+</div>
+<div class="section" id="comparison-to-other-languages">
+<h3>Comparison to Other Languages<a class="headerlink" href="#comparison-to-other-languages" title="Permalink to this headline">¶</a></h3>
+<p>On the other hand, in most of the rest of the programming world, where the main
+focus is, in one form or another, on defining and using large sets of complex
+objects, with tons of properties and behaviors, known only in the code in which
+they are defined (as opposed to defined by the same  notation throughout the
+literature), it makes more sense to use longer, more descriptive names. The
+naming conventions one sees used in more general-purpose languages such as C++
+and Python, therefore, are perfectly consistent with their more general-purpose
+missions. But Fortran has a different mission (numerical scientific computing).</p>
+</div>
+</div>
 <div class="section" id="floating-point-numbers">
 <h2>Floating Point Numbers<a class="headerlink" href="#floating-point-numbers" title="Permalink to this headline">¶</a></h2>
 <p>Somewhere create and export a parameter <tt class="docutils literal"><span class="pre">dp</span></tt>:</p>
@@ -971,6 +1021,12 @@ As such, the <tt class="docutils literal"><span class="pre">type(c_ptr)</span></
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Fortran Best Practices</a><ul>
+<li><a class="reference internal" href="#fortran-style-guide">Fortran Style Guide</a><ul>
+<li><a class="reference internal" href="#naming-convention">Naming Convention</a></li>
+<li><a class="reference internal" href="#indentation">Indentation</a></li>
+<li><a class="reference internal" href="#comparison-to-other-languages">Comparison to Other Languages</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#floating-point-numbers">Floating Point Numbers</a></li>
 <li><a class="reference internal" href="#integer-division">Integer Division</a></li>
 <li><a class="reference internal" href="#modules-and-programs">Modules and Programs</a></li>
