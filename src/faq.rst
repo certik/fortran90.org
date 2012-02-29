@@ -9,19 +9,7 @@ sending a pull request fixing it, see the `main <http://fortran90.org/>`_ page).
 What is the advantage of using Fortran (as opposed to for example C/C++)?
 -------------------------------------------------------------------------
 
-The Fortran language has been designed with the following goals:
-
-* Contain basic mathematics in the core language (rich array operations,
-  complex numbers, exponentiation)
-
-* Be more restricting (and higher level) than languages like C/C++, so that the
-  resulting code is easier to maintain and write. There is one canonical way
-  to do things and you don’t have to worry about memory allocation (most of
-  the times).
-
-* Speed
-
-
+First an informal, general answer.
 The key bottom line is: Fortran is *not* a general purpose language.  Rather,
 it is built from the ground up to translate mathematics into simple, readable,
 and fast code -- straightforwardly maintainable by the gamut of scientists who
@@ -29,6 +17,44 @@ actually produce/apply that mathematics. If that is the task at hand, it is the
 right tool for the job and, as right tools tend to do, can save enormous time
 and pain, with most excellent results in the end. If, however, mathematics is
 not the task, then almost certainly C++ will be much, much better.
+
+The design goals of the C++ language are
+(`citing <http://www2.research.att.com/~bs/C++0xFAQ.html#aims>`_
+Bjarne Stroustrup talking about the aims of the C++0x
+standard): *Make C++ a better language for systems programming and library
+building -- that is, to build directly on C++'s contributions to
+programming, rather than providing specialized facilities for a
+particular sub-community (e.g. numeric computation or Windows-style
+application development).*
+(See also the `specific aims
+<http://www2.research.att.com/~bs/C++0xFAQ.html#specific-aims>`_.)
+
+On the other hand,
+the Fortran language has been designed with the following goals:
+
+* Contain basic mathematics in the core language (rich array operations,
+  complex numbers, exponentiation, special functions)
+
+* Be more restricting (and higher level) than languages like C/C++, so that the
+  resulting code is easier to maintain and write and easier for the compilers
+  to optimize (e.g. pointers are purposely restricted so that they can be more
+  highly optimized than C pointers, Fortran arrays are designed in such a way
+  that compilers can check for size and shape mismatches at compile time and
+  index errors at run time, etc...). There is one canonical way to do things and
+  you don’t have to worry about memory allocation (most of the times).
+
+* Speed
+
+
+An important point is that having all the basic elements in the language itself
+greatly simplifies both writing and reading fast, robust code. Writing and
+reading is simplified because there is a single standard set of
+functions/constructs. No need to wonder what class the array operations are
+coming from, what the member functions are, how well it will be maintained in 5
+years, how well optimized it is/will be, etc. All the basics are in the
+language itself: fast, robust, and standard for all to read and write -- and
+for the compiler writers to optimize at the machine level.
+
 
 What are good books to learn Fortran from?
 ------------------------------------------
