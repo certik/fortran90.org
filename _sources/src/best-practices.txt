@@ -23,11 +23,10 @@ standard library) and you are welcome to follow it.
    ...).
 2. Follow short mathematical notation for mathematical variables/functions
    (``Ylm``, ``Gamma``, ``gamma``, ``Enl``, ``Rnl``, ...).
-3. For other names use all lowercase: try to keep names to 2 syllables or less
-   (typically by indicative word truncations); if more syllables are needed,
-   use underscores to clarify (``sortpair``, ``whitechar``,
-   ``meshexp``, ``numstrings``, ``linspace``, ``meshgrid``, ``argsort``,
-   ``spline``, ``spline_interp``, ``spline_interpolate``,
+3. For other names use all lowercase: try to keep names to one or two
+   syllables; if more are required, use underscores to clarify (``sortpair``,
+   ``whitechar``, ``meshexp``, ``numstrings``, ``linspace``, ``meshgrid``,
+   ``argsort``, ``spline``, ``spline_interp``, ``spline_interpolate``,
    ``stoperr``, ``stop_error``, ``meshexp_der``).
 
 For example "spline interpolation" can be shortened to
