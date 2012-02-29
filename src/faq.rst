@@ -30,6 +30,12 @@ right tool for the job and, as right tools tend to do, can save enormous time
 and pain, with most excellent results in the end. If, however, mathematics is
 not the task, then almost certainly C++ will be much, much better.
 
+What are good books to learn Fortran from?
+------------------------------------------
+
+The canonical book is
+`Michael Metcalf, John Reid, Malcolm Cohen: Modern Fortran Explained
+<http://www.amazon.com/Explained-Numerical-Mathematics-Scientific-Computation/dp/0199601429>`_.
 
 How to do dynamic dispatch in Fortran (like 'void \*' in C)?
 ------------------------------------------------------------
