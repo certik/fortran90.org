@@ -507,7 +507,6 @@ And use it like:
 | -7.69468277489e-16                                        | -7.69468277488715811E-016                                              |
 +-----------------------------------------------------------+------------------------------------------------------------------------+
 
-
 Examples
 --------
 
@@ -591,5 +590,51 @@ Timings on Acer 1830T with gfortran 4.6.1 are:
 +-------------+--------+---------+---------+
 | Total       | 14.653 | 02.240  |  6.5x   |
 +-------------+--------+---------+---------+
+
+Least Squares Fitting
+~~~~~~~~~~~~~~~~~~~~~
+
+In Python we use `SciPy <http://www.scipy.org/>`_, in Fortran we use
+`Minpack <https://github.com/certik/minpack>`_.
+
+Find a nonlinear fit of the form ``a*x*log(b + c*x)`` to a list of primes:
+
++-----------------------------------------------------------------+---------------------------------------------------------------------------------+
+| Python                                                          |           Fortran                                                               |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------+
+|::                                                               |::                                                                               |
+|                                                                 |                                                                                 |
+|                                                                 | program example_primes                                                          |
+|                                                                 | use find_fit_module, only: find_fit                                             |
+|                                                                 | use types, only: dp                                                             |
+|                                                                 | implicit none                                                                   |
+|                                                                 |                                                                                 |
+|                                                                 | real(dp) :: pars(3)                                                             |
+|                                                                 | real(dp), parameter :: y(*) = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, &        |
+|                                                                 |     37, 41, 43, 47, 53, 59, 61, 67, 71]                                         |
+|                                                                 | integer :: i                                                                    |
+|                                                                 | pars = [1._dp, 1._dp, 1._dp]                                                    |
+|                                                                 | call find_fit([(real(i, dp), i=1,size(y))], y, expression, pars)                |
+|                                                                 | print *, pars                                                                   |
+|                                                                 |                                                                                 |
+|                                                                 | contains                                                                        |
+|                                                                 |                                                                                 |
+|                                                                 | function expression(x, pars) result(y)                                          |
+|                                                                 | real(dp), intent(in) :: x(:), pars(:)                                           |
+|                                                                 | real(dp) :: y(size(x))                                                          |
+|                                                                 | real(dp) :: a, b, c                                                             |
+|                                                                 | a = pars(1)                                                                     |
+|                                                                 | b = pars(2)                                                                     |
+|                                                                 | c = pars(3)                                                                     |
+|                                                                 | y = a*x*log(b + c*x)                                                            |
+|                                                                 | end function                                                                    |
+|                                                                 |                                                                                 |
+|                                                                 | end program                                                                     |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------+
+
+This prints::
+
+   1.4207732655565537        1.6556111085593115       0.53462502018670921
+
 
 .. ::   vim: set nowrap textwidth=0 syn=off: ~

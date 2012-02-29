@@ -984,6 +984,56 @@ Both versions generate equivalent <tt class="docutils literal"><span class="pre"
 </tbody>
 </table>
 </div>
+<div class="section" id="least-squares-fitting">
+<h3>Least Squares Fitting<a class="headerlink" href="#least-squares-fitting" title="Permalink to this headline">¶</a></h3>
+<p>In Python we use <a class="reference external" href="http://www.scipy.org/">SciPy</a>, in Fortran we use
+<a class="reference external" href="https://github.com/certik/minpack">Minpack</a>.</p>
+<p>Find a nonlinear fit of the form <tt class="docutils literal"><span class="pre">a*x*log(b</span> <span class="pre">+</span> <span class="pre">c*x)</span></tt> to a list of primes:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="45%" />
+<col width="55%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Python</td>
+<td>Fortran</td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td><div class="first last highlight-python"><pre>program example_primes
+use find_fit_module, only: find_fit
+use types, only: dp
+implicit none
+
+real(dp) :: pars(3)
+real(dp), parameter :: y(*) = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, &amp;
+    37, 41, 43, 47, 53, 59, 61, 67, 71]
+integer :: i
+pars = [1._dp, 1._dp, 1._dp]
+call find_fit([(real(i, dp), i=1,size(y))], y, expression, pars)
+print *, pars
+
+contains
+
+function expression(x, pars) result(y)
+real(dp), intent(in) :: x(:), pars(:)
+real(dp) :: y(size(x))
+real(dp) :: a, b, c
+a = pars(1)
+b = pars(2)
+c = pars(3)
+y = a*x*log(b + c*x)
+end function
+
+end program</pre>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>This prints:</p>
+<div class="highlight-python"><pre>1.4207732655565537        1.6556111085593115       0.53462502018670921</pre>
+</div>
+</div>
 </div>
 </div>
 
@@ -1004,6 +1054,7 @@ Both versions generate equivalent <tt class="docutils literal"><span class="pre"
 <li><a class="reference internal" href="#nested-functions">Nested Functions</a></li>
 <li><a class="reference internal" href="#examples">Examples</a><ul>
 <li><a class="reference internal" href="#mandelbrot-set">Mandelbrot Set</a></li>
+<li><a class="reference internal" href="#least-squares-fitting">Least Squares Fitting</a></li>
 </ul>
 </li>
 </ul>
