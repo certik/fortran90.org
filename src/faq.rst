@@ -9,14 +9,13 @@ sending a pull request fixing it, see the `main <http://fortran90.org/>`_ page).
 What is the advantage of using Fortran (as opposed to for example C/C++)?
 -------------------------------------------------------------------------
 
-First an informal, general answer.
-The key bottom line is: Fortran is *not* a general purpose language.  Rather,
-it is built from the ground up to translate mathematics into simple, readable,
-and fast code -- straightforwardly maintainable by the gamut of scientists who
-actually produce/apply that mathematics. If that is the task at hand, it is the
-right tool for the job and, as right tools tend to do, can save enormous time
-and pain, with most excellent results in the end. If, however, mathematics is
-not the task, then almost certainly C++ will be much, much better.
+Fortran is built from the ground up to translate mathematics into simple,
+readable, and fast code – straightforwardly maintainable by the gamut of
+mathematicians, scientists, and engineers who actually produce/apply that
+mathematics. If that is the task at hand, it is the right tool for the job and,
+as right tools tend to do, can save enormous time and pain, with most excellent
+results. If, however, mathematics is not the main task, then almost certainly
+C/C++, or a host of other more general-purpose languages, will be much better.
 
 The design goals of the C++ language are
 (`citing <http://www2.research.att.com/~bs/C++0xFAQ.html#aims>`_
