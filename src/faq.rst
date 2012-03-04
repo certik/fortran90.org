@@ -132,6 +132,11 @@ with GCC and Clang.
 What is the best way to distribute and install Fortran libraries?
 -----------------------------------------------------------------
 
+The best way is to simply provide the library as modules with source. That way,
+compilers can optimize to the particular hardware and there are no object-file
+incompatibility issues -- and the user can extend/modify the module for his own
+purposes.
+
 Due to ABI incompatibility, in general the ``.so``/``.a`` libraries compiled
 with one compiler version cannot be used with any other compiler or version.
 
