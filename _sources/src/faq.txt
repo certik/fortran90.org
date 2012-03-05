@@ -58,9 +58,17 @@ for the compiler writers to optimize at the machine level.
 What are good books to learn Fortran from?
 ------------------------------------------
 
-The canonical book is
-`Michael Metcalf, John Reid, Malcolm Cohen: Modern Fortran Explained
-<http://www.amazon.com/Explained-Numerical-Mathematics-Scientific-Computation/dp/0199601429>`_.
+We have found,
+`Metcalf, Reid, & Cohen: Modern Fortran Explained
+<http://www.amazon.com/Explained-Numerical-Mathematics-Scientific-Computation/dp/0199601429>`_,
+to be quite helpful in providing both the larger context of the language as a
+whole and a clear, well-connected presentation, organized by standard: f95,
+f2003, and f2008.
+
+However, Fortran is relatively quick to learn because it is so much simpler
+and smaller than C/C++ (in practice, that is, with all needed libraries
+included).
+
 
 How to do dynamic dispatch in Fortran (like 'void \*' in C)?
 ------------------------------------------------------------
