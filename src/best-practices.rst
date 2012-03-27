@@ -531,17 +531,17 @@ Interfacing with Python
 -----------------------
 
 Using Cython
-^^^^^^^^^^^^
+~~~~~~~~~~~~
 
 To wrap Fortran code in Python, export it to C first (see above) and then write this Cython code::
 
     from numpy cimport ndarray
     from numpy import empty
-    
+
     cdef extern:
         void c_mesh_exp(double *r_min, double *r_max, double *a, int *N,
                 double *mesh)
-    
+
     def mesh_exp(double r_min, double r_max, double a, int N):
         cdef ndarray[double, mode="c"] mesh = empty(N, dtype="double")
         c_mesh_exp(&r_min, &r_max, &a, &N, &mesh[0])
@@ -558,7 +558,7 @@ involved.
 
 
 Using ctypes
-^^^^^^^^^^^^
+~~~~~~~~~~~~
 
 Alternatively, you can assign C-callable names to your Fortran
 routines like this::
