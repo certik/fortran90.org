@@ -104,8 +104,9 @@ How to implement functions that operate on arbitrary shape arrays?
 ------------------------------------------------------------------
 
 You can use the ``elemental`` keyword to implement subroutines/functions that
-can operate on arrays of any shape. The other approach is to use ``reshape``.
-See :ref:`elemental` for examples of usage of both approaches.
+can operate on arrays of any shape. Other approaches are to use ``reshape`` or
+explicit-shape arrays. See :ref:`elemental` for examples of usage of both
+approaches.
 
 
 .. _ABI:
