@@ -17,6 +17,7 @@ Contents:
     src/rosetta.rst
     src/faq.rst
     src/gotchas.rst
+    src/contributors.rst
 
 This web is opensource. If you have ideas for improvement, please send a
 pull request against the repository
