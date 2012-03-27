@@ -508,6 +508,8 @@ c_mesh_exp(&amp;r_min, &amp;r_max, &amp;a, &amp;N, mesh);</pre>
 </div>
 <div class="section" id="interfacing-with-python">
 <span id="python-interface"></span><h2>Interfacing with Python<a class="headerlink" href="#interfacing-with-python" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="using-cython">
+<h3>Using Cython<a class="headerlink" href="#using-cython" title="Permalink to this headline">¶</a></h3>
 <p>To wrap Fortran code in Python, export it to C first (see above) and then write this Cython code:</p>
 <div class="highlight-python"><pre>from numpy cimport ndarray
 from numpy import empty
@@ -528,6 +530,37 @@ Cython, that the function is implemented in C, but in fact, it is linked in
 from Fortran directly. So this is the most direct way of calling Fortran from
 Python. There is no intermediate step, and no unnecessary processing/wrapping
 involved.</p>
+</div>
+<div class="section" id="using-ctypes">
+<h3>Using ctypes<a class="headerlink" href="#using-ctypes" title="Permalink to this headline">¶</a></h3>
+<p>Alternatively, you can assign C-callable names to your Fortran
+routines like this:</p>
+<div class="highlight-python"><pre>subroutine mesh_exp(r_min, r_max, a, N, mesh) bind(c, name='mesh_exp')
+  real(c_double), intent(in), value :: r_min
+  real(c_double), intent(in), value :: r_max
+  real(c_double), intent(in), value :: a
+  integer(c_int), intent(in), value :: N
+  real(c_double), intent(out) :: mesh(N)
+
+  ! ...
+
+end subroutine mesh_exp</pre>
+</div>
+<p>and use the builtin <a class="reference external" href="http://docs.python.org/library/ctypes.html">ctypes</a>
+Python package to dynamically load
+shared object files containing your C-callable Fortran routines and
+call them directly:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">ctypes</span> <span class="kn">import</span> <span class="n">CDLL</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">,</span> <span class="n">c_int</span><span class="p">,</span> <span class="n">c_double</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">empty</span>
+
+<span class="n">fortran</span> <span class="o">=</span> <span class="n">CDLL</span><span class="p">(</span><span class="s">&#39;./libmyfortranroutines.so&#39;</span><span class="p">)</span>
+
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">empty</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&quot;double&quot;</span><span class="p">)</span>
+<span class="n">fortran</span><span class="o">.</span><span class="n">mesh_exp</span><span class="p">(</span><span class="n">c_double</span><span class="p">(</span><span class="n">r_min</span><span class="p">),</span> <span class="n">c_double</span><span class="p">(</span><span class="n">r_max</span><span class="p">),</span> <span class="n">c_double</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">c_int</span><span class="p">(</span><span class="n">N</span><span class="p">),</span>
+                 <span class="n">mesh</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">POINTER</span><span class="p">(</span><span class="n">c_double</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="callbacks">
 <h2>Callbacks<a class="headerlink" href="#callbacks" title="Permalink to this headline">¶</a></h2>
@@ -1035,7 +1068,11 @@ As such, the <tt class="docutils literal"><span class="pre">type(c_ptr)</span></
 <li><a class="reference internal" href="#allocatable-arrays">Allocatable Arrays</a></li>
 <li><a class="reference internal" href="#file-input-output">File Input/Output</a></li>
 <li><a class="reference internal" href="#interfacing-with-c">Interfacing with C</a></li>
-<li><a class="reference internal" href="#interfacing-with-python">Interfacing with Python</a></li>
+<li><a class="reference internal" href="#interfacing-with-python">Interfacing with Python</a><ul>
+<li><a class="reference internal" href="#using-cython">Using Cython</a></li>
+<li><a class="reference internal" href="#using-ctypes">Using ctypes</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#callbacks">Callbacks</a></li>
 <li><a class="reference internal" href="#type-casting-in-callbacks">Type Casting in Callbacks</a><ul>
 <li><a class="reference internal" href="#i-work-arrays">I: Work Arrays</a></li>
