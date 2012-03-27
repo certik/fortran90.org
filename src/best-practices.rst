@@ -574,7 +574,8 @@ routines like this::
 
     end subroutine mesh_exp
 
-and use the builtin `ctypes`_ Python package to dynamically load
+and use the builtin `ctypes <http://docs.python.org/library/ctypes.html>`_
+Python package to dynamically load
 shared object files containing your C-callable Fortran routines and
 call them directly::
 
