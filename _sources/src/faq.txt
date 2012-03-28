@@ -29,7 +29,10 @@ application development).*
 <http://www2.research.att.com/~bs/C++0xFAQ.html#specific-aims>`_.)
 
 On the other hand,
-the Fortran language has been designed with the following goals:
+the Fortran language has been designed with the following goals
+(see for example the review article
+`The Seven Ages of Fortran <http://journal.info.unlp.edu.ar/journal/journal30/papers/JCST-Apr11-1.pdf>`_
+by Michael Metcalf):
 
 * Contain basic mathematics in the core language (rich array operations,
   complex numbers, exponentiation, special functions)
@@ -64,6 +67,9 @@ We have found,
 to be quite helpful in providing both the larger context of the language as a
 whole and a clear, well-connected presentation, organized by standard: f95,
 f2003, and f2008.
+
+Other books can be found for example at
+`fortran.com/metcalf.htm <http://www.fortran.com/metcalf.htm>`_
 
 However, Fortran is relatively quick to learn because it is so much simpler
 and smaller than C/C++ (in practice, that is, with all needed libraries
