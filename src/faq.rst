@@ -29,7 +29,10 @@ application development).*
 <http://www2.research.att.com/~bs/C++0xFAQ.html#specific-aims>`_.)
 
 On the other hand,
-the Fortran language has been designed with the following goals:
+the Fortran language has been designed with the following goals
+(see for example the review article
+`The Seven Ages of Fortran <http://journal.info.unlp.edu.ar/journal/journal30/papers/JCST-Apr11-1.pdf>`_
+by Michael Metcalf):
 
 * Contain basic mathematics in the core language (rich array operations,
   complex numbers, exponentiation, special functions)
