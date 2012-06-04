@@ -244,6 +244,9 @@ the function:</p>
 <div class="highlight-python"><pre>integer :: r(5)
 r = [1, 2, 3, 4, 5]</pre>
 </div>
+<p>This syntax is valid since the Fortran 2003 standard and it is the preferred
+syntax (the old syntax <tt class="docutils literal"><span class="pre">r</span> <span class="pre">=</span> <span class="pre">(/</span> <span class="pre">1,</span> <span class="pre">2,</span> <span class="pre">3,</span> <span class="pre">4,</span> <span class="pre">5</span> <span class="pre">/)</span></tt> should only be used if you
+cannot use Fortran 2003).</p>
 <p>In order for the array to start with different index than 1, do:</p>
 <div class="highlight-python"><pre>subroutine print_eigenvalues(kappa_min, lam)
 integer, intent(in) :: kappa_min
