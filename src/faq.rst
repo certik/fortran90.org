@@ -75,6 +75,18 @@ However, Fortran is relatively quick to learn because it is so much simpler
 and smaller than C/C++ (in practice, that is, with all needed libraries
 included).
 
+What are other good online Fortran resources?
+---------------------------------------------
+
+We have found the following links to be quite helpful:
+
+http://en.wikipedia.org/wiki/Fortran
+
+http://en.wikipedia.org/wiki/Fortran_95_language_features
+
+http://fortranwiki.org/
+
+http://www.fortran.com/metcalf.htm
 
 How to do dynamic dispatch in Fortran (like 'void \*' in C)?
 ------------------------------------------------------------
