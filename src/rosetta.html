@@ -986,9 +986,9 @@ Both versions generate equivalent <tt class="docutils literal"><span class="pre"
 </div>
 <div class="section" id="least-squares-fitting">
 <h3>Least Squares Fitting<a class="headerlink" href="#least-squares-fitting" title="Permalink to this headline">¶</a></h3>
-<p>In Python we use <a class="reference external" href="http://www.scipy.org/">SciPy</a>, in Fortran we use
-<a class="reference external" href="https://github.com/certik/minpack">Minpack</a>.</p>
-<p>Find a nonlinear fit of the form <tt class="docutils literal"><span class="pre">a*x*log(b</span> <span class="pre">+</span> <span class="pre">c*x)</span></tt> to a list of primes:</p>
+<p>In Python we use Minpack via <a class="reference external" href="http://www.scipy.org/">SciPy</a>, in Fortran we
+use <a class="reference external" href="https://github.com/certik/minpack">Minpack</a> directly. We first create a
+module <tt class="docutils literal"><span class="pre">find_fit_module</span></tt> with a function <tt class="docutils literal"><span class="pre">find_fit</span></tt>:</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="45%" />
@@ -998,7 +998,98 @@ Both versions generate equivalent <tt class="docutils literal"><span class="pre"
 <tr class="row-odd"><td>Python</td>
 <td>Fortran</td>
 </tr>
-<tr class="row-even"><td>&nbsp;</td>
+<tr class="row-even"><td><div class="first last highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">leastsq</span>
+
+<span class="k">def</span> <span class="nf">find_fit</span><span class="p">(</span><span class="n">data_x</span><span class="p">,</span> <span class="n">data_y</span><span class="p">,</span> <span class="n">expr</span><span class="p">,</span> <span class="n">pars</span><span class="p">):</span>
+    <span class="n">data_x</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">data_x</span><span class="p">)</span>
+    <span class="n">data_y</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">data_y</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">fcn</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">data_y</span> <span class="o">-</span> <span class="n">expr</span><span class="p">(</span><span class="n">data_x</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">ier</span> <span class="o">=</span> <span class="n">leastsq</span><span class="p">(</span><span class="n">fcn</span><span class="p">,</span> <span class="n">pars</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">ier</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&quot;Failed to converge.&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span>
+</pre></div>
+</div>
+</td>
+<td><div class="first last highlight-python"><pre>module find_fit_module
+use minpack, only: lmdif1
+use types, only: dp
+implicit none
+private
+public find_fit
+
+contains
+
+subroutine find_fit(data_x, data_y, expr, pars)
+real(dp), intent(in) :: data_x(:), data_y(:)
+interface
+    function expr(x, pars) result(y)
+    use types, only: dp
+    implicit none
+    real(dp), intent(in) :: x(:), pars(:)
+    real(dp) :: y(size(x))
+    end function
+end interface
+real(dp), intent(inout) :: pars(:)
+
+real(dp) :: tol, fvec(size(data_x))
+integer :: iwa(size(pars)), info, m, n
+real(dp), allocatable :: wa(:)
+
+tol = sqrt(epsilon(1._dp))
+m = size(fvec)
+n = size(pars)
+allocate(wa(m*n + 5*n + m))
+call lmdif1(fcn, m, n, pars, fvec, tol, info, iwa, wa, size(wa))
+if (info /= 1) stop "failed to converge"
+
+contains
+
+subroutine fcn(m, n, x, fvec, iflag)
+integer, intent(in) :: m, n, iflag
+real(dp), intent(in) :: x(n)
+real(dp), intent(out) :: fvec(m)
+! Suppress compiler warning:
+fvec(1) = iflag
+fvec = data_y - expr(data_x, x)
+end subroutine
+
+end subroutine
+
+end module</pre>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Then we use it to
+find a nonlinear fit of the form <tt class="docutils literal"><span class="pre">a*x*log(b</span> <span class="pre">+</span> <span class="pre">c*x)</span></tt> to a list of primes:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="45%" />
+<col width="55%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Python</td>
+<td>Fortran</td>
+</tr>
+<tr class="row-even"><td><div class="first last highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">size</span><span class="p">,</span> <span class="n">log</span>
+<span class="kn">from</span> <span class="nn">find_fit_module</span> <span class="kn">import</span> <span class="n">find_fit</span>
+
+<span class="k">def</span> <span class="nf">expression</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">pars</span><span class="p">):</span>
+    <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">pars</span>
+    <span class="k">return</span> <span class="n">a</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">log</span><span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">c</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span>
+    <span class="mi">37</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">43</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">53</span><span class="p">,</span> <span class="mi">59</span><span class="p">,</span> <span class="mi">61</span><span class="p">,</span> <span class="mi">67</span><span class="p">,</span> <span class="mi">71</span><span class="p">]</span>
+<span class="n">pars</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">]</span>
+<span class="n">pars</span> <span class="o">=</span> <span class="n">find_fit</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">y</span><span class="p">,</span> <span class="n">expression</span><span class="p">,</span> <span class="n">pars</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">pars</span>
+</pre></div>
+</div>
+</td>
 <td><div class="first last highlight-python"><pre>program example_primes
 use find_fit_module, only: find_fit
 use types, only: dp

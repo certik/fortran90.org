@@ -594,28 +594,84 @@ Timings on Acer 1830T with gfortran 4.6.1 are:
 Least Squares Fitting
 ~~~~~~~~~~~~~~~~~~~~~
 
-In Python we use `SciPy <http://www.scipy.org/>`_, in Fortran we use
-`Minpack <https://github.com/certik/minpack>`_.
-
-Find a nonlinear fit of the form ``a*x*log(b + c*x)`` to a list of primes:
+In Python we use Minpack via `SciPy <http://www.scipy.org/>`_, in Fortran we
+use `Minpack <https://github.com/certik/minpack>`_ directly. We first create a
+module ``find_fit_module`` with a function ``find_fit``:
 
 +-----------------------------------------------------------------+---------------------------------------------------------------------------------+
 | Python                                                          |           Fortran                                                               |
 +-----------------------------------------------------------------+---------------------------------------------------------------------------------+
-|                                                                 |::                                                                               |
+|::                                                               |::                                                                               |
 |                                                                 |                                                                                 |
-|                                                                 | program example_primes                                                          |
-|                                                                 | use find_fit_module, only: find_fit                                             |
+| from numpy import array                                         | module find_fit_module                                                          |
+| from scipy.optimize import leastsq                              | use minpack, only: lmdif1                                                       |
 |                                                                 | use types, only: dp                                                             |
-|                                                                 | implicit none                                                                   |
+| def find_fit(data_x, data_y, expr, pars):                       | implicit none                                                                   |
+|     data_x = array(data_x)                                      | private                                                                         |
+|     data_y = array(data_y)                                      | public find_fit                                                                 |
+|     def fcn(x):                                                 |                                                                                 |
+|         return data_y - expr(data_x, x)                         | contains                                                                        |
+|     x, ier = leastsq(fcn, pars)                                 |                                                                                 |
+|     if (ier != 1):                                              | subroutine find_fit(data_x, data_y, expr, pars)                                 |
+|         raise Exception("Failed to converge.")                  | real(dp), intent(in) :: data_x(:), data_y(:)                                    |
+|     return x                                                    | interface                                                                       |
+|                                                                 |     function expr(x, pars) result(y)                                            |
+|                                                                 |     use types, only: dp                                                         |
+|                                                                 |     implicit none                                                               |
+|                                                                 |     real(dp), intent(in) :: x(:), pars(:)                                       |
+|                                                                 |     real(dp) :: y(size(x))                                                      |
+|                                                                 |     end function                                                                |
+|                                                                 | end interface                                                                   |
+|                                                                 | real(dp), intent(inout) :: pars(:)                                              |
 |                                                                 |                                                                                 |
-|                                                                 | real(dp) :: pars(3)                                                             |
+|                                                                 | real(dp) :: tol, fvec(size(data_x))                                             |
+|                                                                 | integer :: iwa(size(pars)), info, m, n                                          |
+|                                                                 | real(dp), allocatable :: wa(:)                                                  |
+|                                                                 |                                                                                 |
+|                                                                 | tol = sqrt(epsilon(1._dp))                                                      |
+|                                                                 | m = size(fvec)                                                                  |
+|                                                                 | n = size(pars)                                                                  |
+|                                                                 | allocate(wa(m*n + 5*n + m))                                                     |
+|                                                                 | call lmdif1(fcn, m, n, pars, fvec, tol, info, iwa, wa, size(wa))                |
+|                                                                 | if (info /= 1) stop "failed to converge"                                        |
+|                                                                 |                                                                                 |
+|                                                                 | contains                                                                        |
+|                                                                 |                                                                                 |
+|                                                                 | subroutine fcn(m, n, x, fvec, iflag)                                            |
+|                                                                 | integer, intent(in) :: m, n, iflag                                              |
+|                                                                 | real(dp), intent(in) :: x(n)                                                    |
+|                                                                 | real(dp), intent(out) :: fvec(m)                                                |
+|                                                                 | ! Suppress compiler warning:                                                    |
+|                                                                 | fvec(1) = iflag                                                                 |
+|                                                                 | fvec = data_y - expr(data_x, x)                                                 |
+|                                                                 | end subroutine                                                                  |
+|                                                                 |                                                                                 |
+|                                                                 | end subroutine                                                                  |
+|                                                                 |                                                                                 |
+|                                                                 | end module                                                                      |
+|                                                                 |                                                                                 |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------+
+
+Then we use it to
+find a nonlinear fit of the form ``a*x*log(b + c*x)`` to a list of primes:
+
++-----------------------------------------------------------------+---------------------------------------------------------------------------------+
+| Python                                                          |           Fortran                                                               |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------+
+|::                                                               |::                                                                               |
+|                                                                 |                                                                                 |
+| from numpy import size, log                                     | program example_primes                                                          |
+| from find_fit_module import find_fit                            | use find_fit_module, only: find_fit                                             |
+|                                                                 | use types, only: dp                                                             |
+| def expression(x, pars):                                        | implicit none                                                                   |
+|     a, b, c = pars                                              |                                                                                 |
+|     return a*x*log(b + c*x)                                     | real(dp) :: pars(3)                                                             |
 |                                                                 | real(dp), parameter :: y(*) = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, &        |
-|                                                                 |     37, 41, 43, 47, 53, 59, 61, 67, 71]                                         |
-|                                                                 | integer :: i                                                                    |
-|                                                                 | pars = [1._dp, 1._dp, 1._dp]                                                    |
-|                                                                 | call find_fit([(real(i, dp), i=1,size(y))], y, expression, pars)                |
-|                                                                 | print *, pars                                                                   |
+| y = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31,                    |     37, 41, 43, 47, 53, 59, 61, 67, 71]                                         |
+|     37, 41, 43, 47, 53, 59, 61, 67, 71]                         | integer :: i                                                                    |
+| pars = [1., 1., 1.]                                             | pars = [1._dp, 1._dp, 1._dp]                                                    |
+| pars = find_fit(range(1, size(y)+1), y, expression, pars)       | call find_fit([(real(i, dp), i=1,size(y))], y, expression, pars)                |
+| print pars                                                      | print *, pars                                                                   |
 |                                                                 |                                                                                 |
 |                                                                 | contains                                                                        |
 |                                                                 |                                                                                 |
