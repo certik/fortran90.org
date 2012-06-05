@@ -80,13 +80,17 @@ What are other good online Fortran resources?
 
 We have found the following links to be quite helpful:
 
-http://en.wikipedia.org/wiki/Fortran
+    * http://en.wikipedia.org/wiki/Fortran
+    * http://en.wikipedia.org/wiki/Fortran_language_features
+    * http://fortranwiki.org/
+    * http://www.fortran.com/metcalf.htm
+    * http://www.cs.umbc.edu/~squire/fortranclass/summary.shtml
 
-http://en.wikipedia.org/wiki/Fortran_language_features
+And the Fortran standards:
 
-http://fortranwiki.org/
-
-http://www.fortran.com/metcalf.htm
+    * Fortran 77 standard: http://www.fortran.com/F77_std/rjcnf0001.html
+    * Fortran 2003 standard: http://www.j3-fortran.org/doc/year/04/04-007.pdf
+    * Fortran 2008 standard: ftp://ftp.nag.co.uk/sc22wg5/N1801-N1850/N1830.pdf
 
 How to do dynamic dispatch in Fortran (like 'void \*' in C)?
 ------------------------------------------------------------
