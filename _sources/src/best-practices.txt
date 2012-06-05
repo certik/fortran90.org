@@ -62,22 +62,42 @@ naming conventions one sees used in more general-purpose languages such as C++
 and Python, therefore, are perfectly consistent with their more general-purpose
 missions. But Fortran has a different mission (numerical scientific computing).
 
+.. _floating_point_numbers:
+
 Floating Point Numbers
 ----------------------
 
 Somewhere create and export a parameter ``dp``::
 
-    integer, parameter:: dp=kind(0.d0)
+    integer, parameter:: dp=kind(0.d0)                   ! double precision
 
 and declare floats as::
 
     real(dp) :: a, b, c
 
-Always write all floating point constants as::
+Always write all floating point constants with the ``_dp`` suffix::
 
     1.0_dp, 3.5_dp, 1.34e8_dp
 
-and never any other way. To print floating point double precision numbers without loosing precision, use the ``(es23.16)`` format (see http://stackoverflow.com/questions/6118231/why-do-i-need-17-significant-digits-and-not-16-to-represent-a-double/).
+and never any other way (see also the gotcha
+:ref:`floating_point_numbers_gotcha`).
+
+To print floating point double precision
+numbers without loosing precision, use the ``(es23.16)`` format (see
+http://stackoverflow.com/questions/6118231/why-do-i-need-17-significant-digits-and-not-16-to-represent-a-double/).
+
+It is safe to assign integers to floating point numbers without loosing
+accuracy::
+
+    real(dp) :: a
+    a = 3
+
+In order to impose floating point division (as opposed to integer division
+``1/2`` equal to ``0``), one can convert the integer to a floating point number
+by::
+
+    real(dp) :: a
+    a = real(1, dp) / 2       ! 'a' is equal to 0.5_dp
 
 Integer Division
 ----------------

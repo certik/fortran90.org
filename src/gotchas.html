@@ -67,6 +67,37 @@ a = 5</pre>
 </div>
 <p>See for example this <a class="reference external" href="http://stackoverflow.com/questions/3352741/fortran-assignment-on-declaration-and-save-attribute-gotcha">question</a>.</p>
 </div>
+<div class="section" id="floating-point-numbers">
+<span id="floating-point-numbers-gotcha"></span><h2>Floating Point Numbers<a class="headerlink" href="#floating-point-numbers" title="Permalink to this headline">¶</a></h2>
+<p>Assuming the definitions:</p>
+<div class="highlight-python"><pre>integer, parameter :: dp=kind(0.d0)           ! double precision
+integer, parameter :: sp=kind(0.0 )           ! single precision</pre>
+</div>
+<p>Then the following code:</p>
+<div class="highlight-python"><pre>real(dp) :: a
+a = 1.0</pre>
+</div>
+<p>is equivalent to:</p>
+<div class="highlight-python"><pre>real(dp) :: a
+a = 1.0_sp</pre>
+</div>
+<p>and <em>not</em> to:</p>
+<div class="highlight-python"><pre>real(dp) :: a
+a = 1.0_dp</pre>
+</div>
+<p>As such, always use the <tt class="docutils literal"><span class="pre">_dp</span></tt> suffix as explained in
+<a class="reference internal" href="best-practices.html#floating-point-numbers"><em>Floating Point Numbers</em></a>. However, the following code:</p>
+<div class="highlight-python"><pre>real(dp) :: a
+a = 1</pre>
+</div>
+<p>is equivalent to:</p>
+<div class="highlight-python"><pre>real(dp) :: a
+a = 1.0_dp</pre>
+</div>
+<p>And so it is safe to assign integers to floating point numbers without loosing
+any accuracy (but one must be careful about integer division, e.g.  <tt class="docutils literal"><span class="pre">1/2</span></tt> is
+equal to <tt class="docutils literal"><span class="pre">0</span></tt> and not <tt class="docutils literal"><span class="pre">0.5</span></tt>).</p>
+</div>
 </div>
 
 
@@ -79,6 +110,7 @@ a = 5</pre>
   <ul>
 <li><a class="reference internal" href="#">Gotchas</a><ul>
 <li><a class="reference internal" href="#variable-initialization-using-initialization-expression">Variable Initialization Using Initialization Expression</a></li>
+<li><a class="reference internal" href="#floating-point-numbers">Floating Point Numbers</a></li>
 </ul>
 </li>
 </ul>
