@@ -82,7 +82,7 @@ We have found the following links to be quite helpful:
 
 http://en.wikipedia.org/wiki/Fortran
 
-http://en.wikipedia.org/wiki/Fortran_95_language_features
+http://en.wikipedia.org/wiki/Fortran_language_features
 
 http://fortranwiki.org/
 
