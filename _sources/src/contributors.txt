@@ -9,3 +9,4 @@ the order of the date of contribution:
 * John Pask
 * Jed Brown
 * Matthew Emmett
+* Juan Luis Cano Rodríguez
