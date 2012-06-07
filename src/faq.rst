@@ -71,6 +71,9 @@ f2003, and f2008.
 Another good book with a lot of examples is
 `Stephen Chapman: Fortran 95/2003 for Scientists & Engineers
 <http://www.amazon.com/Fortran-95-2003-Scientists-Engineers/dp/0073191574>`_.
+And a reference book
+`Adams, Brainerd, Hendrickson, Maine, Martin & Smith: The Fortran 2003 Handbook
+<http://www.amazon.com/The-Fortran-2003-Handbook-Procedures/dp/1846283787>`_.
 
 Other books can be found for example at
 `fortran.com/metcalf.htm <http://www.fortran.com/metcalf.htm>`_
