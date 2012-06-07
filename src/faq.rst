@@ -68,6 +68,10 @@ to be quite helpful in providing both the larger context of the language as a
 whole and a clear, well-connected presentation, organized by standard: f95,
 f2003, and f2008.
 
+Another good book with a lot of examples is
+`Stephen Chapman: Fortran 95/2003 for Scientists & Engineers
+<http://www.amazon.com/Fortran-95-2003-Scientists-Engineers/dp/0073191574>`_.
+
 Other books can be found for example at
 `fortran.com/metcalf.htm <http://www.fortran.com/metcalf.htm>`_
 
