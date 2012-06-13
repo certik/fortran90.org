@@ -56,6 +56,47 @@
 <p>Python with NumPy and Fortran are very similar in terms
 of expressiveness and features. This rosetta stone
 shows how to implement many common idioms in both languages side by side.</p>
+<div class="section" id="how-to-execute-code-snippets">
+<h2>How to Execute Code Snippets<a class="headerlink" href="#how-to-execute-code-snippets" title="Permalink to this headline">¶</a></h2>
+<p>Consider for example the following code snippets:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="49%" />
+<col width="51%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>NumPy</td>
+<td>Fortran</td>
+</tr>
+<tr class="row-even"><td><div class="first last highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="nb">sum</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="k">print</span> <span class="n">shape</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">size</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="k">print</span> <span class="nb">max</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="k">print</span> <span class="nb">min</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="k">print</span> <span class="nb">sum</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+<td><div class="first last highlight-python"><pre>integer :: a(3)
+a = [1, 2, 3]
+print *, shape(a)
+print *, size(a)
+print *, maxval(a)
+print *, minval(a)
+print *, sum(a)</pre>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>In Python, just save the code to a file <tt class="docutils literal"><span class="pre">a.py</span></tt> and execute using <tt class="docutils literal"><span class="pre">python</span>
+<span class="pre">a.py</span></tt>. In Fortran, save it to a file <tt class="docutils literal"><span class="pre">a.f90</span></tt> and append the line <tt class="docutils literal"><span class="pre">end</span></tt> at
+the end of the file (see the section <a class="reference internal" href="#modulespy"><em>Modules</em></a> for more info how this
+works). Compile using <tt class="docutils literal"><span class="pre">gfortran</span> <span class="pre">a.f90</span></tt> and execute using <tt class="docutils literal"><span class="pre">./a.out</span></tt> (you can
+of course add compilation options to gfortran, for example to produce the
+executable with a different name).</p>
+</div>
 <div class="section" id="arrays">
 <h2>Arrays<a class="headerlink" href="#arrays" title="Permalink to this headline">¶</a></h2>
 <p>Arrays are builtin in Fortran, and available in the NumPy module in Python.
@@ -72,17 +113,17 @@ other ordering). This also matters when <tt class="docutils literal"><span class
 other operations like flattening.</li>
 <li>The first index is the fastest in Fortran, while in NumPy, the last index
 is the fastest</li>
-<li>By default NumPy prints the 2d array nicely, while Fortran flattens it
-(column wise) first (you need to write a subroutine to print a 2D array
-nicely)</li>
+<li>By default NumPy prints the 2d array nicely, while in Fortran one has to
+specify a format to print it (also Fortran prints column wise, so one has
+to transpose the array for row wise printing)</li>
 </ul>
 </div></blockquote>
 <p>Everything else is the same, in particular:</p>
 <blockquote>
 <div><ul class="simple">
 <li>There is one-to-one correspondence between NumPy and Fortran array
-operations and things can be expressed
-the same easily/naturally in both languages</li>
+operations and things can be expressed the same easily/naturally in both
+languages</li>
 <li>For 2D arrays, the first index is a row index, the second is the column
 index (just like in mathematics)</li>
 <li>NumPy and Fortran arrays are equivalent if they have the same shape and
@@ -188,7 +229,7 @@ print *, b(2, :)</pre>
 </div>
 </td>
 <td><div class="first highlight-python"><pre>integer :: a(2, 3)
-a = reshape([1, 2, 3, 4, 5, 6], [2, 3], order=[2, 1]))
+a = reshape([1, 2, 3, 4, 5, 6], [2, 3], order=[2, 1])
 print *, shape(a)
 print *, size(a, 1)
 print *, size(a, 2)
@@ -196,7 +237,7 @@ print *, maxval(a)
 print *, minval(a)
 print *, a(1, 1), a(1, 2), a(1, 3)
 print *, a(2, 1), a(2, 2), a(2, 3)
-print *, a</pre>
+print "(3i5)", transpose(a)</pre>
 </div>
 <p>Output (whitespace trimmed):</p>
 <div class="last highlight-python"><pre>2 3
@@ -206,7 +247,8 @@ print *, a</pre>
 1
 1 2 3
 4 5 6
-1 4 2 5 3 6</pre>
+1 2 3
+4 5 6</pre>
 </div>
 </td>
 </tr>
@@ -313,15 +355,36 @@ print *, matmul(a, b)</pre>
 </div>
 </td>
 </tr>
+<tr class="row-even"><td><div class="first last highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">pi</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">)])</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">array</span><span class="p">([(</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">*</span><span class="n">pi</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">)])</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span> \
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)])</span>
+</pre></div>
+</div>
+</td>
+<td><div class="first last highlight-python"><pre>use types, only: dp
+use constants, only: pi
+integer :: a(6), c(18)
+real(dp) :: b(6)
+integer :: i, j
+a = [ (i, i = 1, 6) ]
+b = [ ((2*i*pi+1)/2, i = 1, 6) ]
+c = [ ((i, j = 1, 3), i = 1, 6) ]</pre>
+</div>
+</td>
+</tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="modules">
-<h2>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h2>
+<span id="modulespy"></span><h2>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h2>
 <p>Fortran modules work just like Python modules. Differences:</p>
 <blockquote>
 <div><ul class="simple">
-<li>Fortran modules cannot be nested</li>
+<li>Fortran modules cannot be nested (i.e. they are all top level, while
+in Python one can nest the module arbitrarily using the <tt class="docutils literal"><span class="pre">__init__.py</span></tt>
+files)</li>
 <li>One can specify private module symbols in Fortran</li>
 </ul>
 </div></blockquote>
@@ -423,6 +486,9 @@ end program</pre>
 </tr>
 </tbody>
 </table>
+<p>In Fortran, one can ommit the line <tt class="docutils literal"><span class="pre">program</span> <span class="pre">main</span></tt>, also one can just
+end the file with <tt class="docutils literal"><span class="pre">end</span></tt> instead of <tt class="docutils literal"><span class="pre">end</span> <span class="pre">program</span></tt>. That way one can test
+any code snippet just by appending <tt class="docutils literal"><span class="pre">end</span></tt> at the end.</p>
 <p>In order to specify which symbols are public and private, one would use:</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -1137,6 +1203,7 @@ end program</pre>
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Python Fortran Rosetta Stone</a><ul>
+<li><a class="reference internal" href="#how-to-execute-code-snippets">How to Execute Code Snippets</a></li>
 <li><a class="reference internal" href="#arrays">Arrays</a></li>
 <li><a class="reference internal" href="#modules">Modules</a></li>
 <li><a class="reference internal" href="#floating-point-numbers">Floating Point Numbers</a></li>
