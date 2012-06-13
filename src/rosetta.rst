@@ -184,7 +184,17 @@ Everything else is the same, in particular:
 | [[10 13]                                             |                                                        |
 |  [22 29]]                                            |                                                        |
 +------------------------------------------------------+--------------------------------------------------------+
-
+|::                                                    |::                                                      |
+|                                                      |                                                        |
+| from numpy import array, pi                          | use types, only: dp                                    |
+| a = array([i for i in range(1, 7)])                  | use constants, only: pi                                |
+| b = array([(2*i*pi+1)/2 for i in range(1, 7)])       | integer :: a(6), c(18)                                 |
+| c = array([i for i in range(1, 7) \                  | real(dp) :: b(6)                                       |
+|     for j in range(1, 4)])                           | integer :: i, j                                        |
+|                                                      | a = [ (i, i = 1, 6) ]                                  |
+|                                                      | b = [ ((2*i*pi+1)/2, i = 1, 6) ]                       |
+|                                                      | c = [ ((i, j = 1, 3), i = 1, 6) ]                      |
++------------------------------------------------------+--------------------------------------------------------+
 
 .. _modulespy:
 
