@@ -5,6 +5,31 @@ Python with NumPy and Fortran are very similar in terms
 of expressiveness and features. This rosetta stone
 shows how to implement many common idioms in both languages side by side.
 
+How to Execute Code Snippets
+----------------------------
+
+Consider for example the following code snippets:
+
++------------------------------------------------------+--------------------------------------------------------+
+| NumPy                                                |           Fortran                                      |
++------------------------------------------------------+--------------------------------------------------------+
+|::                                                    |::                                                      |
+|                                                      |                                                        |
+| from numpy import array, size, shape, min, max, sum  | integer :: a(3)                                        |
+| a = array([1, 2, 3])                                 | a = [1, 2, 3]                                          |
+| print shape(a)                                       | print *, shape(a)                                      |
+| print size(a)                                        | print *, size(a)                                       |
+| print max(a)                                         | print *, maxval(a)                                     |
+| print min(a)                                         | print *, minval(a)                                     |
+| print sum(a)                                         | print *, sum(a)                                        |
++------------------------------------------------------+--------------------------------------------------------+
+
+In Python, just save the code to a file ``a.py`` and execute using ``python
+a.py``. In Fortran, save it to a file ``a.f90`` and append the line ``end`` at
+the end of the file (see the section :ref:`modulespy` for more info how this
+works). Compile using ``gfortran a.f90`` and execute using ``./a.out`` (you can
+of course add compilation options to gfortran, for example to produce the
+executable with a different name).
 
 Arrays
 ------
@@ -161,12 +186,16 @@ Everything else is the same, in particular:
 +------------------------------------------------------+--------------------------------------------------------+
 
 
+.. _modulespy:
+
 Modules
 -------
 
 Fortran modules work just like Python modules. Differences:
 
-    * Fortran modules cannot be nested
+    * Fortran modules cannot be nested (i.e. they are all top level, while
+      in Python one can nest the module arbitrarily using the ``__init__.py``
+      files)
     * One can specify private module symbols in Fortran
 
 Identical features:
@@ -227,6 +256,9 @@ And uses it from the main program as follows:
 | 5                                                    | 5                                                      |
 +------------------------------------------------------+--------------------------------------------------------+
 
+In Fortran, one can ommit the line ``program main``, also one can just
+end the file with ``end`` instead of ``end program``. That way one can test
+any code snippet just by appending ``end`` at the end.
 
 In order to specify which symbols are public and private, one would use:
 
