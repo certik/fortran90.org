@@ -22,15 +22,15 @@ The usage is identical, except for the following differences:
       other operations like flattening.
     * The first index is the fastest in Fortran, while in NumPy, the last index
       is the fastest
-    * By default NumPy prints the 2d array nicely, while Fortran flattens it
-      (column wise) first (you need to write a subroutine to print a 2D array
-      nicely)
+    * By default NumPy prints the 2d array nicely, while in Fortran one has to
+      specify a format to print it (also Fortran prints column wise, so one has
+      to transpose the array for row wise printing)
 
 Everything else is the same, in particular:
 
     * There is one-to-one correspondence between NumPy and Fortran array
-      operations and things can be expressed
-      the same easily/naturally in both languages
+      operations and things can be expressed the same easily/naturally in both
+      languages
     * For 2D arrays, the first index is a row index, the second is the column
       index (just like in mathematics)
     * NumPy and Fortran arrays are equivalent if they have the same shape and
@@ -81,7 +81,7 @@ Everything else is the same, in particular:
 |::                                                    |::                                                      |
 |                                                      |                                                        |
 | from numpy import array, size, shape, max, min       | integer :: a(2, 3)                                     |
-| a = array([[1, 2, 3], [4, 5, 6]])                    | a = reshape([1, 2, 3, 4, 5, 6], [2, 3], order=[2, 1])) |
+| a = array([[1, 2, 3], [4, 5, 6]])                    | a = reshape([1, 2, 3, 4, 5, 6], [2, 3], order=[2, 1])  |
 | print shape(a)                                       | print *, shape(a)                                      |
 | print size(a, 0)                                     | print *, size(a, 1)                                    |
 | print size(a, 1)                                     | print *, size(a, 2)                                    |
@@ -89,7 +89,7 @@ Everything else is the same, in particular:
 | print min(a)                                         | print *, minval(a)                                     |
 | print a[0, 0], a[0, 1], a[0, 2]                      | print *, a(1, 1), a(1, 2), a(1, 3)                     |
 | print a[1, 0], a[1, 1], a[1, 2]                      | print *, a(2, 1), a(2, 2), a(2, 3)                     |
-| print a                                              | print *, a                                             |
+| print a                                              | print "(3i5)", transpose(a)                            |
 |                                                      |                                                        |
 |Output::                                              |Output (whitespace trimmed)::                           |
 |                                                      |                                                        |
@@ -100,8 +100,8 @@ Everything else is the same, in particular:
 | 1                                                    | 1                                                      |
 | 1 2 3                                                | 1 2 3                                                  |
 | 4 5 6                                                | 4 5 6                                                  |
-| [[1 2 3]                                             | 1 4 2 5 3 6                                            |
-|  [4 5 6]]                                            |                                                        |
+| [[1 2 3]                                             | 1 2 3                                                  |
+|  [4 5 6]]                                            | 4 5 6                                                  |
 +------------------------------------------------------+--------------------------------------------------------+
 |::                                                    |::                                                      |
 |                                                      |                                                        |
