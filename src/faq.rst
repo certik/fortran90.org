@@ -100,6 +100,11 @@ And the Fortran standards:
     * Fortran 2003 standard: http://www.j3-fortran.org/doc/year/04/04-007.pdf
     * Fortran 2008 standard: ftp://ftp.nag.co.uk/sc22wg5/N1801-N1850/N1830.pdf
 
+Compiler table for support for the 2003 and 2008 standards appears regularly in
+`Fortran Forum <http://dl.acm.org/citation.cfm?id=J286>`_.
+The 9th revision: `compiler_table_revision_9.pdf
+<http://www.fortranplus.co.uk/resources/compiler_table_revision_9.pdf>`_
+
 How to do dynamic dispatch in Fortran (like 'void \*' in C)?
 ------------------------------------------------------------
 
