@@ -15,6 +15,7 @@ Contents:
 .. toctree::
     :maxdepth: 2
 
+    src/about.rst
     src/best-practices.rst
     src/rosetta.rst
     src/faq.rst

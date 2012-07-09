@@ -138,6 +138,9 @@ included).</p>
 <li>Fortran 2008 standard: <a class="reference external" href="ftp://ftp.nag.co.uk/sc22wg5/N1801-N1850/N1830.pdf">ftp://ftp.nag.co.uk/sc22wg5/N1801-N1850/N1830.pdf</a></li>
 </ul>
 </div></blockquote>
+<p>Compiler table for support for the 2003 and 2008 standards appears regularly in
+<a class="reference external" href="http://dl.acm.org/citation.cfm?id=J286">Fortran Forum</a>.
+The 9th revision: <a class="reference external" href="http://www.fortranplus.co.uk/resources/compiler_table_revision_9.pdf">compiler_table_revision_9.pdf</a></p>
 </div>
 <div class="section" id="how-to-do-dynamic-dispatch-in-fortran-like-void-in-c">
 <h2>How to do dynamic dispatch in Fortran (like &#8216;void *&#8217; in C)?<a class="headerlink" href="#how-to-do-dynamic-dispatch-in-fortran-like-void-in-c" title="Permalink to this headline">¶</a></h2>
@@ -260,15 +263,17 @@ libraries, see <a class="reference internal" href="#distribute-libraries"><em>Wh
 <div class="section" id="what-compiler-options-should-i-use-for-development">
 <h2>What compiler options should I use for development?<a class="headerlink" href="#what-compiler-options-should-i-use-for-development" title="Permalink to this headline">¶</a></h2>
 <p>One possibility for gfortran is:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="o">-</span><span class="n">Wall</span> <span class="o">-</span><span class="n">Wextra</span> <span class="o">-</span><span class="n">Wimplicit</span><span class="o">-</span><span class="n">interface</span> <span class="o">-</span><span class="n">fPIC</span> <span class="o">-</span><span class="n">Werror</span> <span class="o">-</span><span class="n">fmax</span><span class="o">-</span><span class="n">errors</span><span class="o">=</span><span class="mi">1</span> <span class="o">-</span><span class="n">g</span> <span class="o">-</span><span class="n">fbounds</span><span class="o">-</span><span class="n">check</span> <span class="o">-</span><span class="n">fcheck</span><span class="o">-</span><span class="n">array</span><span class="o">-</span><span class="n">temporaries</span> <span class="o">-</span><span class="n">fbacktrace</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">-</span><span class="n">Wall</span> <span class="o">-</span><span class="n">Wextra</span> <span class="o">-</span><span class="n">Wimplicit</span><span class="o">-</span><span class="n">interface</span> <span class="o">-</span><span class="n">fPIC</span> <span class="o">-</span><span class="n">fmax</span><span class="o">-</span><span class="n">errors</span><span class="o">=</span><span class="mi">1</span> <span class="o">-</span><span class="n">g</span> <span class="o">-</span><span class="n">fcheck</span><span class="o">=</span><span class="nb">all</span> <span class="o">-</span><span class="n">fbacktrace</span>
 </pre></div>
 </div>
-<p>With gfortran 4.5 and newer, you can use <tt class="docutils literal"><span class="pre">fcheck=all</span></tt>, which turns
-on <tt class="docutils literal"><span class="pre">-fbounds-check</span> <span class="pre">-fcheck-array-temporaries</span></tt> and other checks.</p>
-<p>This warns about undefined symbols, turns warnings into errors (so that the
-compilation stops when undefined symbol is used), stops at the first error,
-turns on bounds checks and array temporaries, and turns on backtrace printing
-when something fails at runtime (typically accessing an array out of bounds).</p>
+<p>This warns about undefined symbols, stops at the first error, turns on all
+debugging checks (bounds checks, array temporaries, ...) and turns on backtrace
+printing when something fails at runtime (typically accessing an array out of
+bounds).
+You can use <tt class="docutils literal"><span class="pre">-Werror</span></tt> to turn warnings into errors (so that the
+compilation stops when undefined symbol is used).
+With gfortran 4.4 and older, replace <tt class="docutils literal"><span class="pre">fcheck=all</span></tt> with
+<tt class="docutils literal"><span class="pre">-fbounds-check</span> <span class="pre">-fcheck-array-temporaries</span></tt>.</p>
 <p>For Intel ifort:</p>
 <div class="highlight-python"><pre>-warn all -check all</pre>
 </div>

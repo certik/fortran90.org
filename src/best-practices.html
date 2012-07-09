@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Fortran90 1.0 documentation" href="../index.html" />
     <link rel="next" title="Python Fortran Rosetta Stone" href="rosetta.html" />
-    <link rel="prev" title="Fortran 90" href="../index.html" /> 
+    <link rel="prev" title="About" href="about.html" /> 
   </head>
   <body>
     <div class="related">
@@ -40,7 +40,7 @@
           <a href="rosetta.html" title="Python Fortran Rosetta Stone"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../index.html" title="Fortran 90"
+          <a href="about.html" title="About"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">Fortran90 1.0 documentation</a> &raquo;</li> 
       </ul>
@@ -1019,6 +1019,84 @@ It is now obsolete and one should use the method V instead.</p>
 <p><a class="reference external" href="http://jblevins.org/research/generic-list.pdf">http://jblevins.org/research/generic-list.pdf</a></p>
 <p><a class="reference external" href="http://www.macresearch.org/advanced_fortran_90_callbacks_with_the_transfer_function">http://www.macresearch.org/advanced_fortran_90_callbacks_with_the_transfer_function</a></p>
 </div>
+<div class="section" id="vii-object-oriented-approach">
+<h3>VII: Object Oriented Approach<a class="headerlink" href="#vii-object-oriented-approach" title="Permalink to this headline">¶</a></h3>
+<p>The module:</p>
+<div class="highlight-python"><pre>module integrals
+
+use types, only: dp
+implicit none
+private
+
+public :: integrand, simpson
+
+! User extends this type
+type, abstract :: integrand
+contains
+    procedure(func), deferred :: eval
+end type
+
+abstract interface
+    function func(this, x) result(fx)
+    import :: integrand, dp
+    class(integrand) :: this
+    real(dp), intent(in) :: x
+    real(dp) :: fx
+    end function
+end interface
+
+contains
+
+real(dp) function simpson(f, a, b) result(s)
+class(integrand) :: f
+real(dp), intent(in) :: a, b
+s = ((b-a)/6) * (f%eval(a) + 4*f%eval((a+b)/2) + f%eval(b))
+end function
+
+end module</pre>
+</div>
+<p>The abstract type prescribes exactly what the integration routine
+needs, namely a method to evaluate the function, but imposes nothing
+else on the user.  The user extends this type, providing a concrete
+implementation of the eval type bound procedure and adding necessary
+context data as components of the extended type.</p>
+<p>Usage:</p>
+<div class="highlight-python"><pre>module example_usage
+
+use types, only: dp
+use integrals, only: integrand, simpson
+implicit none
+private
+
+public :: foo
+
+type, extends(integrand) :: my_integrand
+    real(dp) :: a, k
+contains
+    procedure :: eval =&gt; f
+end type
+
+contains
+
+function f(this, x) result(fx)
+class(my_integrand) :: this
+real(dp), intent(in) :: x
+real(dp) :: fx
+fx = this%a*sin(this%k*x)
+end function
+
+subroutine foo(a, k)
+real(dp) :: a, k
+type(my_integrand) :: my_f
+my_f%a = a
+my_f%k = k
+print *, simpson(my_f, 0.0_dp, 1.0_dp)
+print *, simpson(my_f, 0.0_dp, 2.0_dp)
+end subroutine
+
+end module</pre>
+</div>
+</div>
 <div class="section" id="complete-example-of-void-vs-type-c-ptr-and-transfer">
 <h3>Complete Example of void * vs type(c_ptr) and transfer()<a class="headerlink" href="#complete-example-of-void-vs-type-c-ptr-and-transfer" title="Permalink to this headline">¶</a></h3>
 <p>Here are three equivalent codes: one in C using <tt class="docutils literal"><span class="pre">void</span> <span class="pre">*</span></tt> and two codes in
@@ -1099,6 +1177,7 @@ As such, the <tt class="docutils literal"><span class="pre">type(c_ptr)</span></
 <li><a class="reference internal" href="#iv-nested-functions">IV: Nested functions</a></li>
 <li><a class="reference internal" href="#v-using-type-c-ptr-pointer">V: Using type(c_ptr) Pointer</a></li>
 <li><a class="reference internal" href="#vi-transfer-intrinsic-function">VI: transfer() Intrinsic Function</a></li>
+<li><a class="reference internal" href="#vii-object-oriented-approach">VII: Object Oriented Approach</a></li>
 <li><a class="reference internal" href="#complete-example-of-void-vs-type-c-ptr-and-transfer">Complete Example of void * vs type(c_ptr) and transfer()</a></li>
 </ul>
 </li>
@@ -1107,8 +1186,8 @@ As such, the <tt class="docutils literal"><span class="pre">type(c_ptr)</span></
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="../index.html"
-                        title="previous chapter">Fortran 90</a></p>
+  <p class="topless"><a href="about.html"
+                        title="previous chapter">About</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="rosetta.html"
                         title="next chapter">Python Fortran Rosetta Stone</a></p>
@@ -1144,7 +1223,7 @@ As such, the <tt class="docutils literal"><span class="pre">type(c_ptr)</span></
           <a href="rosetta.html" title="Python Fortran Rosetta Stone"
              >next</a> |</li>
         <li class="right" >
-          <a href="../index.html" title="Fortran 90"
+          <a href="about.html" title="About"
              >previous</a> |</li>
         <li><a href="../index.html">Fortran90 1.0 documentation</a> &raquo;</li> 
       </ul>
