@@ -245,15 +245,17 @@ What compiler options should I use for development?
 
 One possibility for gfortran is::
 
-    -Wall -Wextra -Wimplicit-interface -fPIC -Werror -fmax-errors=1 -g -fbounds-check -fcheck-array-temporaries -fbacktrace
+    -Wall -Wextra -Wimplicit-interface -fPIC -fmax-errors=1 -g -fcheck=all -fbacktrace
 
-With gfortran 4.5 and newer, you can use ``fcheck=all``, which turns
-on ``-fbounds-check -fcheck-array-temporaries`` and other checks.
+This warns about undefined symbols, stops at the first error, turns on all
+debugging checks (bounds checks, array temporaries, ...) and turns on backtrace
+printing when something fails at runtime (typically accessing an array out of
+bounds).
+You can use ``-Werror`` to turn warnings into errors (so that the
+compilation stops when undefined symbol is used).
+With gfortran 4.4 and older, replace ``fcheck=all`` with
+``-fbounds-check -fcheck-array-temporaries``.
 
-This warns about undefined symbols, turns warnings into errors (so that the
-compilation stops when undefined symbol is used), stops at the first error,
-turns on bounds checks and array temporaries, and turns on backtrace printing
-when something fails at runtime (typically accessing an array out of bounds).
 
 For Intel ifort::
 
