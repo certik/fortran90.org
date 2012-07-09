@@ -1091,6 +1091,86 @@ http://jblevins.org/research/generic-list.pdf
 
 http://www.macresearch.org/advanced_fortran_90_callbacks_with_the_transfer_function
 
+VII: Object Oriented Approach
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The module::
+
+    module integrals
+
+    use types, only: dp
+    implicit none
+    private
+
+    public :: integrand, simpson
+
+    ! User extends this type
+    type, abstract :: integrand
+    contains
+        procedure(func), deferred :: eval
+    end type
+
+    abstract interface
+        function func(this, x) result(fx)
+        import :: integrand, dp
+        class(integrand) :: this
+        real(dp), intent(in) :: x
+        real(dp) :: fx
+        end function
+    end interface
+
+    contains
+
+    real(dp) function simpson(f, a, b) result(s)
+    class(integrand) :: f
+    real(dp), intent(in) :: a, b
+    s = ((b-a)/6) * (f%eval(a) + 4*f%eval((a+b)/2) + f%eval(b))
+    end function
+
+    end module
+
+The abstract type prescribes exactly what the integration routine
+needs, namely a method to evaluate the function, but imposes nothing
+else on the user.  The user extends this type, providing a concrete
+implementation of the eval type bound procedure and adding necessary
+context data as components of the extended type.
+
+Usage::
+
+    module example_usage
+
+    use types, only: dp
+    use integrals, only: integrand, simpson
+    implicit none
+    private
+
+    public :: foo
+
+    type, extends(integrand) :: my_integrand
+        real(dp) :: a, k
+    contains
+        procedure :: eval => f
+    end type
+
+    contains
+
+    function f(this, x) result(fx)
+    class(my_integrand) :: this
+    real(dp), intent(in) :: x
+    real(dp) :: fx
+    fx = this%a*sin(this%k*x)
+    end function
+
+    subroutine foo(a, k)
+    real(dp) :: a, k
+    type(my_integrand) :: my_f
+    my_f%a = a
+    my_f%k = k
+    print *, simpson(my_f, 0.0_dp, 1.0_dp)
+    print *, simpson(my_f, 0.0_dp, 2.0_dp)
+    end subroutine
+
+    end module
 
 Complete Example of void * vs type(c_ptr) and transfer()
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
