@@ -1,6 +1,8 @@
 Fortran Best Practices
 ======================
 
+.. highlight:: fortran
+
 This page collects a modern canonical way of doing things in Fortran. It is meant to be short, and it is assumed that you already know how to program in other languages (like Python, C/C++, ...) and also know Fortran syntax a bit. Some things in Fortran are obsolete, so this guide only shows the "one correct/canonical modern way" how to do things.
 
 Summary of the language: http://www.cs.umbc.edu/~squire/fortranclass/summary.shtml
@@ -124,14 +126,14 @@ Only use modules and programs. Always setup a module in the following way::
             rk4step2, get_midpoints, rk4_integrate, rk4_integrate_inward, &
             rk4_integrate_inward2, rk4_integrate3, rk4_integrate4, &
             rk4_integrate_inward4
-    
+
     contains
-    
+
     subroutine get_val(...)
     ...
     end subroutine
     ...
-    
+
     end module
 
 The ``implicit none`` statement works for the whole module (so you don't need to worry about it). By keeping the ``private`` empty, all your subroutines/data types will be private to the module by default. Then you export things by putting it into the ``public`` clause.
@@ -534,12 +536,19 @@ Write a C wrapper using the ``iso_c_binding`` module::
     
     end module
 
-You need to declare the length of all arrays (``mesh(N)``) and pass it as a parameter. The Fortran compiler will check that the C and Fortran types match. If it compiles, you can then trust it, and call it from C using the following declaration::
+You need to declare the length of all arrays (``mesh(N)``) and pass it as a
+parameter. The Fortran compiler will check that the C and Fortran types match.
+If it compiles, you can then trust it, and call it from C using the following
+declaration:
+
+.. code-block:: c
 
     void c_mesh_exp(double *r_min, double *r_max, double *a, int *N,
             double *mesh);
 
-use it as::
+use it as:
+
+.. code-block:: c
 
     int N=5;
     double r_min, r_max, a, mesh[N];
@@ -557,7 +566,10 @@ Interfacing with Python
 Using Cython
 ~~~~~~~~~~~~
 
-To wrap Fortran code in Python, export it to C first (see above) and then write this Cython code::
+To wrap Fortran code in Python, export it to C first (see above) and then write
+this Cython code:
+
+.. code-block:: cython
 
     from numpy cimport ndarray
     from numpy import empty
@@ -601,7 +613,9 @@ routines like this::
 and use the builtin `ctypes <http://docs.python.org/library/ctypes.html>`_
 Python package to dynamically load
 shared object files containing your C-callable Fortran routines and
-call them directly::
+call them directly:
+
+.. code-block:: python
 
     from ctypes import CDLL, POINTER, c_int, c_double
     from numpy import empty

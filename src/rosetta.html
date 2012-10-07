@@ -78,7 +78,7 @@ shows how to implement many common idioms in both languages side by side.</p>
 </pre></div>
 </div>
 </td>
-<td><div class="first last highlight-python"><pre>integer :: a(3)
+<td><div class="first last highlight-fortran"><pre>integer :: a(3)
 a = [1, 2, 3]
 print *, shape(a)
 print *, size(a)
@@ -259,7 +259,7 @@ print "(3i5)", transpose(a)</pre>
 </pre></div>
 </div>
 </td>
-<td><div class="first last highlight-python"><pre>integer :: i(3)
+<td><div class="first last highlight-fortran"><pre>integer :: i(3)
 i = [1, 2, 3]
 all(i == [1, 2, 3])
 any(i == [2, 2, 3])</pre>
@@ -423,24 +423,25 @@ recommended)</li>
 </div>
 </td>
 <td><p class="first">File <tt class="docutils literal"><span class="pre">a.f90</span></tt>:</p>
-<div class="last highlight-python"><pre>module a
-implicit none
+<div class="last highlight-fortran"><div class="highlight"><pre><span class="k">module </span><span class="nv">a</span>
+<span class="k">implicit none</span>
 
-integer :: i = 5
+<span class="kt">integer</span> <span class="kd">::</span> <span class="nv">i</span> <span class="o">=</span> <span class="mi">5</span>
 
-contains
+<span class="k">contains</span>
 
-integer function f(x) result(r)
-integer, intent(in) :: x
-r = x + 5
-end function
+<span class="kt">integer </span><span class="k">function </span><span class="nv">f</span><span class="p">(</span><span class="nv">x</span><span class="p">)</span> <span class="nv">result</span><span class="p">(</span><span class="nv">r</span><span class="p">)</span>
+<span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="nv">in</span><span class="p">)</span> <span class="kd">::</span> <span class="nv">x</span>
+<span class="nv">r</span> <span class="o">=</span> <span class="nv">x</span> <span class="o">+</span> <span class="mi">5</span>
+<span class="k">end function</span>
 
-integer function g(x) result(r)
-integer, intent(in) :: x
-r = x - 5
-end function
+<span class="kt">integer </span><span class="k">function </span><span class="nv">g</span><span class="p">(</span><span class="nv">x</span><span class="p">)</span> <span class="nv">result</span><span class="p">(</span><span class="nv">r</span><span class="p">)</span>
+<span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="nv">in</span><span class="p">)</span> <span class="kd">::</span> <span class="nv">x</span>
+<span class="nv">r</span> <span class="o">=</span> <span class="nv">x</span> <span class="o">-</span> <span class="mi">5</span>
+<span class="k">end function</span>
 
-end module</pre>
+<span class="k">end module</span>
+</pre></div>
 </div>
 </td>
 </tr>
@@ -470,12 +471,13 @@ end module</pre>
 </div>
 </td>
 <td><p class="first">File <tt class="docutils literal"><span class="pre">main.f90</span></tt>:</p>
-<div class="highlight-python"><pre>program main
-use a, only: f, i
-implicit none
-print *, f(3)
-print *, i
-end program</pre>
+<div class="highlight-fortran"><div class="highlight"><pre><span class="k">program </span><span class="nv">main</span>
+<span class="k">use </span><span class="nv">a</span><span class="p">,</span> <span class="nv">only</span><span class="p">:</span> <span class="nv">f</span><span class="p">,</span> <span class="nv">i</span>
+<span class="k">implicit none</span>
+<span class="k">print</span> <span class="o">*</span><span class="p">,</span> <span class="nv">f</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="k">print</span> <span class="o">*</span><span class="p">,</span> <span class="nv">i</span>
+<span class="k">end program</span>
+</pre></div>
 </div>
 <p>Output:</p>
 <div class="last highlight-python"><div class="highlight"><pre><span class="mi">8</span>
@@ -958,7 +960,7 @@ call foo(0.5_dp, 2._dp)</pre>
 </pre></div>
 </div>
 </td>
-<td><div class="first last highlight-python"><pre>program Mandelbrot
+<td><div class="first last highlight-fortran"><pre>program Mandelbrot
 use types, only: dp
 use constants, only: I
 use utils, only: savetxt, linspace, meshgrid

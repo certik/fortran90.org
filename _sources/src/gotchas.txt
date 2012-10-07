@@ -1,6 +1,8 @@
 Gotchas
 =======
 
+.. highlight:: fortran
+
 Variable Initialization Using Initialization Expression
 -------------------------------------------------------
 
