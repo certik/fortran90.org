@@ -1,6 +1,8 @@
 Fortran Best Practices
 ======================
 
+.. highlight:: fortran
+
 This page collects a modern canonical way of doing things in Fortran. It is meant to be short, and it is assumed that you already know how to program in other languages (like Python, C/C++, ...) and also know Fortran syntax a bit. Some things in Fortran are obsolete, so this guide only shows the "one correct/canonical modern way" how to do things.
 
 Summary of the language: http://www.cs.umbc.edu/~squire/fortranclass/summary.shtml
@@ -124,14 +126,14 @@ Only use modules and programs. Always setup a module in the following way::
             rk4step2, get_midpoints, rk4_integrate, rk4_integrate_inward, &
             rk4_integrate_inward2, rk4_integrate3, rk4_integrate4, &
             rk4_integrate_inward4
-    
+
     contains
-    
+
     subroutine get_val(...)
     ...
     end subroutine
     ...
-    
+
     end module
 
 The ``implicit none`` statement works for the whole module (so you don't need to worry about it). By keeping the ``private`` empty, all your subroutines/data types will be private to the module by default. Then you export things by putting it into the ``public`` clause.
