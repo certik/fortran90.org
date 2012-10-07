@@ -633,18 +633,18 @@ package. Fortran doesn&#8217;t include constants, so one has to use the
 <td>Fortran</td>
 </tr>
 <tr class="row-even"><td><div class="first highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">cos</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">e</span>
-<span class="n">I</span> <span class="o">=</span> <span class="mi">1</span><span class="n">j</span>
+<span class="n">I</span> <span class="o">=</span> <span class="mi">1j</span>
 <span class="k">print</span> <span class="n">e</span><span class="o">**</span><span class="p">(</span><span class="n">I</span><span class="o">*</span><span class="n">pi</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
 <span class="k">print</span> <span class="n">cos</span><span class="p">(</span><span class="n">pi</span><span class="p">)</span>
-<span class="k">print</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">5</span><span class="n">j</span>
+<span class="k">print</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">5j</span>
 <span class="k">print</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">5</span><span class="o">*</span><span class="n">I</span>
 </pre></div>
 </div>
 <p>Output:</p>
-<div class="last highlight-python"><div class="highlight"><pre><span class="mf">1.22460635382e-16</span><span class="n">j</span>
+<div class="last highlight-python"><div class="highlight"><pre><span class="mf">1.22460635382e-16j</span>
 <span class="o">-</span><span class="mf">1.0</span>
-<span class="p">(</span><span class="mi">4</span><span class="o">+</span><span class="mi">5</span><span class="n">j</span><span class="p">)</span>
-<span class="p">(</span><span class="mi">4</span><span class="o">+</span><span class="mi">5</span><span class="n">j</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">4</span><span class="o">+</span><span class="mi">5j</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">4</span><span class="o">+</span><span class="mi">5j</span><span class="p">)</span>
 </pre></div>
 </div>
 </td>
@@ -941,7 +941,7 @@ call foo(0.5_dp, 2._dp)</pre>
 
 <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">DENSITY</span><span class="p">),</span>
                    <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">,</span> <span class="n">DENSITY</span><span class="p">))</span>
-<span class="n">c</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">y</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1j</span><span class="o">*</span><span class="n">y</span>
 <span class="n">z</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="n">fractal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span> <span class="o">+</span> <span class="mi">255</span>
 
@@ -1264,7 +1264,7 @@ end program</pre>
     </div>
     <div class="footer">
         &copy; Copyright 2012, Ondřej Čertík.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2pre.
     </div>
   </body>
 </html>
