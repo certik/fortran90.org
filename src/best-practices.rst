@@ -536,12 +536,19 @@ Write a C wrapper using the ``iso_c_binding`` module::
     
     end module
 
-You need to declare the length of all arrays (``mesh(N)``) and pass it as a parameter. The Fortran compiler will check that the C and Fortran types match. If it compiles, you can then trust it, and call it from C using the following declaration::
+You need to declare the length of all arrays (``mesh(N)``) and pass it as a
+parameter. The Fortran compiler will check that the C and Fortran types match.
+If it compiles, you can then trust it, and call it from C using the following
+declaration:
+
+.. code-block:: c
 
     void c_mesh_exp(double *r_min, double *r_max, double *a, int *N,
             double *mesh);
 
-use it as::
+use it as:
+
+.. code-block:: c
 
     int N=5;
     double r_min, r_max, a, mesh[N];
@@ -559,7 +566,10 @@ Interfacing with Python
 Using Cython
 ~~~~~~~~~~~~
 
-To wrap Fortran code in Python, export it to C first (see above) and then write this Cython code::
+To wrap Fortran code in Python, export it to C first (see above) and then write
+this Cython code:
+
+.. code-block:: cython
 
     from numpy cimport ndarray
     from numpy import empty
@@ -603,7 +613,9 @@ routines like this::
 and use the builtin `ctypes <http://docs.python.org/library/ctypes.html>`_
 Python package to dynamically load
 shared object files containing your C-callable Fortran routines and
-call them directly::
+call them directly:
+
+.. code-block:: python
 
     from ctypes import CDLL, POINTER, c_int, c_double
     from numpy import empty
