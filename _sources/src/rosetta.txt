@@ -201,11 +201,37 @@ Everything else is the same, in particular:
 Modules
 -------
 
+Comparison of Fortran and Python import statements:
+
++------------------------------------------------------+--------------------------------------------------------+
+| Python                                               |           Fortran                                      |
++------------------------------------------------------+--------------------------------------------------------+
+|::                                                    |.. code-block:: fortran                                 |
+|                                                      |                                                        |
+|  from A import foo                                   | use A, only: foo                                       |
+|  from A import foo as Afoo                           | use A, only: Afoo => foo                               |
+|  from A import *                                     | use A                                                  |
+|                                                      |                                                        |
++------------------------------------------------------+--------------------------------------------------------+
+
+The following Python statements have no equivalent in Fortran:
+
++------------------------------------------------------+--------------------------------------------------------+
+| Python                                               |           Fortran                                      |
++------------------------------------------------------+--------------------------------------------------------+
+|::                                                    |                                                        |
+|                                                      |                                                        |
+|  import A                                            |                                                        |
+|  import ALongName as A                               |                                                        |
+|                                                      |                                                        |
++------------------------------------------------------+--------------------------------------------------------+
+
 Fortran modules work just like Python modules. Differences:
 
     * Fortran modules cannot be nested (i.e. they are all top level, while
       in Python one can nest the module arbitrarily using the ``__init__.py``
       files)
+    * There is no Fortran equivalent of Python's ``import A``
     * One can specify private module symbols in Fortran
 
 Identical features:
@@ -216,6 +242,8 @@ Identical features:
       are private or public (in Python this only works for implicit imports)
     * Symbols that are public don't pollute the global namespace, but need
       to be explicitly imported from the module in order to use them
+    * Importing a symbol into a module becomes part of that module and can then
+      be imported from other modules
     * One can use explicit or implicit imports (explicit imports are
       recommended)
 
