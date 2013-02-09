@@ -260,7 +260,7 @@ end function</pre>
 </div>
 <p>If you want to enforce/check the size of the arrays, put at the beginning of
 the function:</p>
-<div class="highlight-fortran"><div class="highlight"><pre><span class="k">if</span> <span class="p">(</span><span class="nv">size</span><span class="p">(</span><span class="nv">r</span><span class="p">)</span> <span class="c">!= 4) stop &quot;Incorrect size of &#39;r&#39;&quot;</span>
+<div class="highlight-fortran"><div class="highlight"><pre><span class="k">if</span> <span class="p">(</span><span class="nv">size</span><span class="p">(</span><span class="nv">r</span><span class="p">)</span> <span class="o">/=</span> <span class="mi">4</span><span class="p">)</span> <span class="k">stop</span> <span class="s2">&quot;Incorrect size of &#39;r&#39;&quot;</span>
 </pre></div>
 </div>
 <p>To initialize an array, do:</p>
