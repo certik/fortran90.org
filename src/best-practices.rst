@@ -145,7 +145,7 @@ Setup programs in the following way::
     use utils, only: stop_error, dp
     use dft, only: atom
     implicit none
-    
+
     integer, parameter :: Z = 92
     real(dp), parameter :: r_min = 8e-9_dp, r_max = 50.0_dp, a = 1e7_dp
     ...
@@ -238,7 +238,7 @@ In order to return an array from a function, do::
 If you want to enforce/check the size of the arrays, put at the beginning of
 the function::
 
-    if (size(r) != 4) stop "Incorrect size of 'r'"
+    if (size(r) /= 4) stop "Incorrect size of 'r'"
 
 To initialize an array, do::
 
@@ -352,11 +352,11 @@ this function with arrays of any (compatible) shape, for example::
 
 The output will be::
 
-   3.0000000000000000     
-   1.0000000000000000        2.0000000000000000        3.0000000000000000        3.1622776601683795     
-   1.0000000000000000        2.0000000000000000        3.0000000000000000        3.1622776601683795     
-   1.0000000000000000        1.5874010519681994        1.7320508075688772        1.5848931924611136     
-   2.0000000000000000        1.5874010519681994        1.4142135623730951        1.3195079107728942     
+   3.0000000000000000
+   1.0000000000000000        2.0000000000000000        3.0000000000000000        3.1622776601683795
+   1.0000000000000000        2.0000000000000000        3.0000000000000000        3.1622776601683795
+   1.0000000000000000        1.5874010519681994        1.7320508075688772        1.5848931924611136
+   2.0000000000000000        1.5874010519681994        1.4142135623730951        1.3195079107728942
 
 In the above, typically ``n`` is a parameter and ``x`` is the array of an
 arbitrary shape, but as you can see, Fortran does not care as long as the final
@@ -405,9 +405,9 @@ And use as follows::
 
 This will print::
 
-    3.0000000000000000     
-    1.0000000000000000        2.0000000000000000        3.0000000000000000        3.1622776601683795     
-    1.0000000000000000        2.0000000000000000        3.0000000000000000        3.1622776601683795     
+    3.0000000000000000
+    1.0000000000000000        2.0000000000000000        3.0000000000000000        3.1622776601683795
+    1.0000000000000000        2.0000000000000000        3.0000000000000000        3.1622776601683795
 
 
 Or one can use `explicit-shape` arrays as follows::
@@ -427,9 +427,9 @@ Use as follows::
 
 The output is the same as before::
 
-       3.0000000000000000     
-       1.0000000000000000        2.0000000000000000        3.0000000000000000        3.1622776601683795     
-       1.0000000000000000        2.0000000000000000        3.0000000000000000        3.1622776601683795     
+       3.0000000000000000
+       1.0000000000000000        2.0000000000000000        3.0000000000000000        3.1622776601683795
+       1.0000000000000000        2.0000000000000000        3.0000000000000000        3.1622776601683795
 
 
 Allocatable Arrays
@@ -514,14 +514,14 @@ Interfacing with C
 Write a C wrapper using the ``iso_c_binding`` module::
 
     module fmesh_wrapper
-    
+
     use iso_c_binding, only: c_double, c_int
     use fmesh, only: mesh_exp
-    
+
     implicit none
-    
+
     contains
-    
+
     subroutine c_mesh_exp(r_min, r_max, a, N, mesh) bind(c)
     real(c_double), intent(in) :: r_min
     real(c_double), intent(in) :: r_max
@@ -530,10 +530,10 @@ Write a C wrapper using the ``iso_c_binding`` module::
     real(c_double), intent(out) :: mesh(N)
     call mesh_exp(r_min, r_max, a, N, mesh)
     end subroutine
-    
+
     ! wrap more functions here
     ! ...
-    
+
     end module
 
 You need to declare the length of all arrays (``mesh(N)``) and pass it as a
