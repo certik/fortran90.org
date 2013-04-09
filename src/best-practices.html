@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -492,7 +490,7 @@ if needed (before another allocation):</p>
 <div class="highlight-fortran"><pre>open(newunit(u), ...)</pre>
 </div>
 <p>where the <tt class="docutils literal"><span class="pre">newunit</span></tt> function is defined by:</p>
-<div class="highlight-fortran"><div class="highlight"><pre><span class="kt">integer </span><span class="k">function </span><span class="nv">newunit</span><span class="p">(</span><span class="nv">unit</span><span class="p">)</span> <span class="nv">result</span><span class="p">(</span><span class="nv">n</span><span class="p">)</span>
+<div class="highlight-fortran"><div class="highlight"><pre><span class="kt">integer </span><span class="k">function </span><span class="nv">newunit</span><span class="p">(</span><span class="nv">unit</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="nv">n</span><span class="p">)</span>
 <span class="c">! returns lowest i/o unit number not in use</span>
 <span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="nv">out</span><span class="p">),</span> <span class="k">optional</span> <span class="kd">::</span> <span class="nv">unit</span>
 <span class="kt">logical </span><span class="nv">inuse</span>
@@ -541,7 +539,7 @@ if needed (before another allocation):</p>
 parameter. The Fortran compiler will check that the C and Fortran types match.
 If it compiles, you can then trust it, and call it from C using the following
 declaration:</p>
-<div class="highlight-c"><div class="highlight"><pre><span class="kt">void</span> <span class="n">c_mesh_exp</span><span class="p">(</span><span class="kt">double</span> <span class="o">*</span><span class="n">r_min</span><span class="p">,</span> <span class="kt">double</span> <span class="o">*</span><span class="n">r_max</span><span class="p">,</span> <span class="kt">double</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="o">*</span><span class="n">N</span><span class="p">,</span>
+<div class="highlight-c"><div class="highlight"><pre><span class="kt">void</span> <span class="nf">c_mesh_exp</span><span class="p">(</span><span class="kt">double</span> <span class="o">*</span><span class="n">r_min</span><span class="p">,</span> <span class="kt">double</span> <span class="o">*</span><span class="n">r_max</span><span class="p">,</span> <span class="kt">double</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="o">*</span><span class="n">N</span><span class="p">,</span>
         <span class="kt">double</span> <span class="o">*</span><span class="n">mesh</span><span class="p">);</span>
 </pre></div>
 </div>
@@ -568,7 +566,7 @@ this Cython code:</p>
             <span class="n">double</span> <span class="o">*</span><span class="n">mesh</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">mesh_exp</span><span class="p">(</span><span class="n">double</span> <span class="n">r_min</span><span class="p">,</span> <span class="n">double</span> <span class="n">r_max</span><span class="p">,</span> <span class="n">double</span> <span class="n">a</span><span class="p">,</span> <span class="nb">int</span> <span class="n">N</span><span class="p">):</span>
-    <span class="k">cdef</span> <span class="kt">ndarray</span>[<span class="nf">double</span><span class="p">,</span> <span class="nf">mode</span><span class="o">=</span><span class="s">&quot;c&quot;</span><span class="p">]</span> <span class="n">mesh</span> <span class="o">=</span> <span class="n">empty</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&quot;double&quot;</span><span class="p">)</span>
+    <span class="k">cdef</span> <span class="kt">ndarray</span>[<span class="nf">double</span><span class="p">,</span> <span class="nf">mode</span><span class="o">=</span><span class="s">&quot;c&quot;</span><span class="p">]</span> <span class="n">mesh</span> <span class="o">=</span> <span class="n">empty</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">double</span><span class="p">)</span>
     <span class="n">c_mesh_exp</span><span class="p">(</span><span class="o">&amp;</span><span class="n">r_min</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">r_max</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">N</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">mesh</span><span class="p">[</span><span class="mf">0</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">mesh</span>
 </pre></div>
@@ -641,7 +639,7 @@ subroutine/function using:</p>
 
 <span class="k">contains</span>
 
-<span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="k">function </span><span class="nv">simpson</span><span class="p">(</span><span class="nv">f</span><span class="p">,</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span><span class="p">)</span> <span class="nv">result</span><span class="p">(</span><span class="nv">s</span><span class="p">)</span>
+<span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="k">function </span><span class="nv">simpson</span><span class="p">(</span><span class="nv">f</span><span class="p">,</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="nv">s</span><span class="p">)</span>
 <span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="nv">in</span><span class="p">)</span> <span class="kd">::</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span>
 <span class="k">interface</span>
 <span class="k">    </span><span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="k">function </span><span class="nv">f</span><span class="p">(</span><span class="nv">x</span><span class="p">)</span>
@@ -666,7 +664,7 @@ and then use <tt class="docutils literal"><span class="pre">procedure(func)</spa
 
 <span class="k">contains</span>
 
-<span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="k">function </span><span class="nv">simpson</span><span class="p">(</span><span class="nv">f</span><span class="p">,</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span><span class="p">)</span> <span class="nv">result</span><span class="p">(</span><span class="nv">s</span><span class="p">)</span>
+<span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="k">function </span><span class="nv">simpson</span><span class="p">(</span><span class="nv">f</span><span class="p">,</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="nv">s</span><span class="p">)</span>
 <span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="nv">in</span><span class="p">)</span> <span class="kd">::</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span>
 <span class="k">interface</span>
 <span class="k">    </span><span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="k">function </span><span class="nv">func</span><span class="p">(</span><span class="nv">x</span><span class="p">)</span>
@@ -699,13 +697,13 @@ and then use <tt class="docutils literal"><span class="pre">procedure(func)</spa
 
 <span class="k">contains</span>
 
-<span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="k">function </span><span class="nv">simpson</span><span class="p">(</span><span class="nv">f</span><span class="p">,</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span><span class="p">)</span> <span class="nv">result</span><span class="p">(</span><span class="nv">s</span><span class="p">)</span>
+<span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="k">function </span><span class="nv">simpson</span><span class="p">(</span><span class="nv">f</span><span class="p">,</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="nv">s</span><span class="p">)</span>
 <span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="nv">in</span><span class="p">)</span> <span class="kd">::</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span>
 <span class="nv">procedure</span><span class="p">(</span><span class="nv">func</span><span class="p">)</span> <span class="kd">::</span> <span class="nv">f</span>
 <span class="nv">s</span> <span class="o">=</span> <span class="p">(</span><span class="nv">b</span><span class="o">-</span><span class="nv">a</span><span class="p">)</span> <span class="o">/</span> <span class="mi">6</span> <span class="o">*</span> <span class="p">(</span><span class="nv">f</span><span class="p">(</span><span class="nv">a</span><span class="p">)</span> <span class="o">+</span> <span class="mi">4</span><span class="o">*</span><span class="nv">f</span><span class="p">((</span><span class="nv">a</span><span class="o">+</span><span class="nv">b</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="nv">f</span><span class="p">(</span><span class="nv">b</span><span class="p">))</span>
 <span class="k">end function</span>
 
-<span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="k">function </span><span class="nv">simpson2</span><span class="p">(</span><span class="nv">f</span><span class="p">,</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span><span class="p">)</span> <span class="nv">result</span><span class="p">(</span><span class="nv">s</span><span class="p">)</span>
+<span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="k">function </span><span class="nv">simpson2</span><span class="p">(</span><span class="nv">f</span><span class="p">,</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="nv">s</span><span class="p">)</span>
 <span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="nv">in</span><span class="p">)</span> <span class="kd">::</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span>
 <span class="nv">procedure</span><span class="p">(</span><span class="nv">func</span><span class="p">)</span> <span class="kd">::</span> <span class="nv">f</span>
 <span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="nv">mid</span>
@@ -738,7 +736,7 @@ LAPACK does it.</p>
 
 <span class="k">contains</span>
 
-<span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="k">function </span><span class="nv">simpson</span><span class="p">(</span><span class="nv">f</span><span class="p">,</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span><span class="p">,</span> <span class="k">data</span><span class="p">)</span> <span class="nv">result</span><span class="p">(</span><span class="nv">s</span><span class="p">)</span>
+<span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="k">function </span><span class="nv">simpson</span><span class="p">(</span><span class="nv">f</span><span class="p">,</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span><span class="p">,</span> <span class="k">data</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="nv">s</span><span class="p">)</span>
 <span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="nv">in</span><span class="p">)</span> <span class="kd">::</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span>
 <span class="k">interface</span>
 <span class="k">    </span><span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="k">function </span><span class="nv">func</span><span class="p">(</span><span class="nv">x</span><span class="p">,</span> <span class="k">data</span><span class="p">)</span>
@@ -812,7 +810,7 @@ instantiation of a text editor.</p>
 
 <span class="k">contains</span>
 
-<span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="k">function </span><span class="nv">simpson</span><span class="p">(</span><span class="nv">f</span><span class="p">,</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span><span class="p">,</span> <span class="k">data</span><span class="p">)</span> <span class="nv">result</span><span class="p">(</span><span class="nv">s</span><span class="p">)</span>
+<span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="k">function </span><span class="nv">simpson</span><span class="p">(</span><span class="nv">f</span><span class="p">,</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span><span class="p">,</span> <span class="k">data</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="nv">s</span><span class="p">)</span>
 <span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="nv">in</span><span class="p">)</span> <span class="kd">::</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span>
 <span class="k">interface</span>
 <span class="k">    </span><span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="k">function </span><span class="nv">func</span><span class="p">(</span><span class="nv">x</span><span class="p">,</span> <span class="k">data</span><span class="p">)</span>
@@ -880,7 +878,7 @@ options between &#8220;all&#8221; and &#8220;none&#8221;.</p>
 
 <span class="k">contains</span>
 
-<span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="k">function </span><span class="nv">simpson</span><span class="p">(</span><span class="nv">f</span><span class="p">,</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span><span class="p">)</span> <span class="nv">result</span><span class="p">(</span><span class="nv">s</span><span class="p">)</span>
+<span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="k">function </span><span class="nv">simpson</span><span class="p">(</span><span class="nv">f</span><span class="p">,</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="nv">s</span><span class="p">)</span>
 <span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="nv">in</span><span class="p">)</span> <span class="kd">::</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span>
 <span class="k">interface</span>
 <span class="k">    </span><span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="k">function </span><span class="nv">func</span><span class="p">(</span><span class="nv">x</span><span class="p">)</span>
@@ -939,7 +937,7 @@ way along the lines of II or IV.</p>
 
 <span class="k">contains</span>
 
-<span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="k">function </span><span class="nv">simpson</span><span class="p">(</span><span class="nv">f</span><span class="p">,</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span><span class="p">)</span> <span class="nv">result</span><span class="p">(</span><span class="nv">s</span><span class="p">)</span>
+<span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="k">function </span><span class="nv">simpson</span><span class="p">(</span><span class="nv">f</span><span class="p">,</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="nv">s</span><span class="p">)</span>
 <span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="nv">in</span><span class="p">)</span> <span class="kd">::</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span>
 <span class="k">interface</span>
 <span class="k">    </span><span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="k">function </span><span class="nv">func</span><span class="p">(</span><span class="nv">x</span><span class="p">)</span>
@@ -986,7 +984,7 @@ can use <tt class="docutils literal"><span class="pre">type(c_ptr)</span></tt> f
 
 <span class="k">contains</span>
 
-<span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="k">function </span><span class="nv">simpson</span><span class="p">(</span><span class="nv">f</span><span class="p">,</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span><span class="p">,</span> <span class="k">data</span><span class="p">)</span> <span class="nv">result</span><span class="p">(</span><span class="nv">s</span><span class="p">)</span>
+<span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="k">function </span><span class="nv">simpson</span><span class="p">(</span><span class="nv">f</span><span class="p">,</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span><span class="p">,</span> <span class="k">data</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="nv">s</span><span class="p">)</span>
 <span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="nv">in</span><span class="p">)</span> <span class="kd">::</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span>
 <span class="k">interface</span>
 <span class="k">    </span><span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="k">function </span><span class="nv">func</span><span class="p">(</span><span class="nv">x</span><span class="p">,</span> <span class="k">data</span><span class="p">)</span>
@@ -1072,15 +1070,15 @@ It is now obsolete and one should use the method V instead.</p>
 <span class="k">public</span> <span class="kd">::</span> <span class="nv">integrand</span><span class="p">,</span> <span class="nv">simpson</span>
 
 <span class="c">! User extends this type</span>
-<span class="k">type</span><span class="p">,</span> <span class="nv">abstract</span> <span class="kd">::</span> <span class="nv">integrand</span>
+<span class="k">type</span><span class="p">,</span> <span class="k">abstract</span> <span class="kd">::</span> <span class="nv">integrand</span>
 <span class="k">contains</span>
 <span class="k">    </span><span class="nv">procedure</span><span class="p">(</span><span class="nv">func</span><span class="p">),</span> <span class="k">deferred</span> <span class="kd">::</span> <span class="nv">eval</span>
 <span class="k">end type</span>
 
-<span class="nv">abstract</span> <span class="k">interface</span>
-<span class="k">    function </span><span class="nv">func</span><span class="p">(</span><span class="nv">this</span><span class="p">,</span> <span class="nv">x</span><span class="p">)</span> <span class="nv">result</span><span class="p">(</span><span class="nv">fx</span><span class="p">)</span>
+<span class="k">abstract interface</span>
+<span class="k">    function </span><span class="nv">func</span><span class="p">(</span><span class="nv">this</span><span class="p">,</span> <span class="nv">x</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="nv">fx</span><span class="p">)</span>
     <span class="k">import</span> <span class="kd">::</span> <span class="nv">integrand</span><span class="p">,</span> <span class="nv">dp</span>
-    <span class="nv">class</span><span class="p">(</span><span class="nv">integrand</span><span class="p">)</span> <span class="kd">::</span> <span class="nv">this</span>
+    <span class="k">class</span><span class="p">(</span><span class="nv">integrand</span><span class="p">)</span> <span class="kd">::</span> <span class="nv">this</span>
     <span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="nv">in</span><span class="p">)</span> <span class="kd">::</span> <span class="nv">x</span>
     <span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="nv">fx</span>
     <span class="k">end function</span>
@@ -1088,8 +1086,8 @@ It is now obsolete and one should use the method V instead.</p>
 
 <span class="k">contains</span>
 
-<span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="k">function </span><span class="nv">simpson</span><span class="p">(</span><span class="nv">f</span><span class="p">,</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span><span class="p">)</span> <span class="nv">result</span><span class="p">(</span><span class="nv">s</span><span class="p">)</span>
-<span class="nv">class</span><span class="p">(</span><span class="nv">integrand</span><span class="p">)</span> <span class="kd">::</span> <span class="nv">f</span>
+<span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="k">function </span><span class="nv">simpson</span><span class="p">(</span><span class="nv">f</span><span class="p">,</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="nv">s</span><span class="p">)</span>
+<span class="k">class</span><span class="p">(</span><span class="nv">integrand</span><span class="p">)</span> <span class="kd">::</span> <span class="nv">f</span>
 <span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="nv">in</span><span class="p">)</span> <span class="kd">::</span> <span class="nv">a</span><span class="p">,</span> <span class="nv">b</span>
 <span class="nv">s</span> <span class="o">=</span> <span class="p">((</span><span class="nv">b</span><span class="o">-</span><span class="nv">a</span><span class="p">)</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="nv">f</span><span class="p">%</span><span class="nv">eval</span><span class="p">(</span><span class="nv">a</span><span class="p">)</span> <span class="o">+</span> <span class="mi">4</span><span class="o">*</span><span class="nv">f</span><span class="p">%</span><span class="nv">eval</span><span class="p">((</span><span class="nv">a</span><span class="o">+</span><span class="nv">b</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="nv">f</span><span class="p">%</span><span class="nv">eval</span><span class="p">(</span><span class="nv">b</span><span class="p">))</span>
 <span class="k">end function</span>
@@ -1272,7 +1270,7 @@ As such, the <tt class="docutils literal"><span class="pre">type(c_ptr)</span></
     </div>
     <div class="footer">
         &copy; Copyright 2012, Ondřej Čertík.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2pre.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
   </body>
 </html>

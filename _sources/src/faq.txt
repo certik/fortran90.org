@@ -92,6 +92,7 @@ We have found the following links to be quite helpful:
     * http://fortranwiki.org/
     * http://www.fortran.com/metcalf.htm
     * http://www.cs.umbc.edu/~squire/fortranclass/summary.shtml
+    * http://www.fortranplus.co.uk/fortran_info.html
 
 And the Fortran standards:
 
@@ -102,8 +103,8 @@ And the Fortran standards:
 
 Compiler table for support for the 2003 and 2008 standards appears regularly in
 `Fortran Forum <http://dl.acm.org/citation.cfm?id=J286>`_.
-The 9th revision: `compiler_table_revision_9.pdf
-<http://www.fortranplus.co.uk/resources/compiler_table_revision_9.pdf>`_
+The 9th revision:
+`fortran_2003_2008_compiler_support.pdf <http://www.fortranplus.co.uk/resources/fortran_2003_2008_compiler_support.pdf>`_.
 
 How to do dynamic dispatch in Fortran (like 'void \*' in C)?
 ------------------------------------------------------------
