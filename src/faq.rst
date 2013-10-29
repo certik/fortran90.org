@@ -125,6 +125,122 @@ to call Fortran from Python, see
 You can also use `f2py <http://www.f2py.com/>`_ or
 `fwrap <http://fwrap.sourceforge.net/>`_.
 
+What is the most natural way to handle initial and final points of intervals?
+-----------------------------------------------------------------------------
+
+Dijkstra `considers <http://www.cs.utexas.edu/users/EWD/ewd08xx/EWD831.PDF>`_ 4 possible ways to handle intervals:
+
+a) 2 ≤ i < 13
+b) 1 < i ≤ 12
+c) 2 ≤ i ≤ 12
+d) 1 < i < 13
+
+What is the natural way to handle the initial and final point of an interval of numbers/objects? The best way
+is to look at a few examples:
+
+* You say that John Doe lived from 1914 to 1955. It means he was born in 1914
+  and died 1955, it does not mean he was born in 1915 or died in 1954.
+
+* In your CV, you say you studied at MIT from 1979 to 1984. It means you
+  started in 1979 and ended in 1984, it does not mean you started in 1980 or
+  ended in 1983.
+
+* Consider, there is a line up of 10 people, and you want to divide them into
+  three groups. You do not say I want group one to start with Peter and end
+  with Jane, and group two to start with Jane, and end with Tom, and group
+  three to start with Tom and end with Frank.
+
+* In math, you say "count the numbers 1-100", it means from 1 to 100, not from
+  1 to 99, or from 2 to 100.
+
+* The mathematical symbol Sum_1^5 mathematical symbol means from 1 to 5
+  (inclusive), it does not mean from 1 to 4
+
+* When you write 1..10 in an email, it means 1 to 10, including both ends
+
+Conclusion: these real life examples show that the case c) is the most natural.
+
+What is the most natural starting index for numbering?
+------------------------------------------------------
+
+Let's look at a few examples:
+
+* Test questions always start with 1.
+
+* Literature in articles always starts with 1.
+
+* When you divide people into groups (e.g. at a gym), you let them count
+  numbers (e.g. 1 to 5) periodically to divide them into 5 groups. You do not
+  start with 0 and you don't have a group 0.
+
+* Babies count their fingers as 1-5, not 0-4.
+
+* House numbers (in an address) start with 1
+
+* You say "I finished first", not "I finished zeroth"
+
+* The ``n`` quantum number is typically from 1 to ``n_max``.
+
+* The angular momentum quantum number ``l`` is from ``0`` to ``n-1``
+
+* The ``z``-component of angular momentum is from ``-l`` to ``l``.
+
+* Dirac ``kappa`` is from ``-kappa_max..kappa_max``, without ``0``.
+
+* FFT frequencies (for ``2*n`` sequence) are from ``-n+1, ..., n`` (the
+  standard ordering actually is ``0, 1, ..., n, -n+1, ..., -1``)
+
+Conclusion: As shown by the many examples, numbering does not always start most
+naturally at one or zero. And so to force any one choice for all cases --- one
+size fits all! -- be it 0-based or 1-based, is *inevitably* unnatural -- and
+with that, more likely error prone and hard to debug/ maintain.  However, the
+most common starting index is 1.
+
+Why does Fortran default array indexing start at 1?
+---------------------------------------------------
+
+Because that is the most commong starting index (see previous question).
+
+What is the motivation behind Fortran numbering convention?
+-----------------------------------------------------------
+
+The whole point of Fortran arrays is to allow the user to index them as most
+natural, and thus least error prone, for the mathematics being rendered. Hence,
+one can declare ``a(1:3)``, ``a(-1:1)``, etc. And since the vast majority of
+enumerations in everyday life, mathematics, and science start at ``1`` (see
+above), Fortran makes that the default unless the user explicitly wants
+otherwise. It's just a nice convenience, in a world of hundreds or thousands of
+array declarations in a typical code, to be able to declare as ``a(3)`` rather
+than always having to specify beginning and ending indices for every
+declaration when, almost always, these would just start at ``1``. This becomes
+all the more convenient and character-saving in the context of
+multi-dimensional arrays. E.g. to be able to declare simply ``a(m,n,p)`` rather
+than ``a(1:m,1:n,1:p)`` all over the place is rather nice, and quick and clear
+to type/mistype/read/misread.
+
+
+As to slicing (or "sections" as it is called in Fortran), the most natural is
+to include both endpoints.  So if it's test scores, ``a(1:n)`` gets the "first
+through nth" scores. If its angular momenta, ``a(-2:2)`` gets the "-2 through
++2" values.  ``a(:)`` means, simply, "first through last" elements of array
+``a`` *regardless* of indexing. Omitting the first index means "first element
+of ``a``, regardless of chosen indexing"; omitting the last index means "last
+element of ``a``, regardless of chosen indexing".
+
+For some examples of a side-by-side comparison of Python vs Fortran array
+indexing, see the :ref:`rosetta_stone`, specifically the section
+about :ref:`rosetta_arrays`.
+
+What is the motivation behind the C/Python numbering convention?
+----------------------------------------------------------------
+
+For C, a good motivation is given by Edsger Dijkstra (1982):
+http://www.cs.utexas.edu/users/EWD/ewd08xx/EWD831.PDF
+
+The author of Python, Guido van Rossum, has provided motivation behind the
+Python convention here (2013):
+https://plus.google.com/u/0/115212051037621986145/posts/YTUxbXYZyfi
+
 Does Fortran support closures?
 ------------------------------
 
