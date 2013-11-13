@@ -158,6 +158,102 @@ to call Fortran from Python, see
 You can also use <a class="reference external" href="http://www.f2py.com/">f2py</a> or
 <a class="reference external" href="http://fwrap.sourceforge.net/">fwrap</a>.</p>
 </div>
+<div class="section" id="what-is-the-most-natural-way-to-handle-initial-and-final-points-of-intervals">
+<span id="faq-endpoints"></span><h2>What is the most natural way to handle initial and final points of intervals?<a class="headerlink" href="#what-is-the-most-natural-way-to-handle-initial-and-final-points-of-intervals" title="Permalink to this headline">¶</a></h2>
+<p>Dijkstra <a class="reference external" href="http://www.cs.utexas.edu/users/EWD/ewd08xx/EWD831.PDF">considers</a> 4 possible ways to handle intervals:</p>
+<ol class="loweralpha simple">
+<li>2 ≤ i &lt; 13</li>
+<li>1 &lt; i ≤ 12</li>
+<li>2 ≤ i ≤ 12</li>
+<li>1 &lt; i &lt; 13</li>
+</ol>
+<p>What is the natural way to handle the initial and final point of an interval of numbers/objects?
+Of course, there is no one most natural way for all cases. However, for the
+vast majority of cases, be they mathematical, scientific, or natural language,
+inclusion of endpoints appears most natural &#8211; and so least mistake prone. To
+get a sense, consider, for example, the following:</p>
+<ul class="simple">
+<li>You say that John Doe lived from 1914 to 1955. It means he was born in 1914
+and died 1955, it does not mean he was born in 1915 or died in 1954.</li>
+<li>In your CV, you say you studied at MIT from 1979 to 1984. It means you
+started in 1979 and ended in 1984, it does not mean you started in 1980 or
+ended in 1983.</li>
+<li>Consider, there is a line up of 10 people, and you want to divide them into
+three groups. You do not say I want group one to start with Peter and end
+with Jane, and group two to start with Jane, and end with Tom, and group
+three to start with Tom and end with Frank.</li>
+<li>In math, you say &#8220;count the numbers 1-100&#8221;, it means from 1 to 100, not from
+1 to 99, or from 2 to 100.</li>
+<li>The mathematical symbol <img class="math" src="../_images/math/636f5fe9d11c57636d0db63796248b70246171ea.png" alt="\sum_{i=1}^5"/> means adding terms with <img class="math" src="../_images/math/34857b3ba74ce5cd8607f3ebd23e9015908ada71.png" alt="i"/> from 1 to
+5 (inclusive), it does not mean from 1 to 4</li>
+<li>When you write 1..10 in an email, it means 1 to 10, including both ends</li>
+</ul>
+<p>Conclusion: these real life examples show that the case c) is the most natural.</p>
+</div>
+<div class="section" id="what-is-the-most-natural-starting-index-for-numbering">
+<span id="faq-start"></span><h2>What is the most natural starting index for numbering?<a class="headerlink" href="#what-is-the-most-natural-starting-index-for-numbering" title="Permalink to this headline">¶</a></h2>
+<p>Let&#8217;s look at a few examples:</p>
+<ul class="simple">
+<li>Test questions always start with 1.</li>
+<li>Literature in articles always starts with 1.</li>
+<li>When you divide people into groups (e.g. at a gym), you let them count
+numbers (e.g. 1 to 5) periodically to divide them into 5 groups. You do not
+start with 0 and you don&#8217;t have a group 0.</li>
+<li>Babies count their fingers as 1-5, not 0-4.</li>
+<li>House numbers (in an address) start with 1</li>
+<li>You say &#8220;I finished first&#8221;, not &#8220;I finished zeroth&#8221;</li>
+<li>The <tt class="docutils literal"><span class="pre">n</span></tt> quantum number is typically from 1 to <tt class="docutils literal"><span class="pre">n_max</span></tt>.</li>
+<li>The angular momentum quantum number <tt class="docutils literal"><span class="pre">l</span></tt> is from <tt class="docutils literal"><span class="pre">0</span></tt> to <tt class="docutils literal"><span class="pre">n-1</span></tt></li>
+<li>The <tt class="docutils literal"><span class="pre">z</span></tt>-component of angular momentum is from <tt class="docutils literal"><span class="pre">-l</span></tt> to <tt class="docutils literal"><span class="pre">l</span></tt>.</li>
+<li>Dirac <tt class="docutils literal"><span class="pre">kappa</span></tt> is from <tt class="docutils literal"><span class="pre">-kappa_max..kappa_max</span></tt>, without <tt class="docutils literal"><span class="pre">0</span></tt>.</li>
+<li>FFT frequencies (for <tt class="docutils literal"><span class="pre">2*n</span></tt> sequence) are from <tt class="docutils literal"><span class="pre">-n+1,</span> <span class="pre">...,</span> <span class="pre">n</span></tt> (the
+standard ordering actually is <tt class="docutils literal"><span class="pre">0,</span> <span class="pre">1,</span> <span class="pre">...,</span> <span class="pre">n,</span> <span class="pre">-n+1,</span> <span class="pre">...,</span> <span class="pre">-1</span></tt>)</li>
+</ul>
+<p>Conclusion: As shown by the many examples, numbering does not always start most
+naturally at one or zero. And so to force any one choice for all cases &#8212; one
+size fits all! &#8211; be it 0-based or 1-based, is <em>inevitably</em> unnatural &#8211; and
+with that, more likely error prone and hard to debug/ maintain.  However, the
+most common starting index is 1.</p>
+</div>
+<div class="section" id="why-does-fortran-default-array-indexing-start-at-1">
+<h2>Why does Fortran default array indexing start at 1?<a class="headerlink" href="#why-does-fortran-default-array-indexing-start-at-1" title="Permalink to this headline">¶</a></h2>
+<p>Because that is the most commong starting index (see previous question).</p>
+</div>
+<div class="section" id="what-is-the-motivation-behind-fortran-numbering-convention">
+<h2>What is the motivation behind Fortran numbering convention?<a class="headerlink" href="#what-is-the-motivation-behind-fortran-numbering-convention" title="Permalink to this headline">¶</a></h2>
+<p>The whole point of Fortran arrays is to allow the user to index them as most
+natural, and thus least error prone, for the mathematics being rendered. Hence,
+one can declare <tt class="docutils literal"><span class="pre">a(1:3)</span></tt>, <tt class="docutils literal"><span class="pre">a(-1:1)</span></tt>, etc. And since the vast majority of
+enumerations in everyday life, mathematics, and science start at <tt class="docutils literal"><span class="pre">1</span></tt> (see
+<a class="reference internal" href="#faq-start"><em>What is the most natural starting index for numbering?</em></a>), Fortran makes that the default unless the user explicitly
+wants otherwise. It&#8217;s just a nice convenience, in a world of hundreds or
+thousands of array declarations in a typical code, to be able to declare as
+<tt class="docutils literal"><span class="pre">a(3)</span></tt> rather than always having to specify beginning and ending indices for
+every declaration when, almost always, these would just start at <tt class="docutils literal"><span class="pre">1</span></tt>. This
+becomes all the more convenient and character-saving in the context of
+multi-dimensional arrays. E.g. to be able to declare simply <tt class="docutils literal"><span class="pre">a(m,n,p)</span></tt> rather
+than <tt class="docutils literal"><span class="pre">a(1:m,1:n,1:p)</span></tt> all over the place is rather nice, and quick and clear
+to type/read (and not mistype/misread).</p>
+<p>As to slicing (or &#8220;sections&#8221; as it is called in Fortran), the most natural is
+to include both endpoints (see <a class="reference internal" href="#faq-endpoints"><em>What is the most natural way to handle initial and final points of intervals?</em></a>).  So if it&#8217;s test scores,
+<tt class="docutils literal"><span class="pre">a(1:n)</span></tt> gets the &#8220;first through nth&#8221; scores. If its angular momenta,
+<tt class="docutils literal"><span class="pre">a(-2:2)</span></tt> gets the &#8220;-2 through +2&#8221; values.  <tt class="docutils literal"><span class="pre">a(:)</span></tt> means, simply, &#8220;first
+through last&#8221; elements of array <tt class="docutils literal"><span class="pre">a</span></tt> <em>regardless</em> of indexing. Omitting the
+first index means &#8220;first element of <tt class="docutils literal"><span class="pre">a</span></tt>, regardless of chosen indexing&#8221;;
+omitting the last index means &#8220;last element of <tt class="docutils literal"><span class="pre">a</span></tt>, regardless of chosen
+indexing&#8221;.</p>
+<p>For some examples of a side-by-side comparison of Python vs Fortran array
+indexing, see the <a class="reference internal" href="rosetta.html#rosetta-stone"><em>Python Fortran Rosetta Stone</em></a>, specifically the section
+about <a class="reference internal" href="rosetta.html#rosetta-array-indexing"><em>Some indexing examples</em></a>.</p>
+</div>
+<div class="section" id="what-is-the-motivation-behind-the-c-python-numbering-convention">
+<h2>What is the motivation behind the C/Python numbering convention?<a class="headerlink" href="#what-is-the-motivation-behind-the-c-python-numbering-convention" title="Permalink to this headline">¶</a></h2>
+<p>For C, a good motivation is given by Edsger Dijkstra (1982):
+<a class="reference external" href="http://www.cs.utexas.edu/users/EWD/ewd08xx/EWD831.PDF">http://www.cs.utexas.edu/users/EWD/ewd08xx/EWD831.PDF</a></p>
+<p>The author of Python, Guido van Rossum, has provided motivation behind the
+Python convention here (2013):
+<a class="reference external" href="https://plus.google.com/u/0/115212051037621986145/posts/YTUxbXYZyfi">https://plus.google.com/u/0/115212051037621986145/posts/YTUxbXYZyfi</a></p>
+</div>
 <div class="section" id="does-fortran-support-closures">
 <h2>Does Fortran support closures?<a class="headerlink" href="#does-fortran-support-closures" title="Permalink to this headline">¶</a></h2>
 <p>No. Fortran doesn&#8217;t support
@@ -309,6 +405,11 @@ compilation stops when undefined symbol is used) and stops at the first error.</
 <li><a class="reference internal" href="#what-are-other-good-online-fortran-resources">What are other good online Fortran resources?</a></li>
 <li><a class="reference internal" href="#how-to-do-dynamic-dispatch-in-fortran-like-void-in-c">How to do dynamic dispatch in Fortran (like &#8216;void *&#8217; in C)?</a></li>
 <li><a class="reference internal" href="#how-to-interface-fortran-with-c-and-python">How to interface Fortran with C and Python?</a></li>
+<li><a class="reference internal" href="#what-is-the-most-natural-way-to-handle-initial-and-final-points-of-intervals">What is the most natural way to handle initial and final points of intervals?</a></li>
+<li><a class="reference internal" href="#what-is-the-most-natural-starting-index-for-numbering">What is the most natural starting index for numbering?</a></li>
+<li><a class="reference internal" href="#why-does-fortran-default-array-indexing-start-at-1">Why does Fortran default array indexing start at 1?</a></li>
+<li><a class="reference internal" href="#what-is-the-motivation-behind-fortran-numbering-convention">What is the motivation behind Fortran numbering convention?</a></li>
+<li><a class="reference internal" href="#what-is-the-motivation-behind-the-c-python-numbering-convention">What is the motivation behind the C/Python numbering convention?</a></li>
 <li><a class="reference internal" href="#does-fortran-support-closures">Does Fortran support closures?</a></li>
 <li><a class="reference internal" href="#does-fortran-support-nested-functions">Does Fortran support nested functions?</a></li>
 <li><a class="reference internal" href="#how-to-implement-functions-that-operate-on-arbitrary-shape-arrays">How to implement functions that operate on arbitrary shape arrays?</a></li>
