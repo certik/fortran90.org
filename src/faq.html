@@ -202,8 +202,10 @@ start with 0 and you don&#8217;t have a group 0.</li>
 <li>Babies count their fingers as 1-5, not 0-4.</li>
 <li>House numbers (in an address) start with 1</li>
 <li>You say &#8220;I finished first&#8221;, not &#8220;I finished zeroth&#8221;</li>
-<li>The <tt class="docutils literal"><span class="pre">n</span></tt> quantum number is typically from 1 to <tt class="docutils literal"><span class="pre">n_max</span></tt>.</li>
-<li>The angular momentum quantum number <tt class="docutils literal"><span class="pre">l</span></tt> is from <tt class="docutils literal"><span class="pre">0</span></tt> to <tt class="docutils literal"><span class="pre">n-1</span></tt></li>
+<li>In atomic physics, the <tt class="docutils literal"><span class="pre">n</span></tt> quantum number is from 1 to <tt class="docutils literal"><span class="pre">n_max</span></tt> and the
+angular momentum quantum number <tt class="docutils literal"><span class="pre">l</span></tt> is from <tt class="docutils literal"><span class="pre">0</span></tt> to <tt class="docutils literal"><span class="pre">n-1</span></tt></li>
+<li>For quantum harmonic oscillator, the <tt class="docutils literal"><span class="pre">n</span></tt> quantum number is from 0 to
+<tt class="docutils literal"><span class="pre">n_max</span></tt> and the angular momentum quantum number <tt class="docutils literal"><span class="pre">l</span></tt> is from <tt class="docutils literal"><span class="pre">0</span></tt> to <tt class="docutils literal"><span class="pre">n</span></tt></li>
 <li>The <tt class="docutils literal"><span class="pre">z</span></tt>-component of angular momentum is from <tt class="docutils literal"><span class="pre">-l</span></tt> to <tt class="docutils literal"><span class="pre">l</span></tt>.</li>
 <li>Dirac <tt class="docutils literal"><span class="pre">kappa</span></tt> is from <tt class="docutils literal"><span class="pre">-kappa_max..kappa_max</span></tt>, without <tt class="docutils literal"><span class="pre">0</span></tt>.</li>
 <li>FFT frequencies (for <tt class="docutils literal"><span class="pre">2*n</span></tt> sequence) are from <tt class="docutils literal"><span class="pre">-n+1,</span> <span class="pre">...,</span> <span class="pre">n</span></tt> (the
@@ -212,7 +214,7 @@ standard ordering actually is <tt class="docutils literal"><span class="pre">0,<
 <p>Conclusion: As shown by the many examples, numbering does not always start most
 naturally at one or zero. And so to force any one choice for all cases &#8212; one
 size fits all! &#8211; be it 0-based or 1-based, is <em>inevitably</em> unnatural &#8211; and
-with that, more likely error prone and hard to debug/ maintain.  However, the
+with that, more likely error prone and hard to debug/maintain.  However, the
 most common starting index is 1.</p>
 </div>
 <div class="section" id="why-does-fortran-default-array-indexing-start-at-1">
