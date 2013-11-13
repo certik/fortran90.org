@@ -125,6 +125,8 @@ to call Fortran from Python, see
 You can also use `f2py <http://www.f2py.com/>`_ or
 `fwrap <http://fwrap.sourceforge.net/>`_.
 
+.. _faq-endpoints:
+
 What is the most natural way to handle initial and final points of intervals?
 -----------------------------------------------------------------------------
 
@@ -162,6 +164,8 @@ get a sense, consider, for example, the following:
 * When you write 1..10 in an email, it means 1 to 10, including both ends
 
 Conclusion: these real life examples show that the case c) is the most natural.
+
+.. _faq-start:
 
 What is the most natural starting index for numbering?
 ------------------------------------------------------
@@ -211,28 +215,29 @@ The whole point of Fortran arrays is to allow the user to index them as most
 natural, and thus least error prone, for the mathematics being rendered. Hence,
 one can declare ``a(1:3)``, ``a(-1:1)``, etc. And since the vast majority of
 enumerations in everyday life, mathematics, and science start at ``1`` (see
-above), Fortran makes that the default unless the user explicitly wants
-otherwise. It's just a nice convenience, in a world of hundreds or thousands of
-array declarations in a typical code, to be able to declare as ``a(3)`` rather
-than always having to specify beginning and ending indices for every
-declaration when, almost always, these would just start at ``1``. This becomes
-all the more convenient and character-saving in the context of
+:ref:`faq-start`), Fortran makes that the default unless the user explicitly
+wants otherwise. It's just a nice convenience, in a world of hundreds or
+thousands of array declarations in a typical code, to be able to declare as
+``a(3)`` rather than always having to specify beginning and ending indices for
+every declaration when, almost always, these would just start at ``1``. This
+becomes all the more convenient and character-saving in the context of
 multi-dimensional arrays. E.g. to be able to declare simply ``a(m,n,p)`` rather
 than ``a(1:m,1:n,1:p)`` all over the place is rather nice, and quick and clear
 to type/read (and not mistype/misread).
 
 
 As to slicing (or "sections" as it is called in Fortran), the most natural is
-to include both endpoints.  So if it's test scores, ``a(1:n)`` gets the "first
-through nth" scores. If its angular momenta, ``a(-2:2)`` gets the "-2 through
-+2" values.  ``a(:)`` means, simply, "first through last" elements of array
-``a`` *regardless* of indexing. Omitting the first index means "first element
-of ``a``, regardless of chosen indexing"; omitting the last index means "last
-element of ``a``, regardless of chosen indexing".
+to include both endpoints (see :ref:`faq-endpoints`).  So if it's test scores,
+``a(1:n)`` gets the "first through nth" scores. If its angular momenta,
+``a(-2:2)`` gets the "-2 through +2" values.  ``a(:)`` means, simply, "first
+through last" elements of array ``a`` *regardless* of indexing. Omitting the
+first index means "first element of ``a``, regardless of chosen indexing";
+omitting the last index means "last element of ``a``, regardless of chosen
+indexing".
 
 For some examples of a side-by-side comparison of Python vs Fortran array
 indexing, see the :ref:`rosetta_stone`, specifically the section
-about :ref:`rosetta_arrays`.
+about :ref:`rosetta_array_indexing`.
 
 What is the motivation behind the C/Python numbering convention?
 ----------------------------------------------------------------
