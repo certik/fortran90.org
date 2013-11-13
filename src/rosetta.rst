@@ -236,7 +236,9 @@ First `n` elements:
 +------------------------------------------------------+--------------------------------------------------------+
 |::                                                    |.. code-block:: fortran                                 |
 |                                                      |                                                        |
-| a[:n]                                                | a(:n) ! assuming default starting index 1              |
+| a[:n]                                                | a(:n)     ! assuming starting index 1 (default)        |
+|                                                      | a(:n-m+1) ! assuming starting index m                  |
++------------------------------------------------------+--------------------------------------------------------+
 
 Last `n` elements:
 
