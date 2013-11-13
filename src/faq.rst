@@ -186,7 +186,7 @@ Let's look at a few examples:
 
 * You say "I finished first", not "I finished zeroth"
 
-* The ``n`` quantum number is typically from 1 to ``n_max``.
+* In atomic physics, the ``n`` quantum number is from 1 to ``n_max``.
 
 * The angular momentum quantum number ``l`` is from ``0`` to ``n-1``
 
