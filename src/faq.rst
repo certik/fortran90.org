@@ -202,7 +202,7 @@ Let's look at a few examples:
 Conclusion: As shown by the many examples, numbering does not always start most
 naturally at one or zero. And so to force any one choice for all cases --- one
 size fits all! -- be it 0-based or 1-based, is *inevitably* unnatural -- and
-with that, more likely error prone and hard to debug/ maintain.  However, the
+with that, more likely error prone and hard to debug/maintain.  However, the
 most common starting index is 1.
 
 Why does Fortran default array indexing start at 1?
