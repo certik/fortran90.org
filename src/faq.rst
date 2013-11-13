@@ -186,9 +186,11 @@ Let's look at a few examples:
 
 * You say "I finished first", not "I finished zeroth"
 
-* In atomic physics, the ``n`` quantum number is from 1 to ``n_max``.
+* In atomic physics, the ``n`` quantum number is from 1 to ``n_max`` and the
+  angular momentum quantum number ``l`` is from ``0`` to ``n-1``
 
-* The angular momentum quantum number ``l`` is from ``0`` to ``n-1``
+* For quantum harmonic oscillator, the ``n`` quantum number is from 0 to
+  ``n_max`` and the angular momentum quantum number ``l`` is from ``0`` to ``n``
 
 * The ``z``-component of angular momentum is from ``-l`` to ``l``.
 
@@ -200,7 +202,7 @@ Let's look at a few examples:
 Conclusion: As shown by the many examples, numbering does not always start most
 naturally at one or zero. And so to force any one choice for all cases --- one
 size fits all! -- be it 0-based or 1-based, is *inevitably* unnatural -- and
-with that, more likely error prone and hard to debug/ maintain.  However, the
+with that, more likely error prone and hard to debug/maintain.  However, the
 most common starting index is 1.
 
 Why does Fortran default array indexing start at 1?
