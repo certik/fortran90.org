@@ -156,8 +156,8 @@ get a sense, consider, for example, the following:
 * In math, you say "count the numbers 1-100", it means from 1 to 100, not from
   1 to 99, or from 2 to 100.
 
-* The mathematical symbol Sum_1^5 means from 1 to 5
-  (inclusive), it does not mean from 1 to 4
+* The mathematical symbol $\sum_{i=1}^5$ means adding terms with $i$ from 1 to
+  5 (inclusive), it does not mean from 1 to 4
 
 * When you write 1..10 in an email, it means 1 to 10, including both ends
 
