@@ -135,8 +135,11 @@ b) 1 < i ≤ 12
 c) 2 ≤ i ≤ 12
 d) 1 < i < 13
 
-What is the natural way to handle the initial and final point of an interval of numbers/objects? The best way
-is to look at a few examples:
+What is the natural way to handle the initial and final point of an interval of numbers/objects?
+Of course, there is no one most natural way for all cases. However, for the
+vast majority of cases, be they mathematical, scientific, or natural language,
+inclusion of endpoints appears most natural -- and so least mistake prone. To
+get a sense, consider, for example, the following:
 
 * You say that John Doe lived from 1914 to 1955. It means he was born in 1914
   and died 1955, it does not mean he was born in 1915 or died in 1954.
@@ -153,7 +156,7 @@ is to look at a few examples:
 * In math, you say "count the numbers 1-100", it means from 1 to 100, not from
   1 to 99, or from 2 to 100.
 
-* The mathematical symbol Sum_1^5 mathematical symbol means from 1 to 5
+* The mathematical symbol Sum_1^5 means from 1 to 5
   (inclusive), it does not mean from 1 to 4
 
 * When you write 1..10 in an email, it means 1 to 10, including both ends
@@ -216,7 +219,7 @@ declaration when, almost always, these would just start at ``1``. This becomes
 all the more convenient and character-saving in the context of
 multi-dimensional arrays. E.g. to be able to declare simply ``a(m,n,p)`` rather
 than ``a(1:m,1:n,1:p)`` all over the place is rather nice, and quick and clear
-to type/mistype/read/misread.
+to type/read (and not mistype/misread).
 
 
 As to slicing (or "sections" as it is called in Fortran), the most natural is
