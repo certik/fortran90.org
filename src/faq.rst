@@ -186,9 +186,11 @@ Let's look at a few examples:
 
 * You say "I finished first", not "I finished zeroth"
 
-* In atomic physics, the ``n`` quantum number is from 1 to ``n_max``.
+* In atomic physics, the ``n`` quantum number is from 1 to ``n_max`` and the
+  angular momentum quantum number ``l`` is from ``0`` to ``n-1``
 
-* The angular momentum quantum number ``l`` is from ``0`` to ``n-1``
+* For quantum harmonic oscillator, the ``n`` quantum number is from 0 to
+  ``n_max`` and the angular momentum quantum number ``l`` is from ``0`` to ``n``
 
 * The ``z``-component of angular momentum is from ``-l`` to ``l``.
 
