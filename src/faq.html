@@ -1,0 +1,484 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>FAQ &mdash; Fortran90 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Fortran90 1.0 documentation" href="../index.html" />
+    <link rel="next" title="Gotchas" href="gotchas.html" />
+    <link rel="prev" title="Python Fortran Rosetta Stone" href="rosetta.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="gotchas.html" title="Gotchas"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="rosetta.html" title="Python Fortran Rosetta Stone"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Fortran90 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="faq">
+<h1>FAQ<a class="headerlink" href="#faq" title="Permalink to this headline">¶</a></h1>
+<p>We try to answer here some commonly asked questions about Fortran.
+If the answers are subjective or incorrect, please let us know (preferably by
+sending a pull request fixing it, see the <a class="reference external" href="http://fortran90.org/">main</a> page).</p>
+<div class="section" id="what-is-the-advantage-of-using-fortran-as-opposed-to-for-example-c-c">
+<h2>What is the advantage of using Fortran (as opposed to for example C/C++)?<a class="headerlink" href="#what-is-the-advantage-of-using-fortran-as-opposed-to-for-example-c-c" title="Permalink to this headline">¶</a></h2>
+<p>Fortran is built from the ground up to translate mathematics into simple,
+readable, and fast code – straightforwardly maintainable by the gamut of
+mathematicians, scientists, and engineers who actually produce/apply that
+mathematics. If that is the task at hand, it is the right tool for the job and,
+as right tools tend to do, can save enormous time and pain, with most excellent
+results. If, however, mathematics is not the main task, then almost certainly
+C/C++, or a host of other more general-purpose languages, will be much better.</p>
+<p>The design goals of the C++ language are
+(<a class="reference external" href="http://www2.research.att.com/~bs/C++0xFAQ.html#aims">citing</a>
+Bjarne Stroustrup talking about the aims of the C++0x
+standard): <em>Make C++ a better language for systems programming and library
+building &#8211; that is, to build directly on C++&#8217;s contributions to
+programming, rather than providing specialized facilities for a
+particular sub-community (e.g. numeric computation or Windows-style
+application development).</em>
+(See also the <a class="reference external" href="http://www2.research.att.com/~bs/C++0xFAQ.html#specific-aims">specific aims</a>.)</p>
+<p>On the other hand,
+the Fortran language has been designed with the following goals
+(see for example the review article
+<a class="reference external" href="http://journal.info.unlp.edu.ar/journal/journal30/papers/JCST-Apr11-1.pdf">The Seven Ages of Fortran</a>
+by Michael Metcalf):</p>
+<ul class="simple">
+<li>Contain basic mathematics in the core language (rich array operations,
+complex numbers, exponentiation, special functions)</li>
+<li>Be more restricting (and higher level) than languages like C/C++, so that the
+resulting code is easier to maintain and write and easier for the compilers
+to optimize (e.g. pointers are purposely restricted so that they can be more
+highly optimized than C pointers, Fortran arrays are designed in such a way
+that compilers can check for size and shape mismatches at compile time and
+index errors at run time, etc...). There is one canonical way to do things and
+you don’t have to worry about memory allocation (most of the times).</li>
+<li>Speed</li>
+</ul>
+<p>An important point is that having all the basic elements in the language itself
+greatly simplifies both writing and reading fast, robust code. Writing and
+reading is simplified because there is a single standard set of
+functions/constructs. No need to wonder what class the array operations are
+coming from, what the member functions are, how well it will be maintained in 5
+years, how well optimized it is/will be, etc. All the basics are in the
+language itself: fast, robust, and standard for all to read and write &#8211; and
+for the compiler writers to optimize at the machine level.</p>
+</div>
+<div class="section" id="what-are-good-books-to-learn-fortran-from">
+<h2>What are good books to learn Fortran from?<a class="headerlink" href="#what-are-good-books-to-learn-fortran-from" title="Permalink to this headline">¶</a></h2>
+<p>We have found,
+<a class="reference external" href="http://www.amazon.com/Explained-Numerical-Mathematics-Scientific-Computation/dp/0199601429">Metcalf, Reid, &amp; Cohen: Modern Fortran Explained</a>,
+to be quite helpful in providing both the larger context of the language as a
+whole and a clear, well-connected presentation, organized by standard: f95,
+f2003, and f2008.</p>
+<p>Another good book with a lot of examples is
+<a class="reference external" href="http://www.amazon.com/Fortran-95-2003-Scientists-Engineers/dp/0073191574">Stephen Chapman: Fortran 95/2003 for Scientists &amp; Engineers</a>.
+And a reference book
+<a class="reference external" href="http://www.amazon.com/The-Fortran-2003-Handbook-Procedures/dp/1846283787">Adams, Brainerd, Hendrickson, Maine, Martin &amp; Smith: The Fortran 2003 Handbook</a>.</p>
+<p>Other books can be found for example at
+<a class="reference external" href="http://www.fortran.com/metcalf.htm">fortran.com/metcalf.htm</a></p>
+<p>However, Fortran is relatively quick to learn because it is so much simpler
+and smaller than C/C++ (in practice, that is, with all needed libraries
+included).</p>
+</div>
+<div class="section" id="what-are-other-good-online-fortran-resources">
+<h2>What are other good online Fortran resources?<a class="headerlink" href="#what-are-other-good-online-fortran-resources" title="Permalink to this headline">¶</a></h2>
+<p>We have found the following links to be quite helpful:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference external" href="http://en.wikipedia.org/wiki/Fortran">http://en.wikipedia.org/wiki/Fortran</a></li>
+<li><a class="reference external" href="http://en.wikipedia.org/wiki/Fortran_language_features">http://en.wikipedia.org/wiki/Fortran_language_features</a></li>
+<li><a class="reference external" href="http://fortranwiki.org/">http://fortranwiki.org/</a></li>
+<li><a class="reference external" href="http://www.fortran.com/metcalf.htm">http://www.fortran.com/metcalf.htm</a></li>
+<li><a class="reference external" href="http://www.cs.umbc.edu/~squire/fortranclass/summary.shtml">http://www.cs.umbc.edu/~squire/fortranclass/summary.shtml</a></li>
+<li><a class="reference external" href="http://www.fortranplus.co.uk/fortran_info.html">http://www.fortranplus.co.uk/fortran_info.html</a></li>
+</ul>
+</div></blockquote>
+<p>And the Fortran standards:</p>
+<blockquote>
+<div><ul class="simple">
+<li>FORTRAN 77 standard: <a class="reference external" href="http://www.fortran.com/F77_std/rjcnf0001.html">http://www.fortran.com/F77_std/rjcnf0001.html</a></li>
+<li>Fortran 95 standard: <a class="reference external" href="http://j3-fortran.org/doc/standing/archive/007/97-007r2/pdf/97-007r2.pdf">http://j3-fortran.org/doc/standing/archive/007/97-007r2/pdf/97-007r2.pdf</a></li>
+<li>Fortran 2003 standard: <a class="reference external" href="http://www.j3-fortran.org/doc/year/04/04-007.pdf">http://www.j3-fortran.org/doc/year/04/04-007.pdf</a></li>
+<li>Fortran 2008 standard: <a class="reference external" href="ftp://ftp.nag.co.uk/sc22wg5/N1801-N1850/N1830.pdf">ftp://ftp.nag.co.uk/sc22wg5/N1801-N1850/N1830.pdf</a></li>
+</ul>
+</div></blockquote>
+<p>Compiler table for support for the 2003 and 2008 standards appears regularly in
+<a class="reference external" href="http://dl.acm.org/citation.cfm?id=J286">Fortran Forum</a>.
+The 9th revision:
+<a class="reference external" href="http://www.fortranplus.co.uk/resources/fortran_2003_2008_compiler_support.pdf">fortran_2003_2008_compiler_support.pdf</a>.</p>
+</div>
+<div class="section" id="how-to-do-dynamic-dispatch-in-fortran-like-void-in-c">
+<h2>How to do dynamic dispatch in Fortran (like &#8216;void *&#8217; in C)?<a class="headerlink" href="#how-to-do-dynamic-dispatch-in-fortran-like-void-in-c" title="Permalink to this headline">¶</a></h2>
+<p>The equivalent of <tt class="docutils literal"><span class="pre">void</span> <span class="pre">*</span></tt> in Fortran is <tt class="docutils literal"><span class="pre">type(c_ptr)</span></tt>, see
+<a class="reference internal" href="best-practices.html#id2"><em>Type Casting in Callbacks</em></a> for examples of usage.</p>
+</div>
+<div class="section" id="how-to-interface-fortran-with-c-and-python">
+<h2>How to interface Fortran with C and Python?<a class="headerlink" href="#how-to-interface-fortran-with-c-and-python" title="Permalink to this headline">¶</a></h2>
+<p>Just use the <tt class="docutils literal"><span class="pre">iso_c_binding</span></tt> module to interface with C, see
+<a class="reference internal" href="best-practices.html#c-interface"><em>Interfacing with C</em></a> for more information and examples.</p>
+<p>Once you can call Fortran from C, just write a simple
+<a class="reference external" href="http://cython.org/">Cython</a> wrapper by hand
+to call Fortran from Python, see
+<a class="reference internal" href="best-practices.html#python-interface"><em>Interfacing with Python</em></a> for more info.
+You can also use <a class="reference external" href="http://www.f2py.com/">f2py</a> or
+<a class="reference external" href="http://fwrap.sourceforge.net/">fwrap</a>.</p>
+</div>
+<div class="section" id="what-is-the-most-natural-way-to-handle-initial-and-final-points-of-intervals">
+<span id="faq-endpoints"></span><h2>What is the most natural way to handle initial and final points of intervals?<a class="headerlink" href="#what-is-the-most-natural-way-to-handle-initial-and-final-points-of-intervals" title="Permalink to this headline">¶</a></h2>
+<p>Dijkstra <a class="reference external" href="http://www.cs.utexas.edu/users/EWD/ewd08xx/EWD831.PDF">considers</a> 4 possible ways to handle intervals:</p>
+<ol class="loweralpha simple">
+<li>2 ≤ i &lt; 13</li>
+<li>1 &lt; i ≤ 12</li>
+<li>2 ≤ i ≤ 12</li>
+<li>1 &lt; i &lt; 13</li>
+</ol>
+<p>What is the natural way to handle the initial and final point of an interval of numbers/objects?
+Of course, there is no one most natural way for all cases. However, for the
+vast majority of cases, be they mathematical, scientific, or natural language,
+inclusion of endpoints appears most natural &#8211; and so least mistake prone. To
+get a sense, consider, for example, the following:</p>
+<ul class="simple">
+<li>You say that John Doe lived from 1914 to 1955. It means he was born in 1914
+and died 1955, it does not mean he was born in 1915 or died in 1954.</li>
+<li>In your CV, you say you studied at MIT from 1979 to 1984. It means you
+started in 1979 and ended in 1984, it does not mean you started in 1980 or
+ended in 1983.</li>
+<li>Consider, there is a line up of 10 people, and you want to divide them into
+three groups. You do not say I want group one to start with Peter and end
+with Jane, and group two to start with Jane, and end with Tom, and group
+three to start with Tom and end with Frank.</li>
+<li>In math, you say &#8220;count the numbers 1-100&#8221;, it means from 1 to 100, not from
+1 to 99, or from 2 to 100.</li>
+<li>The mathematical symbol <img class="math" src="../_images/math/636f5fe9d11c57636d0db63796248b70246171ea.png" alt="\sum_{i=1}^5"/> means adding terms with <img class="math" src="../_images/math/34857b3ba74ce5cd8607f3ebd23e9015908ada71.png" alt="i"/> from 1 to
+5 (inclusive), it does not mean from 1 to 4</li>
+<li>When you write 1..10 in an email, it means 1 to 10, including both ends</li>
+</ul>
+<p>Conclusion: these real life examples show that the case c) is the most natural.</p>
+</div>
+<div class="section" id="what-is-the-most-natural-starting-index-for-numbering">
+<span id="faq-start"></span><h2>What is the most natural starting index for numbering?<a class="headerlink" href="#what-is-the-most-natural-starting-index-for-numbering" title="Permalink to this headline">¶</a></h2>
+<p>Let&#8217;s look at a few examples:</p>
+<ul class="simple">
+<li>Test questions always start with 1.</li>
+<li>Literature in articles always starts with 1.</li>
+<li>When you divide people into groups (e.g. at a gym), you let them count
+numbers (e.g. 1 to 5) periodically to divide them into 5 groups. You do not
+start with 0 and you don&#8217;t have a group 0.</li>
+<li>Babies count their fingers as 1-5, not 0-4.</li>
+<li>House numbers (in an address) start with 1</li>
+<li>You say &#8220;I finished first&#8221;, not &#8220;I finished zeroth&#8221;</li>
+<li>In atomic physics, the <tt class="docutils literal"><span class="pre">n</span></tt> quantum number is from 1 to <tt class="docutils literal"><span class="pre">n_max</span></tt> and the
+angular momentum quantum number <tt class="docutils literal"><span class="pre">l</span></tt> is from <tt class="docutils literal"><span class="pre">0</span></tt> to <tt class="docutils literal"><span class="pre">n-1</span></tt></li>
+<li>For quantum harmonic oscillator, the <tt class="docutils literal"><span class="pre">n</span></tt> quantum number is from 0 to
+<tt class="docutils literal"><span class="pre">n_max</span></tt> and the angular momentum quantum number <tt class="docutils literal"><span class="pre">l</span></tt> is from <tt class="docutils literal"><span class="pre">0</span></tt> to <tt class="docutils literal"><span class="pre">n</span></tt></li>
+<li>The <tt class="docutils literal"><span class="pre">z</span></tt>-component of angular momentum is from <tt class="docutils literal"><span class="pre">-l</span></tt> to <tt class="docutils literal"><span class="pre">l</span></tt>.</li>
+<li>Dirac <tt class="docutils literal"><span class="pre">kappa</span></tt> is from <tt class="docutils literal"><span class="pre">-kappa_max..kappa_max</span></tt>, without <tt class="docutils literal"><span class="pre">0</span></tt>.</li>
+<li>FFT frequencies (for <tt class="docutils literal"><span class="pre">2*n</span></tt> sequence) are from <tt class="docutils literal"><span class="pre">-n+1,</span> <span class="pre">...,</span> <span class="pre">n</span></tt> (the
+standard ordering actually is <tt class="docutils literal"><span class="pre">0,</span> <span class="pre">1,</span> <span class="pre">...,</span> <span class="pre">n,</span> <span class="pre">-n+1,</span> <span class="pre">...,</span> <span class="pre">-1</span></tt>)</li>
+</ul>
+<p>Conclusion: As shown by the many examples, numbering does not always start most
+naturally at one or zero. And so to force any one choice for all cases &#8212; one
+size fits all! &#8211; be it 0-based or 1-based, is <em>inevitably</em> unnatural &#8211; and
+with that, more likely error prone and hard to debug/maintain.  However, the
+most common starting index is 1.</p>
+</div>
+<div class="section" id="why-does-fortran-default-array-indexing-start-at-1">
+<h2>Why does Fortran default array indexing start at 1?<a class="headerlink" href="#why-does-fortran-default-array-indexing-start-at-1" title="Permalink to this headline">¶</a></h2>
+<p>Because that is the most commong starting index (see previous question).</p>
+</div>
+<div class="section" id="what-is-the-motivation-behind-fortran-numbering-convention">
+<h2>What is the motivation behind Fortran numbering convention?<a class="headerlink" href="#what-is-the-motivation-behind-fortran-numbering-convention" title="Permalink to this headline">¶</a></h2>
+<p>The whole point of Fortran arrays is to allow the user to index them as most
+natural, and thus least error prone, for the mathematics being rendered. Hence,
+one can declare <tt class="docutils literal"><span class="pre">a(1:3)</span></tt>, <tt class="docutils literal"><span class="pre">a(-1:1)</span></tt>, etc. And since the vast majority of
+enumerations in everyday life, mathematics, and science start at <tt class="docutils literal"><span class="pre">1</span></tt> (see
+<a class="reference internal" href="#faq-start"><em>What is the most natural starting index for numbering?</em></a>), Fortran makes that the default unless the user explicitly
+wants otherwise. It&#8217;s just a nice convenience, in a world of hundreds or
+thousands of array declarations in a typical code, to be able to declare as
+<tt class="docutils literal"><span class="pre">a(3)</span></tt> rather than always having to specify beginning and ending indices for
+every declaration when, almost always, these would just start at <tt class="docutils literal"><span class="pre">1</span></tt>. This
+becomes all the more convenient and character-saving in the context of
+multi-dimensional arrays. E.g. to be able to declare simply <tt class="docutils literal"><span class="pre">a(m,n,p)</span></tt> rather
+than <tt class="docutils literal"><span class="pre">a(1:m,1:n,1:p)</span></tt> all over the place is rather nice, and quick and clear
+to type/read (and not mistype/misread).</p>
+<p>As to slicing (or &#8220;sections&#8221; as it is called in Fortran), the most natural is
+to include both endpoints (see <a class="reference internal" href="#faq-endpoints"><em>What is the most natural way to handle initial and final points of intervals?</em></a>).  So if it&#8217;s test scores,
+<tt class="docutils literal"><span class="pre">a(1:n)</span></tt> gets the &#8220;first through nth&#8221; scores. If its angular momenta,
+<tt class="docutils literal"><span class="pre">a(-2:2)</span></tt> gets the &#8220;-2 through +2&#8221; values.  <tt class="docutils literal"><span class="pre">a(:)</span></tt> means, simply, &#8220;first
+through last&#8221; elements of array <tt class="docutils literal"><span class="pre">a</span></tt> <em>regardless</em> of indexing. Omitting the
+first index means &#8220;first element of <tt class="docutils literal"><span class="pre">a</span></tt>, regardless of chosen indexing&#8221;;
+omitting the last index means &#8220;last element of <tt class="docutils literal"><span class="pre">a</span></tt>, regardless of chosen
+indexing&#8221;.</p>
+<p>For some examples of a side-by-side comparison of Python vs Fortran array
+indexing, see the <a class="reference internal" href="rosetta.html#rosetta-stone"><em>Python Fortran Rosetta Stone</em></a>, specifically the section
+about <a class="reference internal" href="rosetta.html#rosetta-array-indexing"><em>Some indexing examples</em></a>.</p>
+</div>
+<div class="section" id="what-is-the-motivation-behind-the-c-python-numbering-convention">
+<h2>What is the motivation behind the C/Python numbering convention?<a class="headerlink" href="#what-is-the-motivation-behind-the-c-python-numbering-convention" title="Permalink to this headline">¶</a></h2>
+<p>For C, a good motivation is given by Edsger Dijkstra (1982):
+<a class="reference external" href="http://www.cs.utexas.edu/users/EWD/ewd08xx/EWD831.PDF">http://www.cs.utexas.edu/users/EWD/ewd08xx/EWD831.PDF</a></p>
+<p>The author of Python, Guido van Rossum, has provided motivation behind the
+Python convention here (2013):
+<a class="reference external" href="https://plus.google.com/u/0/115212051037621986145/posts/YTUxbXYZyfi">https://plus.google.com/u/0/115212051037621986145/posts/YTUxbXYZyfi</a></p>
+</div>
+<div class="section" id="does-fortran-support-closures">
+<h2>Does Fortran support closures?<a class="headerlink" href="#does-fortran-support-closures" title="Permalink to this headline">¶</a></h2>
+<p>No. Fortran doesn&#8217;t support
+<a class="reference external" href="http://en.wikipedia.org/wiki/Closure_(computer_science)">closures</a>.</p>
+</div>
+<div class="section" id="does-fortran-support-nested-functions">
+<h2>Does Fortran support nested functions?<a class="headerlink" href="#does-fortran-support-nested-functions" title="Permalink to this headline">¶</a></h2>
+<p>Yes, see <a class="reference internal" href="rosetta.html#nested-functions"><em>Nested Functions</em></a> for examples of usage.</p>
+</div>
+<div class="section" id="how-to-implement-functions-that-operate-on-arbitrary-shape-arrays">
+<h2>How to implement functions that operate on arbitrary shape arrays?<a class="headerlink" href="#how-to-implement-functions-that-operate-on-arbitrary-shape-arrays" title="Permalink to this headline">¶</a></h2>
+<p>You can use the <tt class="docutils literal"><span class="pre">elemental</span></tt> keyword to implement subroutines/functions that
+can operate on arrays of any shape. Other approaches are to use <tt class="docutils literal"><span class="pre">reshape</span></tt> or
+explicit-shape arrays. See <a class="reference internal" href="best-practices.html#elemental"><em>Element-wise Operations on Arrays Using Subroutines/Functions</em></a> for examples of usage of both
+approaches.</p>
+</div>
+<div class="section" id="are-fortran-compilers-abi-compatible">
+<span id="abi"></span><h2>Are Fortran compilers ABI compatible?<a class="headerlink" href="#are-fortran-compilers-abi-compatible" title="Permalink to this headline">¶</a></h2>
+<p>No, in general Fortran compilers are not ABI compatible.
+Things that are different:</p>
+<ul class="simple">
+<li>Run-time library: different for each compiler. For the given compiler,
+most of the time the library is backward compatible (for example
+libgfortran of GCC 4.7 is compatible with 4.6, 4.5, 4.4 and 4.3; 4.5 is
+compatible with 4.4 and 4.3. But 4.2 has a different .so version and is
+incompatible with either 4.1 and 4.3.)</li>
+<li>Modules: convention for naming and symbol mangling</li>
+<li>Trailing underscores (zero, one (most common), two)</li>
+<li>Calling convention: Whether real is passed as double, whether
+a function returns the value as first argument, etc. (see for
+example the <tt class="docutils literal"><span class="pre">-ff2c</span></tt> option in gfortran)</li>
+<li>Logical: Special Intel vs. gfortran problem: Intel has <tt class="docutils literal"><span class="pre">-1</span></tt> as
+<tt class="docutils literal"><span class="pre">.true.</span></tt> and gfortran <tt class="docutils literal"><span class="pre">1</span></tt>. With higher optimization levels,
+gfortran only looks at one bit, hence <tt class="docutils literal"><span class="pre">-1</span></tt> is <tt class="docutils literal"><span class="pre">.false.</span></tt>.</li>
+<li>...</li>
+</ul>
+<p>On the other hand, Intel C and C++ compilers are
+<a class="reference external" href="http://software.intel.com/sites/products/collateral/hpc/compilers/intel_linux_compiler_compatibility_with_gnu_compilers.pdf">ABI-compatible</a>
+with GCC and Clang.</p>
+</div>
+<div class="section" id="what-is-the-best-way-to-distribute-and-install-fortran-libraries">
+<span id="distribute-libraries"></span><h2>What is the best way to distribute and install Fortran libraries?<a class="headerlink" href="#what-is-the-best-way-to-distribute-and-install-fortran-libraries" title="Permalink to this headline">¶</a></h2>
+<p>The best way is to simply provide the library as modules with source. That way,
+compilers can optimize to the particular hardware and there are no object-file
+incompatibility issues &#8211; and the user can extend/modify the module for his own
+purposes.</p>
+<p>Due to ABI incompatibility, in general the <tt class="docutils literal"><span class="pre">.so</span></tt>/<tt class="docutils literal"><span class="pre">.a</span></tt> libraries compiled
+with one compiler version cannot be used with any other compiler or version.</p>
+<p>As such, the only two options are:</p>
+<ol class="arabic">
+<li><p class="first">Distribute different <tt class="docutils literal"><span class="pre">.so</span></tt>/<tt class="docutils literal"><span class="pre">.a</span></tt> for each compiler (to some extent,
+they can be used with different versions of the same compiler, see
+<a class="reference internal" href="#abi"><em>Are Fortran compilers ABI compatible?</em></a>).</p>
+<p>This means to either provide source code and the user compiles it using
+his compiler, or precompile it with each compiler version (for commercial
+libraries). Either way, once we have <tt class="docutils literal"><span class="pre">.so</span></tt>/<tt class="docutils literal"><span class="pre">.a</span></tt> compatible with our
+compiler, there are generally two ways to call it from a program:</p>
+<blockquote>
+<div><p>1.1. Distribute <tt class="docutils literal"><span class="pre">.mod</span></tt> files, that are compiler version dependent (In
+case of gfortran, they are only compatible between releases (4.5.0 and
+4.5.2) but not between minor versions (4.5 vs 4.6))</p>
+<p>1.2. Distribute interface <tt class="docutils literal"><span class="pre">.f90</span></tt> files, that contain the &#8220;abstract
+interface&#8221; for each subroutine/function, those are compiler
+independent, but they don&#8217;t work for modules. The upcoming Fortran
+standard for &#8220;submodules&#8221; will make this work for modules as well.</p>
+</div></blockquote>
+</li>
+<li><p class="first">Provide C interface (see <a class="reference internal" href="best-practices.html#c-interface"><em>Interfacing with C</em></a>) and distribute just one
+<tt class="docutils literal"><span class="pre">.so</span></tt>/<tt class="docutils literal"><span class="pre">.a</span></tt>.</p>
+<p>The library would be indistinguishable from any other C
+library, and it would be used from Fortran like any other C library. This of
+course means that one cannot use Fortran features not available through the C
+interface (currently: assume shape arrays, allocatable arrays, pointer arrays,
+but those will all be eventually available in future Fortran standards).</p>
+</li>
+</ol>
+<p>Unless the ABI becomes compatible across compilers, the easiest
+is to use 1.1. for Fortran usage, and 2. for C/Python usage.
+(If the ABI became compatible let&#8217;s say at least between ifort and gfortran,
+it might make sense to use 1.2. and distribute only one <tt class="docutils literal"><span class="pre">.so</span></tt>/<tt class="docutils literal"><span class="pre">.a</span></tt>).</p>
+<p>Note I: Distributing the <tt class="docutils literal"><span class="pre">.a</span></tt> file only (as opposed to both <tt class="docutils literal"><span class="pre">.so</span></tt> and
+<tt class="docutils literal"><span class="pre">.a</span></tt> files) for the given platform/compiler should be enough in many cases as
+it is faster and the number of programs sharing the library on any given system
+is typically fairly low.</p>
+<p>Note II: The advantage of distributing the sources is that it allows to
+optimize for the system at hand (e.g. GCC&#8217;s <tt class="docutils literal"><span class="pre">-march=native</span></tt> option), as well
+as for more specialized machines like BlueGene.</p>
+<p>See this
+<a class="reference external" href="http://gcc.gnu.org/ml/fortran/2011-06/msg00114.html">thread</a>
+for more information.</p>
+</div>
+<div class="section" id="does-fortran-warn-you-about-undefined-symbols">
+<h2>Does Fortran warn you about undefined symbols?<a class="headerlink" href="#does-fortran-warn-you-about-undefined-symbols" title="Permalink to this headline">¶</a></h2>
+<p>Yes, it does. For gfortran, you need to use the <tt class="docutils literal"><span class="pre">-Wimplicit-interface</span></tt> option.</p>
+</div>
+<div class="section" id="what-is-the-equivalent-of-the-c-header-files-in-fortran">
+<h2>What is the equivalent of the C header files in Fortran?<a class="headerlink" href="#what-is-the-equivalent-of-the-c-header-files-in-fortran" title="Permalink to this headline">¶</a></h2>
+<p>Create a module and use it from other places
+(see <a class="reference internal" href="best-practices.html#modules"><em>Modules and Programs</em></a> for more information). The compiler will check all the
+types. However, there is a difference from C in how to distribute Fortran
+libraries, see <a class="reference internal" href="#distribute-libraries"><em>What is the best way to distribute and install Fortran libraries?</em></a> for more information.</p>
+</div>
+<div class="section" id="what-compiler-options-should-i-use-for-development">
+<h2>What compiler options should I use for development?<a class="headerlink" href="#what-compiler-options-should-i-use-for-development" title="Permalink to this headline">¶</a></h2>
+<p>One possibility for gfortran is:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">-</span><span class="n">Wall</span> <span class="o">-</span><span class="n">Wextra</span> <span class="o">-</span><span class="n">Wimplicit</span><span class="o">-</span><span class="n">interface</span> <span class="o">-</span><span class="n">fPIC</span> <span class="o">-</span><span class="n">fmax</span><span class="o">-</span><span class="n">errors</span><span class="o">=</span><span class="mi">1</span> <span class="o">-</span><span class="n">g</span> <span class="o">-</span><span class="n">fcheck</span><span class="o">=</span><span class="nb">all</span> <span class="o">-</span><span class="n">fbacktrace</span>
+</pre></div>
+</div>
+<p>This warns about undefined symbols, stops at the first error, turns on all
+debugging checks (bounds checks, array temporaries, ...) and turns on backtrace
+printing when something fails at runtime (typically accessing an array out of
+bounds).
+You can use <tt class="docutils literal"><span class="pre">-Werror</span></tt> to turn warnings into errors (so that the
+compilation stops when undefined symbol is used).
+With gfortran 4.4 and older, replace <tt class="docutils literal"><span class="pre">fcheck=all</span></tt> with
+<tt class="docutils literal"><span class="pre">-fbounds-check</span> <span class="pre">-fcheck-array-temporaries</span></tt>.</p>
+<p>For Intel ifort:</p>
+<div class="highlight-python"><pre>-warn all -check all</pre>
+</div>
+</div>
+<div class="section" id="what-compiler-options-should-i-use-for-production-run">
+<h2>What compiler options should I use for production run?<a class="headerlink" href="#what-compiler-options-should-i-use-for-production-run" title="Permalink to this headline">¶</a></h2>
+<p>One possibility for gfortran is:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">-</span><span class="n">Wall</span> <span class="o">-</span><span class="n">Wextra</span> <span class="o">-</span><span class="n">Wimplicit</span><span class="o">-</span><span class="n">interface</span> <span class="o">-</span><span class="n">fPIC</span> <span class="o">-</span><span class="n">Werror</span> <span class="o">-</span><span class="n">fmax</span><span class="o">-</span><span class="n">errors</span><span class="o">=</span><span class="mi">1</span> <span class="o">-</span><span class="n">O3</span> <span class="o">-</span><span class="n">march</span><span class="o">=</span><span class="n">native</span> <span class="o">-</span><span class="n">ffast</span><span class="o">-</span><span class="n">math</span> <span class="o">-</span><span class="n">funroll</span><span class="o">-</span><span class="n">loops</span>
+</pre></div>
+</div>
+<p>This turns off all debugging options (like bounds checks)
+and turns on optimizing options (fast math and platform dependent code
+generation).</p>
+<p>It still warns about undefined symbols, turns warnings into errors (so that the
+compilation stops when undefined symbol is used) and stops at the first error.</p>
+<p>For Intel ifort:</p>
+<div class="highlight-python"><pre>-warn all -fast</pre>
+</div>
+</div>
+<div class="section" id="how-do-i-indent-free-form-fortran-source-code-in-a-consistent-manner-automatically">
+<h2>How do I indent free-form Fortran source code in a consistent manner automatically?<a class="headerlink" href="#how-do-i-indent-free-form-fortran-source-code-in-a-consistent-manner-automatically" title="Permalink to this headline">¶</a></h2>
+<p>If your editor or IDE does not support automatic indentation, you may want to
+use Emacs&#8217; batch mode instead:</p>
+<div class="highlight-python"><pre>emacs --batch filename.f90 -f mark-whole-buffer -f f90-indent-subprogram -f save-buffer</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">FAQ</a><ul>
+<li><a class="reference internal" href="#what-is-the-advantage-of-using-fortran-as-opposed-to-for-example-c-c">What is the advantage of using Fortran (as opposed to for example C/C++)?</a></li>
+<li><a class="reference internal" href="#what-are-good-books-to-learn-fortran-from">What are good books to learn Fortran from?</a></li>
+<li><a class="reference internal" href="#what-are-other-good-online-fortran-resources">What are other good online Fortran resources?</a></li>
+<li><a class="reference internal" href="#how-to-do-dynamic-dispatch-in-fortran-like-void-in-c">How to do dynamic dispatch in Fortran (like &#8216;void *&#8217; in C)?</a></li>
+<li><a class="reference internal" href="#how-to-interface-fortran-with-c-and-python">How to interface Fortran with C and Python?</a></li>
+<li><a class="reference internal" href="#what-is-the-most-natural-way-to-handle-initial-and-final-points-of-intervals">What is the most natural way to handle initial and final points of intervals?</a></li>
+<li><a class="reference internal" href="#what-is-the-most-natural-starting-index-for-numbering">What is the most natural starting index for numbering?</a></li>
+<li><a class="reference internal" href="#why-does-fortran-default-array-indexing-start-at-1">Why does Fortran default array indexing start at 1?</a></li>
+<li><a class="reference internal" href="#what-is-the-motivation-behind-fortran-numbering-convention">What is the motivation behind Fortran numbering convention?</a></li>
+<li><a class="reference internal" href="#what-is-the-motivation-behind-the-c-python-numbering-convention">What is the motivation behind the C/Python numbering convention?</a></li>
+<li><a class="reference internal" href="#does-fortran-support-closures">Does Fortran support closures?</a></li>
+<li><a class="reference internal" href="#does-fortran-support-nested-functions">Does Fortran support nested functions?</a></li>
+<li><a class="reference internal" href="#how-to-implement-functions-that-operate-on-arbitrary-shape-arrays">How to implement functions that operate on arbitrary shape arrays?</a></li>
+<li><a class="reference internal" href="#are-fortran-compilers-abi-compatible">Are Fortran compilers ABI compatible?</a></li>
+<li><a class="reference internal" href="#what-is-the-best-way-to-distribute-and-install-fortran-libraries">What is the best way to distribute and install Fortran libraries?</a></li>
+<li><a class="reference internal" href="#does-fortran-warn-you-about-undefined-symbols">Does Fortran warn you about undefined symbols?</a></li>
+<li><a class="reference internal" href="#what-is-the-equivalent-of-the-c-header-files-in-fortran">What is the equivalent of the C header files in Fortran?</a></li>
+<li><a class="reference internal" href="#what-compiler-options-should-i-use-for-development">What compiler options should I use for development?</a></li>
+<li><a class="reference internal" href="#what-compiler-options-should-i-use-for-production-run">What compiler options should I use for production run?</a></li>
+<li><a class="reference internal" href="#how-do-i-indent-free-form-fortran-source-code-in-a-consistent-manner-automatically">How do I indent free-form Fortran source code in a consistent manner automatically?</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="rosetta.html"
+                        title="previous chapter">Python Fortran Rosetta Stone</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="gotchas.html"
+                        title="next chapter">Gotchas</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/src/faq.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="gotchas.html" title="Gotchas"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="rosetta.html" title="Python Fortran Rosetta Stone"
+             >previous</a> |</li>
+        <li><a href="../index.html">Fortran90 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Ondřej Čertík.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b3.
+    </div>
+  </body>
+</html>
