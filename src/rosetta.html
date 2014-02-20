@@ -435,7 +435,29 @@ print *, b(:0)</pre>
 </pre></div>
 </div>
 </td>
-<td><div class="first last highlight-fortran"><div class="highlight"><pre><span class="nv">a</span><span class="p">(:</span><span class="nv">n</span><span class="p">)</span> <span class="c">! assuming default starting index 1</span>
+<td><div class="first last highlight-fortran"><div class="highlight"><pre><span class="nv">a</span><span class="p">(:</span><span class="nv">n</span><span class="p">)</span>     <span class="c">! assuming starting index 1 (default)</span>
+<span class="nv">a</span><span class="p">(:</span><span class="nv">n</span><span class="o">-</span><span class="nv">m</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="c">! assuming starting index m</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Last <cite>n</cite> elements:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="49%" />
+<col width="51%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>NumPy</td>
+<td>Fortran</td>
+</tr>
+<tr class="row-even"><td><div class="first last highlight-python"><div class="highlight"><pre><span class="n">a</span><span class="p">[</span><span class="o">-</span><span class="n">n</span><span class="p">:]</span> <span class="c"># equivalent to a[size(a)-n:]</span>
+</pre></div>
+</div>
+</td>
+<td><div class="first last highlight-fortran"><div class="highlight"><pre><span class="nv">a</span><span class="p">(</span><span class="nv">size</span><span class="p">(</span><span class="nv">a</span><span class="p">)</span><span class="o">-</span><span class="nv">n</span><span class="o">+</span><span class="mi">1</span><span class="p">:)</span>
 </pre></div>
 </div>
 </td>
