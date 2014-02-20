@@ -85,10 +85,10 @@ and never any other way (see also the gotcha
 :ref:`floating_point_numbers_gotcha`).
 
 To print floating point double precision
-numbers without loosing precision, use the ``(es23.16)`` format (see
+numbers without losing precision, use the ``(es23.16)`` format (see
 http://stackoverflow.com/questions/6118231/why-do-i-need-17-significant-digits-and-not-16-to-represent-a-double/).
 
-It is safe to assign integers to floating point numbers without loosing
+It is safe to assign integers to floating point numbers without losing
 accuracy::
 
     real(dp) :: a
