@@ -411,3 +411,10 @@ For Intel ifort::
 
     -warn all -fast
 
+How do I indent free-form Fortran source code in a consistent manner automatically?
+-----------------------------------------------------------------------------------
+
+If your editor or IDE does not support automatic indentation, you may want to
+use Emacs' batch mode instead::
+
+     emacs --batch filename.f90 -f mark-whole-buffer -f f90-indent-subprogram -f save-buffer

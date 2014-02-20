@@ -57,6 +57,6 @@ is equivalent to::
     real(dp) :: a
     a = 1.0_dp
 
-And so it is safe to assign integers to floating point numbers without loosing
+And so it is safe to assign integers to floating point numbers without losing
 any accuracy (but one must be careful about integer division, e.g.  ``1/2`` is
 equal to ``0`` and not ``0.5``).

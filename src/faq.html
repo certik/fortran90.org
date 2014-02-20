@@ -391,6 +391,13 @@ compilation stops when undefined symbol is used) and stops at the first error.</
 <div class="highlight-python"><pre>-warn all -fast</pre>
 </div>
 </div>
+<div class="section" id="how-do-i-indent-free-form-fortran-source-code-in-a-consistent-manner-automatically">
+<h2>How do I indent free-form Fortran source code in a consistent manner automatically?<a class="headerlink" href="#how-do-i-indent-free-form-fortran-source-code-in-a-consistent-manner-automatically" title="Permalink to this headline">¶</a></h2>
+<p>If your editor or IDE does not support automatic indentation, you may want to
+use Emacs&#8217; batch mode instead:</p>
+<div class="highlight-python"><pre>emacs --batch filename.f90 -f mark-whole-buffer -f f90-indent-subprogram -f save-buffer</pre>
+</div>
+</div>
 </div>
 
 
@@ -421,6 +428,7 @@ compilation stops when undefined symbol is used) and stops at the first error.</
 <li><a class="reference internal" href="#what-is-the-equivalent-of-the-c-header-files-in-fortran">What is the equivalent of the C header files in Fortran?</a></li>
 <li><a class="reference internal" href="#what-compiler-options-should-i-use-for-development">What compiler options should I use for development?</a></li>
 <li><a class="reference internal" href="#what-compiler-options-should-i-use-for-production-run">What compiler options should I use for production run?</a></li>
+<li><a class="reference internal" href="#how-do-i-indent-free-form-fortran-source-code-in-a-consistent-manner-automatically">How do I indent free-form Fortran source code in a consistent manner automatically?</a></li>
 </ul>
 </li>
 </ul>
@@ -470,7 +478,7 @@ compilation stops when undefined symbol is used) and stops at the first error.</
     </div>
     <div class="footer">
         &copy; Copyright 2012, Ondřej Čertík.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b3.
     </div>
   </body>
 </html>
