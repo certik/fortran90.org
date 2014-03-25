@@ -102,6 +102,47 @@ a = 1.0_dp</pre>
 any accuracy (but one must be careful about integer division, e.g.  <tt class="docutils literal"><span class="pre">1/2</span></tt> is
 equal to <tt class="docutils literal"><span class="pre">0</span></tt> and not <tt class="docutils literal"><span class="pre">0.5</span></tt>).</p>
 </div>
+<div class="section" id="c-fortran-interoperability-of-logical">
+<h2>C/Fortran Interoperability of Logical<a class="headerlink" href="#c-fortran-interoperability-of-logical" title="Permalink to this headline">¶</a></h2>
+<p>The Fortran standard specifies, that the Fortran type <tt class="docutils literal"><span class="pre">logical(c_bool)</span></tt> and C
+type <tt class="docutils literal"><span class="pre">bool</span></tt> are interoperable (as long as <tt class="docutils literal"><span class="pre">c_bool</span></tt> returns some positive
+integer). Unfortunately, for some compilers one must enable this behavior with
+a specific (non-default) option. In particular, the following options must be
+used:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="32%" />
+<col width="68%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Compiler</td>
+<td>Extra Compiler Option</td>
+</tr>
+<tr class="row-even"><td>gfortran</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>ifort</td>
+<td>-standard-semantics</td>
+</tr>
+<tr class="row-even"><td>PGI</td>
+<td>-Munixlogical</td>
+</tr>
+<tr class="row-odd"><td>Cray</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p>Empty <cite>Extra Compiler Option</cite> means that no extra option is needed and things
+work by default.</p>
+<p>If you omit these extra compiler options, then when you pass <cite>logical</cite> to and
+from Fortran, its value will in general be corrupted when accessed from C. A
+minimal code example that exemplifies this behavior is at:
+<a class="reference external" href="https://gist.github.com/certik/9744747">https://gist.github.com/certik/9744747</a>
+When you use these extra compiler options, then everything works as expected
+and there is no issue.</p>
+<p>Conclusion: <em>always</em> use these extra compiler options when compiling your
+Fortran code, unless you have a specific reason not to.</p>
+</div>
 </div>
 
 
@@ -115,6 +156,7 @@ equal to <tt class="docutils literal"><span class="pre">0</span></tt> and not <t
 <li><a class="reference internal" href="#">Gotchas</a><ul>
 <li><a class="reference internal" href="#variable-initialization-using-initialization-expression">Variable Initialization Using Initialization Expression</a></li>
 <li><a class="reference internal" href="#floating-point-numbers">Floating Point Numbers</a></li>
+<li><a class="reference internal" href="#c-fortran-interoperability-of-logical">C/Fortran Interoperability of Logical</a></li>
 </ul>
 </li>
 </ul>
