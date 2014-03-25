@@ -81,6 +81,8 @@ used:
 +-----------+-----------------------+
 | Cray      |                       |
 +-----------+-----------------------+
+| IBM XL    |                       |
++-----------+-----------------------+
 
 Empty `Extra Compiler Option` means that no extra option is needed and things
 work by default.
