@@ -60,3 +60,37 @@ is equivalent to::
 And so it is safe to assign integers to floating point numbers without losing
 any accuracy (but one must be careful about integer division, e.g.  ``1/2`` is
 equal to ``0`` and not ``0.5``).
+
+C/Fortran Interoperability of Logical
+-------------------------------------
+
+The Fortran standard specifies, that the Fortran type ``logical(c_bool)`` and C
+type ``bool`` are interoperable (as long as ``c_bool`` returns some positive
+integer). Unfortunately, for some compilers one must enable this behavior with
+a specific (non-default) option. In particular, the following options must be
+used:
+
++-----------+-----------------------+
+| Compiler  | Extra Compiler Option |
++-----------+-----------------------+
+| gfortran  |                       |
++-----------+-----------------------+
+| ifort     | -standard-semantics   |
++-----------+-----------------------+
+| PGI       | -Munixlogical         |
++-----------+-----------------------+
+| Cray      |                       |
++-----------+-----------------------+
+
+Empty `Extra Compiler Option` means that no extra option is needed and things
+work by default.
+
+If you omit these extra compiler options, then when you pass `logical` to and
+from Fortran, its value will in general be corrupted when accessed from C. A
+minimal code example that exemplifies this behavior is at:
+https://gist.github.com/certik/9744747
+When you use these extra compiler options, then everything works as expected
+and there is no issue.
+
+Conclusion: *always* use these extra compiler options when compiling your
+Fortran code, unless you have a specific reason not to.
