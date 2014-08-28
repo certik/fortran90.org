@@ -13,4 +13,5 @@ the order of the date of contribution:
 * Matthew Emmett
 * Juan Luis Cano Rodríguez
 * Neil Carlson
+* Andrea Vigliotti
 * Pierre Haessig
