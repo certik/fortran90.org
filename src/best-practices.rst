@@ -205,7 +205,8 @@ in the following cases one can (or has to) use `explicit-shape` arrays:
 To use `explicit-shape` arrays, do::
 
     subroutine f(n, r)
-    real(dp), intent(in) :: r(n)
+    integer, intent(in) :: n
+    real(dp), intent(out) :: r(n)
     integer :: i
     do i = 1, n
         r(i) = 1.0_dp / i**2
@@ -215,6 +216,7 @@ To use `explicit-shape` arrays, do::
 2D arrays::
 
     subroutine g(m, n, A)
+    integer, intent(in) :: m, n
     real(dp), intent(in) :: A(m, n)
     ...
     end subroutine
