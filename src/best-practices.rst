@@ -165,7 +165,7 @@ When passing arrays in and out of a subroutine/function, use
 the following pattern for 1D arrays (it is called `assumed-shape`)::
 
     subroutine f(r)
-    real(dp), intent(in) :: r(:)
+    real(dp), intent(out) :: r(:)
     integer :: n, i
     n = size(r)
     do i = 1, n
