@@ -140,37 +140,50 @@ Everything else is the same, in particular:
 | i = array([1, 2, 3])                                 | i = [1, 2, 3]                                          |
 | print(all(i == [1, 2, 3]))                           | print *, all(i == [1, 2, 3])                           |
 | print(any(i == [2, 2, 3]))                           | print *, any(i == [2, 2, 3])                           |
+|                                                      |                                                        |
+|Output::                                              |Output (whitespace trimmed)::                           |
+|                                                      |                                                        |
+| True                                                 | T                                                      |
+| True                                                 | T                                                      |
 +------------------------------------------------------+--------------------------------------------------------+
 |::                                                    |::                                                      |
 |                                                      |                                                        |
-| from numpy import array, empty                       | integer :: a(10), b(10)                                |
+| from numpy import array                              | integer :: a(10), b(10)                                |
 | a = array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])           | a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]                    |
-| b = empty(10)                                        | where (a > 5)                                          |
-| b[:] = 0                                             |     b = a - 3                                          |
-| b[a > 2] = 1                                         | elsewhere (a > 2)                                      |
-| b[a > 5] = a[a > 5] - 3                              |     b = 1                                              |
-|                                                      | elsewhere                                              |
+| b = a - a                                            | where (a > 5)                                          |
+| b[a > 2] = 1                                         |     b = a - 3                                          |
+| b[a > 5] = a[a > 5] - 3                              | elsewhere (a > 2)                                      |
 | print(a)                                             |     b = 1                                              |
 | print(b)                                             | elsewhere                                              |
 |                                                      |     b = 0                                              |
 |                                                      | end where                                              |
 |                                                      | print "10i5", a                                        |
 |                                                      | print "10i5", b                                        |
+|                                                      |                                                        |
+|Output (whitespace trimmed)::                         |Output (whitespace trimmed)::                           |
+|                                                      |                                                        |
+| [1 2 3 4 5 6 7 8 9 10]                               | 1 2 3 4 5 6 7 8 9 10                                   |
+| [0 0 1 1 1 3 4 5 6 7]                                | 0 0 1 1 1 3 4 5 6 7                                    |
 +------------------------------------------------------+--------------------------------------------------------+
 |::                                                    |::                                                      |
 |                                                      |                                                        |
-| from numpy import array, empty                       | integer :: a(10), b(10)                                |
+| from numpy import array                              | integer :: a(10), b(10)                                |
 | a = array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])           | a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]                    |
-| b = empty(10)                                        | where (a > 5)                                          |
-| for i in range(len(a)):                              |     b = a - 3                                          |
-|     if a[i] > 5:                                     | elsewhere (a > 2)                                      |
-|         b[i] = a[i] - 3                              |     b = 1                                              |
-|     elif a[i] > 2:                                   | elsewhere                                              |
+| b = a - a                                            | where (a > 5)                                          |
+| for i, ai in enumerate(a):                           |     b = a - 3                                          |
+|     if ai > 5:                                       | elsewhere (a > 2)                                      |
+|         b[i] = ai - 3                                |     b = 1                                              |
+|     elif ai > 2:                                     | elsewhere                                              |
 |         b[i] = 1                                     |     b = 0                                              |
 |     else:                                            | end where                                              |
 |         b[i] = 0                                     | print "10i5", a                                        |
 | print(a)                                             | print "10i5", b                                        |
 | print(b)                                             |                                                        |
+|                                                      |                                                        |
+|Output (whitespace trimmed)::                         |Output (whitespace trimmed)::                           |
+|                                                      |                                                        |
+| [1 2 3 4 5 6 7 8 9 10]                               | 1 2 3 4 5 6 7 8 9 10                                   |
+| [0 0 1 1 1 3 4 5 6 7]                                | 0 0 1 1 1 3 4 5 6 7                                    |
 +------------------------------------------------------+--------------------------------------------------------+
 |::                                                    |::                                                      |
 |                                                      |                                                        |
@@ -180,6 +193,12 @@ Everything else is the same, in particular:
 | print(sum(a[(a > 2) & (a < 6)]))                     | print *, sum(a, mask=a > 2 .and. a < 6)                |
 | o = ones(size(a), dtype="int")                       | print *, count(a > 2 .and. a < 6)                      |
 | print(sum(o[(a > 2) & (a < 6)]))                     |                                                        |
+|                                                      |                                                        |
+|Output::                                              |Output (whitespace trimmed)::                           |
+|                                                      |                                                        |
+| 55                                                   | 55                                                     |
+| 12                                                   | 12                                                     |
+| 3                                                    | 3                                                      |
 +------------------------------------------------------+--------------------------------------------------------+
 |::                                                    |::                                                      |
 |                                                      |                                                        |
@@ -221,20 +240,21 @@ Some indexing examples
 +------------------------------------------------------+--------------------------------------------------------+
 |::                                                    |.. code-block:: fortran                                 |
 |                                                      |                                                        |
-| from numpy import array                              |  integer :: a(3), b(-1:1)                              |
-| a = array([1, 2, 3])                                 |  a = [1, 2, 3]                                         |
+| from numpy import array                              |  integer :: a(10), b(-1:8), n                          |
+| a = array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])           |  a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]                   |
 | b = a                                                |  b = a                                                 |
+| n = 3                                                |  n = 3                                                 |
 | print(a[:])                                          |  print *, a(:)                                         |
 | print(b[:])                                          |  print *, b(:)                                         |
 | print(a[:2])                                         |  print *, a(:2)                                        |
 | print(b[:2])                                         |  print *, b(:0)                                        |
 |                                                      |                                                        |
-|Output::                                              |Output::                                                |
+|Output::                                              |Output (whitespace trimmed)::                           |
 |                                                      |                                                        |
-| [1 2 3]                                              | 1           2           3                              |
-| [1 2 3]                                              | 1           2           3                              |
-| [1 2]                                                | 1           2                                          |
-| [1 2]                                                | 1           2                                          |
+| [ 1 2 3 4 5 6 7 8 9 10]                              | 1 2 3 4 5 6 7 8 9 10                                   |
+| [ 1 2 3 4 5 6 7 8 9 10]                              | 1 2 3 4 5 6 7 8 9 10                                   |
+| [1 2]                                                | 1 2                                                    |
+| [1 2]                                                | 1 2                                                    |
 +------------------------------------------------------+--------------------------------------------------------+
 
 
@@ -414,13 +434,13 @@ One creates the module:
 |                                                      |                                                        |
 |                                                      |.. code-block:: fortran                                 |
 |                                                      |                                                        |
-| i = 5                                                | module a                                               |
-|                                                      | implicit none                                          |
-| def f(x):                                            |                                                        |
-|     return x + 5                                     | integer :: i = 5                                       |
+| def f(x):                                            | module a                                               |
+|     return x + 5                                     | implicit none                                          |
 |                                                      |                                                        |
-| def g(x):                                            | contains                                               |
+| def g(x):                                            | integer :: i = 5                                       |
 |     return x - 5                                     |                                                        |
+|                                                      | contains                                               |
+| i = 5                                                |                                                        |
 |                                                      | integer function f(x) result(r)                        |
 |                                                      | integer, intent(in) :: x                               |
 |                                                      | r = x + 5                                              |
