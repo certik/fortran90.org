@@ -148,9 +148,9 @@ Everything else is the same, in particular:
 +------------------------------------------------------+--------------------------------------------------------+
 |::                                                    |::                                                      |
 |                                                      |                                                        |
-| from numpy import array                              | integer :: a(10), b(10)                                |
+| from numpy import array, zeros_like                  | integer :: a(10), b(10)                                |
 | a = array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])           | a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]                    |
-| b = a - a                                            | where (a > 5)                                          |
+| b = zeros_like(a)                                    | where (a > 5)                                          |
 | b[a > 2] = 1                                         |     b = a - 3                                          |
 | b[a > 5] = a[a > 5] - 3                              | elsewhere (a > 2)                                      |
 | print(a)                                             |     b = 1                                              |
@@ -167,9 +167,9 @@ Everything else is the same, in particular:
 +------------------------------------------------------+--------------------------------------------------------+
 |::                                                    |::                                                      |
 |                                                      |                                                        |
-| from numpy import array                              | integer :: a(10), b(10)                                |
+| from numpy import array, zeros_like                  | integer :: a(10), b(10)                                |
 | a = array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])           | a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]                    |
-| b = a - a                                            | where (a > 5)                                          |
+| b = zeros_like(a)                                    | where (a > 5)                                          |
 | for i, ai in enumerate(a):                           |     b = a - 3                                          |
 |     if ai > 5:                                       | elsewhere (a > 2)                                      |
 |         b[i] = ai - 3                                |     b = 1                                              |
