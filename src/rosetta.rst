@@ -627,15 +627,15 @@ There are three or four general ways to print formatted strings:
 +-----------------------------------------------------------+----------------------------------------------------------------------+
 |::                                                         |::                                                                    |
 |                                                           |                                                                      |
-| print("Integer", 5, "and float", 5.5, "works fine.")      | use utils, only: str                                                 |
+|                                                           | use utils, only: str                                                 |
 | print("Integer " + str(5) + " and float " + str(5.5))     | print *, "Integer", 5, "and float", 5.5, "works fine."               |
 | print("Integer %d and float %f." % (5, 5.5))              | print *, "Integer " // str(5) // " and float " // str(5.5_dp) // "." |
 | print("Integer {} and float {}.".format(5, 5.5))          | print '("Integer ", i0, " and float ", f0.6, ".")', 5, 5.5           |
 |                                                           |                                                                      |
 |Output::                                                   |Output::                                                              |
 |                                                           |                                                                      |
-| Integer 5 and float 5.5 works fine.                       |  Integer           5 and float   5.5000000     works fine.           |
-| Integer 5 and float 5.5.                                  |  Integer 5 and float 5.500000.                                       |
+|                                                           |  Integer           5 and float   5.5000000     works fine.           |
+| Integer 5 and float 5.5                                   |  Integer 5 and float 5.500000.                                       |
 | Integer 5 and float 5.500000.                             |  Integer 5 and float 5.500000.                                       |
 | Integer 5 and float 5.5.                                  |                                                                      |
 +-----------------------------------------------------------+----------------------------------------------------------------------+
