@@ -97,7 +97,7 @@ Everything else is the same, in particular:
 | b = reshape([1, 2, 3, 4, 5, 6], (2, 3), order="F")   | b = reshape([1, 2, 3, 4, 5, 6], [2, 3])                |
 | print(a[0, :])                                       | print *, a(1, :)                                       |
 | print(a[1, :])                                       | print *, a(2, :)                                       |
-| print()                                              | print *                                                |
+| print("")                                            | print *                                                |
 | print(b[0, :])                                       | print *, b(1, :)                                       |
 | print(b[1, :])                                       | print *, b(2, :)                                       |
 |                                                      |                                                        |
