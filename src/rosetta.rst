@@ -317,8 +317,8 @@ Loop over the whole array:
 |::                                                    |.. code-block:: fortran                                 |
 |                                                      |                                                        |
 | r = 1                                                | r = 1                                                  |
-| for i in range(len(a)):                              | do i = 1, size(a)                                      |
-|     r *= a[i]                                        |     r = r*a(i)                                         |
+| for ai in a:                                         | do i = 1, size(a)                                      |
+|     r *= ai                                          |     r = r*a(i)                                         |
 |                                                      | end do                                                 |
 +------------------------------------------------------+--------------------------------------------------------+
 
