@@ -589,7 +589,7 @@ The functionality of both Python and Fortran is pretty much equivalent,
 only the syntax is a litte different.
 
 In both Python and Fortran, strings can be delimited by either ``"``
-or `````.
+or ``'``.
 
 There are three general ways to print formatted strings:
 
