@@ -917,5 +917,28 @@ This prints::
 
    1.4207732655565537        1.6556111085593115       0.53462502018670921
 
+Caveats
+-------
+
+continue statement
+~~~~~~~~~~~~~~~~~~
+
+Python's ``continue`` statement is used to skip the rest of a loop body. The
+loop then continues at its next iteration cycle. Fortran's ``continue``
+statement does not do anything and one should use ``cycle`` instead. For named
+loops, it is possible to speficy which loop is affected by appending its name
+to the ``cycle`` statement.
+
++------------------------------------------------------+--------------------------------------------------------+
+| NumPy                                                |           Fortran                                      |
++------------------------------------------------------+--------------------------------------------------------+
+|::                                                    |.. code-block:: fortran                                 |
+|                                                      |                                                        |
+| for i in range(1, 9):                                | loop_name: do i = 1, 8                                 |
+|     if i%2 == 0:                                     |     if (modulo(i, 2) == 0) cycle loop_name             |
+|         continue                                     |     print *, i                                         |
+|     print i                                          | end do loop_name                                       |
++------------------------------------------------------+--------------------------------------------------------+
+
 
 .. ::   vim: set nowrap textwidth=0 syn=off: ~
