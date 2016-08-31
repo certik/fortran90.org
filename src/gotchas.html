@@ -54,16 +54,16 @@
 <div class="section" id="variable-initialization-using-initialization-expression">
 <h2>Variable Initialization Using Initialization Expression<a class="headerlink" href="#variable-initialization-using-initialization-expression" title="Permalink to this headline">¶</a></h2>
 <p>The following code:</p>
-<div class="highlight-fortran"><div class="highlight"><pre><span class="kt">integer</span> <span class="kd">::</span> <span class="nv">a</span> <span class="o">=</span> <span class="mi">5</span>
+<div class="highlight-fortran"><div class="highlight"><pre><span></span><span class="kt">integer</span> <span class="kd">::</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">5</span>
 </pre></div>
 </div>
 <p>is equivalent to:</p>
-<div class="highlight-fortran"><div class="highlight"><pre><span class="kt">integer</span><span class="p">,</span> <span class="k">save</span> <span class="kd">::</span> <span class="nv">a</span> <span class="o">=</span> <span class="mi">5</span>
+<div class="highlight-fortran"><div class="highlight"><pre><span></span><span class="kt">integer</span><span class="p">,</span> <span class="k">save</span> <span class="kd">::</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">5</span>
 </pre></div>
 </div>
 <p>and <em>not</em> to:</p>
-<div class="highlight-fortran"><div class="highlight"><pre><span class="kt">integer</span> <span class="kd">::</span> <span class="nv">a</span>
-<span class="nv">a</span> <span class="o">=</span> <span class="mi">5</span>
+<div class="highlight-fortran"><div class="highlight"><pre><span></span><span class="kt">integer</span> <span class="kd">::</span> <span class="n">a</span>
+<span class="n">a</span> <span class="o">=</span> <span class="mi">5</span>
 </pre></div>
 </div>
 <p>See for example this <a class="reference external" href="http://stackoverflow.com/questions/3352741/fortran-assignment-on-declaration-and-save-attribute-gotcha">question</a>.</p>
@@ -71,32 +71,35 @@
 <div class="section" id="floating-point-numbers">
 <span id="floating-point-numbers-gotcha"></span><h2>Floating Point Numbers<a class="headerlink" href="#floating-point-numbers" title="Permalink to this headline">¶</a></h2>
 <p>Assuming the definitions:</p>
-<div class="highlight-fortran"><div class="highlight"><pre><span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span> <span class="kd">::</span> <span class="nv">dp</span><span class="o">=</span><span class="nb">kind</span><span class="p">(</span><span class="mf">0.</span><span class="nv">d0</span><span class="p">)</span>           <span class="c">! double precision</span>
-<span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span> <span class="kd">::</span> <span class="nv">sp</span><span class="o">=</span><span class="nb">kind</span><span class="p">(</span><span class="mf">0.0</span> <span class="p">)</span>           <span class="c">! single precision</span>
+<div class="highlight-fortran"><div class="highlight"><pre><span></span><span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span> <span class="kd">::</span> <span class="n">dp</span><span class="o">=</span><span class="nb">kind</span><span class="p">(</span><span class="mf">0.</span><span class="n">d0</span><span class="p">)</span>           <span class="c">! double precision</span>
+<span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span> <span class="kd">::</span> <span class="n">sp</span><span class="o">=</span><span class="nb">kind</span><span class="p">(</span><span class="mf">0.0</span> <span class="p">)</span>           <span class="c">! single precision</span>
 </pre></div>
 </div>
 <p>Then the following code:</p>
-<div class="highlight-fortran"><div class="highlight"><pre><span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="nv">a</span>
-<span class="nv">a</span> <span class="o">=</span> <span class="mf">1.0</span>
+<div class="highlight-fortran"><div class="highlight"><pre><span></span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">a</span>
+<span class="n">a</span> <span class="o">=</span> <span class="mf">1.0</span>
 </pre></div>
 </div>
 <p>is equivalent to:</p>
-<div class="highlight-fortran"><pre>real(dp) :: a
-a = 1.0_sp</pre>
+<div class="highlight-fortran"><div class="highlight"><pre><span></span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">a</span>
+<span class="n">a</span> <span class="o">=</span> <span class="mf">1.0_sp</span>
+</pre></div>
 </div>
 <p>and <em>not</em> to:</p>
-<div class="highlight-fortran"><pre>real(dp) :: a
-a = 1.0_dp</pre>
+<div class="highlight-fortran"><div class="highlight"><pre><span></span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">a</span>
+<span class="n">a</span> <span class="o">=</span> <span class="mf">1.0_dp</span>
+</pre></div>
 </div>
 <p>As such, always use the <tt class="docutils literal"><span class="pre">_dp</span></tt> suffix as explained in
 <a class="reference internal" href="best-practices.html#floating-point-numbers"><em>Floating Point Numbers</em></a>. However, the following code:</p>
-<div class="highlight-fortran"><div class="highlight"><pre><span class="kt">real</span><span class="p">(</span><span class="nv">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="nv">a</span>
-<span class="nv">a</span> <span class="o">=</span> <span class="mi">1</span>
+<div class="highlight-fortran"><div class="highlight"><pre><span></span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">a</span>
+<span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
 </pre></div>
 </div>
 <p>is equivalent to:</p>
-<div class="highlight-fortran"><pre>real(dp) :: a
-a = 1.0_dp</pre>
+<div class="highlight-fortran"><div class="highlight"><pre><span></span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">a</span>
+<span class="n">a</span> <span class="o">=</span> <span class="mf">1.0_dp</span>
+</pre></div>
 </div>
 <p>And so it is safe to assign integers to floating point numbers without losing
 any accuracy (but one must be careful about integer division, e.g.  <tt class="docutils literal"><span class="pre">1/2</span></tt> is

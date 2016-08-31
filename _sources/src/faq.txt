@@ -402,7 +402,7 @@ One possibility for gfortran is::
 
 This turns off all debugging options (like bounds checks)
 and turns on optimizing options (fast math and platform dependent code
-generation).
+generation). One can also use ``-Ofast`` instead of ``-O3 -ffast-math``.
 
 It still warns about undefined symbols, turns warnings into errors (so that the
 compilation stops when undefined symbol is used) and stops at the first error.
