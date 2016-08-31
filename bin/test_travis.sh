@@ -6,13 +6,17 @@ set -x
 make html
 
 git fetch origin gh-pages:gh-pages
+mv _build /tmp/
+git clean -dfx
 git checkout gh-pages
-cp -r _build/html/* .
-rm -r _build
-git add .
+rm -r *
+echo "www.fortran90.org" > CNAME
+cp -r /tmp/_build/html/* .
+git add -A
 git config user.name "Travis-CI"
 git config user.email "noreply@travis-ci.org"
 git commit -a -m "Automatic commit"
+git show HEAD --stat
 
 set +x
 if [[ "${SSH_PRIVATE_KEY}" == "" ]]; then
