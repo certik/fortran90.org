@@ -1250,6 +1250,80 @@ call foo(0.5_dp, 2._dp)</pre>
 </tbody>
 </table>
 </div>
+<div class="section" id="control-flow-in-loops">
+<h2>Control flow in loops<a class="headerlink" href="#control-flow-in-loops" title="Permalink to this headline">¶</a></h2>
+<p>The common loop types in Python and Fortran are the <tt class="docutils literal"><span class="pre">for</span></tt> and <tt class="docutils literal"><span class="pre">do</span></tt> loops
+respectively. It is possible to skip a single loop or to stop the execution of a loop in
+both languages but the statements to do so differ.</p>
+<div class="section" id="break-and-exit-statements">
+<h3>break and exit statements<a class="headerlink" href="#break-and-exit-statements" title="Permalink to this headline">¶</a></h3>
+<p>In Python, <tt class="docutils literal"><span class="pre">break</span></tt> is used to stop the execution of the innermost loop. In Fortran, this
+is accomplished by the <tt class="docutils literal"><span class="pre">exit</span></tt> statement. For named loops, it is possible to speficy which
+loop is affected by appending its name to the <tt class="docutils literal"><span class="pre">exit</span></tt> statement. Else, the innermost loop
+is interrupted.</p>
+<p>Python&#8217;s <tt class="docutils literal"><span class="pre">exit()</span></tt> interrupts the execution of program or of an interactive session.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="49%" />
+<col width="51%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>NumPy</td>
+<td>Fortran</td>
+</tr>
+<tr class="row-even"><td><div class="first last highlight-python"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">i</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">:</span>
+        <span class="k">break</span>
+    <span class="k">print</span> <span class="n">i</span>
+</pre></div>
+</div>
+</td>
+<td><div class="first last highlight-fortran"><div class="highlight"><pre><span></span><span class="n">loop_name</span><span class="p">:</span> <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">8</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">)</span> <span class="k">exit </span><span class="n">loop_name</span>
+    <span class="k">print</span> <span class="o">*</span><span class="p">,</span> <span class="n">i</span>
+<span class="k">end do </span><span class="n">loop_name</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="continue-and-cycle-statements">
+<h3>continue and cycle statements<a class="headerlink" href="#continue-and-cycle-statements" title="Permalink to this headline">¶</a></h3>
+<p>Python&#8217;s <tt class="docutils literal"><span class="pre">continue</span></tt> statement is used to skip the rest of a loop body. The
+loop then continues at its next iteration cycle. Fortran&#8217;s <tt class="docutils literal"><span class="pre">continue</span></tt>
+statement does not do anything and one should use <tt class="docutils literal"><span class="pre">cycle</span></tt> instead. For named
+loops, it is possible to speficy which loop is affected by appending its name
+to the <tt class="docutils literal"><span class="pre">cycle</span></tt> statement.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="49%" />
+<col width="51%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>NumPy</td>
+<td>Fortran</td>
+</tr>
+<tr class="row-even"><td><div class="first last highlight-python"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">i</span><span class="o">%</span><span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="k">print</span> <span class="n">i</span>
+</pre></div>
+</div>
+</td>
+<td><div class="first last highlight-fortran"><div class="highlight"><pre><span></span><span class="n">loop_name</span><span class="p">:</span> <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">8</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">modulo</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">cycle </span><span class="n">loop_name</span>
+    <span class="k">print</span> <span class="o">*</span><span class="p">,</span> <span class="n">i</span>
+<span class="k">end do </span><span class="n">loop_name</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <div class="section" id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="mandelbrot-set">
@@ -1525,43 +1599,6 @@ end program</pre>
 </div>
 </div>
 </div>
-<div class="section" id="caveats">
-<h2>Caveats<a class="headerlink" href="#caveats" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="continue-statement">
-<h3>continue statement<a class="headerlink" href="#continue-statement" title="Permalink to this headline">¶</a></h3>
-<p>Python&#8217;s <tt class="docutils literal"><span class="pre">continue</span></tt> statement is used to skip the rest of a loop body. The
-loop then continues at its next iteration cycle. Fortran&#8217;s <tt class="docutils literal"><span class="pre">continue</span></tt>
-statement does not do anything and one should use <tt class="docutils literal"><span class="pre">cycle</span></tt> instead. For named
-loops, it is possible to speficy which loop is affected by appending its name
-to the <tt class="docutils literal"><span class="pre">cycle</span></tt> statement.</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="49%" />
-<col width="51%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>NumPy</td>
-<td>Fortran</td>
-</tr>
-<tr class="row-even"><td><div class="first last highlight-python"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">i</span><span class="o">%</span><span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">continue</span>
-    <span class="k">print</span> <span class="n">i</span>
-</pre></div>
-</div>
-</td>
-<td><div class="first last highlight-fortran"><div class="highlight"><pre><span></span><span class="n">loop_name</span><span class="p">:</span> <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">8</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nb">modulo</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">cycle </span><span class="n">loop_name</span>
-    <span class="k">print</span> <span class="o">*</span><span class="p">,</span> <span class="n">i</span>
-<span class="k">end do </span><span class="n">loop_name</span>
-</pre></div>
-</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
 </div>
 
 
@@ -1583,13 +1620,14 @@ to the <tt class="docutils literal"><span class="pre">cycle</span></tt> statemen
 <li><a class="reference internal" href="#math-and-complex-numbers">Math and Complex Numbers</a></li>
 <li><a class="reference internal" href="#strings-and-formatting">Strings and Formatting</a></li>
 <li><a class="reference internal" href="#nested-functions">Nested Functions</a></li>
+<li><a class="reference internal" href="#control-flow-in-loops">Control flow in loops</a><ul>
+<li><a class="reference internal" href="#break-and-exit-statements">break and exit statements</a></li>
+<li><a class="reference internal" href="#continue-and-cycle-statements">continue and cycle statements</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#examples">Examples</a><ul>
 <li><a class="reference internal" href="#mandelbrot-set">Mandelbrot Set</a></li>
 <li><a class="reference internal" href="#least-squares-fitting">Least Squares Fitting</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#caveats">Caveats</a><ul>
-<li><a class="reference internal" href="#continue-statement">continue statement</a></li>
 </ul>
 </li>
 </ul>
