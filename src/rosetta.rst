@@ -730,6 +730,55 @@ And use it like:
 | -7.69468277489e-16                                        | -7.69468277488715811E-016                                              |
 +-----------------------------------------------------------+------------------------------------------------------------------------+
 
+Control flow in loops
+---------------------
+
+The common loop types in Python and Fortran are the ``for`` and ``do`` loops
+respectively. It is possible to skip a single loop or to stop the execution of a loop in
+both languages but the statements to do so differ.
+
+break and exit statements
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In Python, ``break`` is used to stop the execution of the innermost loop. In Fortran, this
+is accomplished by the ``exit`` statement. For named loops, it is possible to speficy which
+loop is affected by appending its name to the ``exit`` statement. Else, the innermost loop
+is interrupted.
+
+Python's ``exit()`` interrupts the execution of program or of an interactive session.
+
++------------------------------------------------------+--------------------------------------------------------+
+| NumPy                                                |           Fortran                                      |
++------------------------------------------------------+--------------------------------------------------------+
+|::                                                    |.. code-block:: fortran                                 |
+|                                                      |                                                        |
+| for i in range(1, 9):                                | loop_name: do i = 1, 8                                 |
+|     if i>2:                                          |     if (i>2) exit loop_name                            |
+|         break                                        |     print *, i                                         |
+|     print i                                          | end do loop_name                                       |
++------------------------------------------------------+--------------------------------------------------------+
+
+continue and cycle statements
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Python's ``continue`` statement is used to skip the rest of a loop body. The
+loop then continues at its next iteration cycle. Fortran's ``continue``
+statement does not do anything and one should use ``cycle`` instead. For named
+loops, it is possible to speficy which loop is affected by appending its name
+to the ``cycle`` statement.
+
++------------------------------------------------------+--------------------------------------------------------+
+| NumPy                                                |           Fortran                                      |
++------------------------------------------------------+--------------------------------------------------------+
+|::                                                    |.. code-block:: fortran                                 |
+|                                                      |                                                        |
+| for i in range(1, 9):                                | loop_name: do i = 1, 8                                 |
+|     if i%2 == 0:                                     |     if (modulo(i, 2) == 0) cycle loop_name             |
+|         continue                                     |     print *, i                                         |
+|     print i                                          | end do loop_name                                       |
++------------------------------------------------------+--------------------------------------------------------+
+
+
 Examples
 --------
 
@@ -916,29 +965,6 @@ find a nonlinear fit of the form ``a*x*log(b + c*x)`` to a list of primes:
 This prints::
 
    1.4207732655565537        1.6556111085593115       0.53462502018670921
-
-Caveats
--------
-
-continue statement
-~~~~~~~~~~~~~~~~~~
-
-Python's ``continue`` statement is used to skip the rest of a loop body. The
-loop then continues at its next iteration cycle. Fortran's ``continue``
-statement does not do anything and one should use ``cycle`` instead. For named
-loops, it is possible to speficy which loop is affected by appending its name
-to the ``cycle`` statement.
-
-+------------------------------------------------------+--------------------------------------------------------+
-| NumPy                                                |           Fortran                                      |
-+------------------------------------------------------+--------------------------------------------------------+
-|::                                                    |.. code-block:: fortran                                 |
-|                                                      |                                                        |
-| for i in range(1, 9):                                | loop_name: do i = 1, 8                                 |
-|     if i%2 == 0:                                     |     if (modulo(i, 2) == 0) cycle loop_name             |
-|         continue                                     |     print *, i                                         |
-|     print i                                          | end do loop_name                                       |
-+------------------------------------------------------+--------------------------------------------------------+
 
 
 .. ::   vim: set nowrap textwidth=0 syn=off: ~
