@@ -104,6 +104,12 @@
 <p>And so it is safe to assign integers to floating point numbers without losing
 any accuracy (but one must be careful about integer division, e.g.  <tt class="docutils literal"><span class="pre">1/2</span></tt> is
 equal to <tt class="docutils literal"><span class="pre">0</span></tt> and not <tt class="docutils literal"><span class="pre">0.5</span></tt>).</p>
+<p>The declaration of integer variables with a <tt class="docutils literal"><span class="pre">_dp</span></tt> suffix does not promote them
+automatically to double precision variables. The following literal:</p>
+<div class="highlight-fortran"><div class="highlight"><pre><span></span><span class="mi">360_dp</span>
+</pre></div>
+</div>
+<p>is interpreted as an integer.</p>
 </div>
 <div class="section" id="c-fortran-interoperability-of-logical">
 <h2>C/Fortran Interoperability of Logical<a class="headerlink" href="#c-fortran-interoperability-of-logical" title="Permalink to this headline">¶</a></h2>
