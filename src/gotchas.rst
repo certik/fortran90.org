@@ -61,6 +61,13 @@ And so it is safe to assign integers to floating point numbers without losing
 any accuracy (but one must be careful about integer division, e.g.  ``1/2`` is
 equal to ``0`` and not ``0.5``).
 
+The declaration of integer variables with a ``_dp`` suffix does not promote them
+automatically to double precision variables. The following literal::
+
+    360_dp
+
+is interpreted as an integer.
+
 C/Fortran Interoperability of Logical
 -------------------------------------
 

@@ -83,6 +83,7 @@ Always write all floating point constants with the ``_dp`` suffix::
 
 and never any other way (see also the gotcha
 :ref:`floating_point_numbers_gotcha`).
+Omitting the dot in the literal constant is also incorrect.
 
 To print floating point double precision
 numbers without losing precision, use the ``(es23.16)`` format (see
