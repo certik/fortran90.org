@@ -107,7 +107,7 @@ missions. But Fortran has a different mission (numerical scientific computing).<
 <div class="section" id="floating-point-numbers">
 <span id="id1"></span><h2>Floating Point Numbers<a class="headerlink" href="#floating-point-numbers" title="Permalink to this headline">¶</a></h2>
 <p>Somewhere create and export a parameter <tt class="docutils literal"><span class="pre">dp</span></tt>:</p>
-<div class="highlight-fortran"><div class="highlight"><pre><span></span><span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">dp</span><span class="o">=</span><span class="nb">kind</span><span class="p">(</span><span class="mf">0.</span><span class="n">d0</span><span class="p">)</span>                   <span class="c">! double precision</span>
+<div class="highlight-fortran"><div class="highlight"><pre><span></span><span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">dp</span><span class="o">=</span><span class="nb">kind</span><span class="p">(</span><span class="mf">0.d0</span><span class="p">)</span>                   <span class="c">! double precision</span>
 </pre></div>
 </div>
 <p>and declare floats as:</p>
@@ -437,7 +437,7 @@ on a vector and write a simple wrappers for other array shapes:</p>
 <div class="highlight-fortran"><div class="highlight"><pre><span></span><span class="k">function </span><span class="n">nroot</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
 <span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">n</span><span class="p">,</span> <span class="n">k</span>
 <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">x</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
-<span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">y</span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">y</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">**</span><span class="p">(</span><span class="mf">1._dp</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span>
 <span class="k">end function</span>
 </pre></div>

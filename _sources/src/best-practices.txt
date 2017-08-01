@@ -418,7 +418,7 @@ Or one can use `explicit-shape` arrays as follows::
     function nroot(n, k, x) result(y)
     integer, intent(in) :: n, k
     real(dp), intent(in) :: x(k)
-    real(dp) :: y(size(x))
+    real(dp) :: y(k)
     y = x**(1._dp / n)
     end function
 
