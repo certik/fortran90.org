@@ -1229,7 +1229,7 @@ will be considered as regular Fortran code
 For example ::
 
     program test_openmpi
-       !$ use mpi
+       !$ use omp_lib
        implicit none
 
        integer :: nthreads
