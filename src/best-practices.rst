@@ -1223,18 +1223,18 @@ OpenMP
 
 `OpenMP <http://www.openmp.org/>`_ should be compatible with
 non-openMP compilers. This can be enforced by prepending all
-OpenMP-specific calls by ``!$``. Regular compilers will consider these
+OpenMP-specific calls by ``!\$``. Regular compilers will consider these
 lines as comments and ignore them. For OpenMP compilers, these lines
 will be considered as regular Fortran code. The following code ::
 
     program test_openmpi
-       !$ use omp_lib
+       !\$ use omp_lib
        implicit none
 
        integer :: nthreads
 
        nthreads = -1
-       !$ nthreads = omp_get_num_threads()
+       !\$ nthreads = omp_get_num_threads()
 
        ! will print the number of running threads when compiled with OpenMP, else will print -1
        print*, "nthreads=", nthreads
