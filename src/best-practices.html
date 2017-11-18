@@ -1204,6 +1204,70 @@ create auxiliary conversion functions for each of his types.
 As such, the <tt class="docutils literal"><span class="pre">type(c_ptr)</span></tt> method should be used instead.</p>
 </div>
 </div>
+<div class="section" id="parallel-programming">
+<span id="parallel"></span><h2>Parallel programming<a class="headerlink" href="#parallel-programming" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="openmp">
+<h3>OpenMP<a class="headerlink" href="#openmp" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://www.openmp.org/">OpenMP</a> should be compatible with
+non-openMP compilers. This can be enforced by prepending all
+OpenMP-specific calls by <tt class="docutils literal"><span class="pre">!$</span></tt>. Regular compilers will consider these
+lines as comments and ignore them. For OpenMP compilers, these lines
+will be considered as regular Fortran code. The following code</p>
+<div class="highlight-fortran"><div class="highlight"><pre><span></span><span class="k">program </span><span class="n">test_openmpi</span>
+   <span class="c">!$ use omp_lib</span>
+   <span class="k">implicit none</span>
+
+<span class="k">   </span><span class="kt">integer</span> <span class="kd">::</span> <span class="n">nthreads</span>
+
+   <span class="n">nthreads</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+   <span class="c">!$ nthreads = omp_get_num_threads()</span>
+
+   <span class="c">! will print the number of running threads when compiled with OpenMP, else will print -1</span>
+   <span class="k">print</span><span class="o">*</span><span class="p">,</span> <span class="s2">&quot;nthreads=&quot;</span><span class="p">,</span> <span class="n">nthreads</span>
+<span class="k">end program</span>
+</pre></div>
+</div>
+<p>will print the number of threads used when compiled with OpenMP. It will print by default -1 if compiled without OpenMP.</p>
+</div>
+<div class="section" id="mpi">
+<h3>MPI<a class="headerlink" href="#mpi" title="Permalink to this headline">¶</a></h3>
+<p>There are three ways of including MPI in a fortran program:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="19%" />
+<col width="66%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Fortran version</th>
+<th class="head">Method</th>
+<th class="head">Comments</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Fortran 08</td>
+<td><tt class="docutils literal"><span class="pre">use</span> <span class="pre">mpi_f08</span></tt></td>
+<td>Consistent with F08 standard, good type-checking; highly recommended</td>
+</tr>
+<tr class="row-odd"><td>Fortran 90</td>
+<td><tt class="docutils literal"><span class="pre">use</span> <span class="pre">mpi</span></tt></td>
+<td>Not consistent with standard, so-so type-checking; not recommended</td>
+</tr>
+<tr class="row-even"><td>Fortran 77</td>
+<td><tt class="docutils literal"><span class="pre">include</span> <span class="pre">&quot;mpif.h&quot;</span></tt></td>
+<td>Not consistent with standard, no type-checking; strongly discouraged</td>
+</tr>
+</tbody>
+</table>
+<p>On infrastructures where <tt class="docutils literal"><span class="pre">use</span> <span class="pre">mpi_f08</span></tt> is not available, one should
+fallback to <tt class="docutils literal"><span class="pre">use</span> <span class="pre">mpi</span></tt>. The use of <tt class="docutils literal"><span class="pre">include</span> <span class="pre">&quot;mpif.h&quot;</span></tt> is strongly
+discouraged, as it does not check at all the types of the argument or
+that the function calls provide the good arguments. For example, you
+don’t get any compiler warnings if you call a subroutine and forget a
+parameter, add an extra parameter, or pass a parameter of the wrong
+type. It may also lead to silent data corruption.</p>
+</div>
+</div>
 </div>
 
 
@@ -1245,6 +1309,11 @@ As such, the <tt class="docutils literal"><span class="pre">type(c_ptr)</span></
 <li><a class="reference internal" href="#vi-transfer-intrinsic-function">VI: transfer() Intrinsic Function</a></li>
 <li><a class="reference internal" href="#vii-object-oriented-approach">VII: Object Oriented Approach</a></li>
 <li><a class="reference internal" href="#complete-example-of-void-vs-type-c-ptr-and-transfer">Complete Example of void * vs type(c_ptr) and transfer()</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#parallel-programming">Parallel programming</a><ul>
+<li><a class="reference internal" href="#openmp">OpenMP</a></li>
+<li><a class="reference internal" href="#mpi">MPI</a></li>
 </ul>
 </li>
 </ul>
