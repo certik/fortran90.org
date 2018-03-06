@@ -444,7 +444,7 @@ memory automatically and it is not possible to create memory leaks.
 For example you can allocate it inside a subroutine::
 
     subroutine foo(lam)
-    real(dp), allocatable, intent(out) :: lam
+    real(dp), allocatable, intent(out) :: lam(:)
     allocate(lam(5))
     end subroutine
 
