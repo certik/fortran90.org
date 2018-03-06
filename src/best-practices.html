@@ -461,13 +461,13 @@ on a vector and write a simple wrappers for other array shapes:</p>
 memory automatically and it is not possible to create memory leaks.</p>
 <p>For example you can allocate it inside a subroutine:</p>
 <div class="highlight-fortran"><div class="highlight"><pre><span></span><span class="k">subroutine </span><span class="n">foo</span><span class="p">(</span><span class="n">lam</span><span class="p">)</span>
-<span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">allocatable</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lam</span>
+<span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">allocatable</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lam</span><span class="p">(:)</span>
 <span class="k">allocate</span><span class="p">(</span><span class="n">lam</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
 <span class="k">end subroutine</span>
 </pre></div>
 </div>
 <p>And use somewhere else:</p>
-<div class="highlight-fortran"><div class="highlight"><pre><span></span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">lam</span>
+<div class="highlight-fortran"><div class="highlight"><pre><span></span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">lam</span><span class="p">(:)</span>
 <span class="k">call </span><span class="n">foo</span><span class="p">(</span><span class="n">lam</span><span class="p">)</span>
 </pre></div>
 </div>
