@@ -450,7 +450,7 @@ For example you can allocate it inside a subroutine::
 
 And use somewhere else::
 
-    real(dp), allocatable :: lam
+    real(dp), allocatable :: lam(:)
     call foo(lam)
 
 When the ``lam`` symbol goes out of scope, Fortran will deallocate it. If
