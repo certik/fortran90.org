@@ -171,17 +171,18 @@ by:</p>
 </div>
 <p>The <tt class="docutils literal"><span class="pre">implicit</span> <span class="pre">none</span></tt> statement works for the whole module (so you don&#8217;t need to worry about it). By keeping the <tt class="docutils literal"><span class="pre">private</span></tt> empty, all your subroutines/data types will be private to the module by default. Then you export things by putting it into the <tt class="docutils literal"><span class="pre">public</span></tt> clause.</p>
 <p>Setup programs in the following way:</p>
-<div class="highlight-fortran"><pre>program uranium
-use fmesh, only: mesh_exp
-use utils, only: stop_error, dp
-use dft, only: atom
-implicit none
+<div class="highlight-fortran"><div class="highlight"><pre><span></span><span class="k">program </span><span class="n">uranium</span>
+<span class="k">use </span><span class="n">fmesh</span><span class="p">,</span> <span class="n">only</span><span class="p">:</span> <span class="n">mesh_exp</span>
+<span class="k">use </span><span class="n">utils</span><span class="p">,</span> <span class="n">only</span><span class="p">:</span> <span class="n">stop_error</span><span class="p">,</span> <span class="n">dp</span>
+<span class="k">use </span><span class="n">dft</span><span class="p">,</span> <span class="n">only</span><span class="p">:</span> <span class="n">atom</span>
+<span class="k">implicit none</span>
 
-integer, parameter :: Z = 92
-real(dp), parameter :: r_min = 8e-9_dp, r_max = 50.0_dp, a = 1e7_dp
-...
-print *, "I am running"
-end program</pre>
+<span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span> <span class="kd">::</span> <span class="n">Z</span> <span class="o">=</span> <span class="mi">92</span>
+<span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">parameter</span> <span class="kd">::</span> <span class="n">r_min</span> <span class="o">=</span> <span class="mf">8e-9_dp</span><span class="p">,</span> <span class="n">r_max</span> <span class="o">=</span> <span class="mi">5</span><span class="mf">0.0_dp</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="mf">1e7_dp</span>
+<span class="p">...</span>
+<span class="k">print</span> <span class="o">*</span><span class="p">,</span> <span class="s2">&quot;I am running&quot;</span>
+<span class="k">end program</span>
+</pre></div>
 </div>
 <p>Notice the &#8220;explicit imports&#8221; (using Python terminology) in the <tt class="docutils literal"><span class="pre">use</span></tt> statements. You can also use &#8220;implicit imports&#8221; like:</p>
 <div class="highlight-fortran"><div class="highlight"><pre><span></span><span class="k">use </span><span class="n">fmesh</span>
