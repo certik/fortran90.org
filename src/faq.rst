@@ -96,10 +96,14 @@ We have found the following links to be quite helpful:
 
 And the Fortran standards:
 
-    * FORTRAN 77 standard: http://www.fortran.com/F77_std/rjcnf0001.html
-    * Fortran 95 standard: http://j3-fortran.org/doc/standing/archive/007/97-007r2/pdf/97-007r2.pdf
-    * Fortran 2003 standard: http://www.j3-fortran.org/doc/year/04/04-007.pdf
-    * Fortran 2008 standard: ftp://ftp.nag.co.uk/sc22wg5/N1801-N1850/N1830.pdf
+    * WG5 Fortran Standards Home: https://wg5-fortran.org/
+    * FORTRAN 66 standard: https://wg5-fortran.org/ARCHIVE/Fortran66.pdf
+    * FORTRAN 77 standard: https://wg5-fortran.org/ARCHIVE/Fortran77.html
+    * Fortran 90 standard: https://wg5-fortran.org/N001-N1100/N692.pdf
+    * Fortran 95 standard: https://wg5-fortran.org/N1151-N1200/N1191.pdf
+    * Fortran 2003 standard: https://wg5-fortran.org/N1601-N1650/N1601.pdf
+    * Fortran 2008 standard: https://j3-fortran.org/doc/year/10/10-007r1.pdf
+    * Fortran 2018 standard: https://j3-fortran.org/doc/year/18/18-007r1.pdf
 
 Compiler table for support for the 2003 and 2008 standards appears regularly in
 `Fortran Forum <http://dl.acm.org/citation.cfm?id=J286>`_.
