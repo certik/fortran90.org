@@ -253,7 +253,7 @@ http://www.cs.utexas.edu/users/EWD/ewd08xx/EWD831.PDF
 
 The author of Python, Guido van Rossum, has provided motivation behind the
 Python convention here (2013):
-https://plus.google.com/u/0/115212051037621986145/posts/YTUxbXYZyfi
+https://web.archive.org/web/20190321101606/https://plus.google.com/115212051037621986145/posts/YTUxbXYZyfi
 
 Does Fortran support closures?
 ------------------------------
