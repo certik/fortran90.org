@@ -212,7 +212,7 @@ most common starting index is 1.
 Why does Fortran default array indexing start at 1?
 ---------------------------------------------------
 
-Because that is the most commong starting index (see previous question).
+Because that is the most common starting index (see previous question).
 
 What is the motivation behind Fortran numbering convention?
 -----------------------------------------------------------
