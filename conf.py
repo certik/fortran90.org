@@ -178,7 +178,7 @@ latex_elements = {
 #'pointsize': '10pt',
 
 # Additional stuff for the LaTeX preamble.
-#'preamble': '',
+  'preamble': '\DeclareUnicodeCharacter{2264}{$\leq$}'
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
