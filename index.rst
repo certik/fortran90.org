@@ -13,6 +13,7 @@ Quick links:
     * Fortran 2003 standard: https://wg5-fortran.org/N1601-N1650/N1601.pdf
     * Fortran 2008 standard: https://j3-fortran.org/doc/year/10/10-007r1.pdf
     * Fortran 2018 standard: https://j3-fortran.org/doc/year/18/18-007r1.pdf
+    * Fortran 2023 standard: https://j3-fortran.org/doc/year/24/24-007.pdf
 
 Contents:
 
