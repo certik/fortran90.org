@@ -19,11 +19,11 @@ Consider for example the following code snippets:
 |                                                      |                                                        |
 | from numpy import array, size, shape, min, max, sum  | integer :: a(3)                                        |
 | a = array([1, 2, 3])                                 | a = [1, 2, 3]                                          |
-| print shape(a)                                       | print *, shape(a)                                      |
-| print size(a)                                        | print *, size(a)                                       |
-| print max(a)                                         | print *, maxval(a)                                     |
-| print min(a)                                         | print *, minval(a)                                     |
-| print sum(a)                                         | print *, sum(a)                                        |
+| print(shape(a))                                      | print *, shape(a)                                      |
+| print(size(a))                                       | print *, size(a)                                       |
+| print(max(a))                                        | print *, maxval(a)                                     |
+| print(min(a))                                        | print *, minval(a)                                     |
+| print(sum(a))                                        | print *, sum(a)                                        |
 +------------------------------------------------------+--------------------------------------------------------+
 
 In Python, just save the code to a file ``a.py`` and execute using ``python
@@ -84,22 +84,22 @@ Everything else is the same, in particular:
 |                                                      |                                                        |
 | from numpy import array, size, shape, min, max, sum  | integer :: a(3)                                        |
 | a = array([1, 2, 3])                                 | a = [1, 2, 3]                                          |
-| print shape(a)                                       | print *, shape(a)                                      |
-| print size(a)                                        | print *, size(a)                                       |
-| print max(a)                                         | print *, maxval(a)                                     |
-| print min(a)                                         | print *, minval(a)                                     |
-| print sum(a)                                         | print *, sum(a)                                        |
+| print(shape(a))                                      | print *, shape(a)                                      |
+| print(size(a))                                       | print *, size(a)                                       |
+| print(max(a))                                        | print *, maxval(a)                                     |
+| print(min(a))                                        | print *, minval(a)                                     |
+| print(sum(a))                                        | print *, sum(a)                                        |
 +------------------------------------------------------+--------------------------------------------------------+
 |::                                                    |::                                                      |
 |                                                      |                                                        |
 | from numpy import reshape                            | integer :: a(2, 3), b(2, 3)                            |
 | a = reshape([1, 2, 3, 4, 5, 6], (2, 3))              | a = reshape([1, 2, 3, 4, 5, 6], [2, 3], order=[2, 1])  |
 | b = reshape([1, 2, 3, 4, 5, 6], (2, 3), order="F")   | b = reshape([1, 2, 3, 4, 5, 6], [2, 3])                |
-| print a[0, :]                                        | print *, a(1, :)                                       |
-| print a[1, :]                                        | print *, a(2, :)                                       |
-| print                                                | print *                                                |
-| print b[0, :]                                        | print *, b(1, :)                                       |
-| print b[1, :]                                        | print *, b(2, :)                                       |
+| print(a[0, :])                                       | print *, a(1, :)                                       |
+| print(a[1, :])                                       | print *, a(2, :)                                       |
+| print("")                                            | print *                                                |
+| print(b[0, :])                                       | print *, b(1, :)                                       |
+| print(b[1, :])                                       | print *, b(2, :)                                       |
 |                                                      |                                                        |
 |Output::                                              |Output::                                                |
 |                                                      |                                                        |
@@ -113,14 +113,14 @@ Everything else is the same, in particular:
 |                                                      |                                                        |
 | from numpy import array, size, shape, max, min       | integer :: a(2, 3)                                     |
 | a = array([[1, 2, 3], [4, 5, 6]])                    | a = reshape([1, 2, 3, 4, 5, 6], [2, 3], order=[2, 1])  |
-| print shape(a)                                       | print *, shape(a)                                      |
-| print size(a, 0)                                     | print *, size(a, 1)                                    |
-| print size(a, 1)                                     | print *, size(a, 2)                                    |
-| print max(a)                                         | print *, maxval(a)                                     |
-| print min(a)                                         | print *, minval(a)                                     |
-| print a[0, 0], a[0, 1], a[0, 2]                      | print *, a(1, 1), a(1, 2), a(1, 3)                     |
-| print a[1, 0], a[1, 1], a[1, 2]                      | print *, a(2, 1), a(2, 2), a(2, 3)                     |
-| print a                                              | print "(3i5)", transpose(a)                            |
+| print(shape(a))                                      | print *, shape(a)                                      |
+| print(size(a, 0))                                    | print *, size(a, 1)                                    |
+| print(size(a, 1))                                    | print *, size(a, 2)                                    |
+| print(max(a))                                        | print *, maxval(a)                                     |
+| print(min(a))                                        | print *, minval(a)                                     |
+| print(a[0, 0], a[0, 1], a[0, 2])                     | print *, a(1, 1), a(1, 2), a(1, 3)                     |
+| print(a[1, 0], a[1, 1], a[1, 2])                     | print *, a(2, 1), a(2, 2), a(2, 3)                     |
+| print(a)                                             | print "(3i5)", transpose(a)                            |
 |                                                      |                                                        |
 |Output::                                              |Output (whitespace trimmed)::                           |
 |                                                      |                                                        |
@@ -138,50 +138,75 @@ Everything else is the same, in particular:
 |                                                      |                                                        |
 | from numpy import array, all, any                    | integer :: i(3)                                        |
 | i = array([1, 2, 3])                                 | i = [1, 2, 3]                                          |
-| all(i == [1, 2, 3])                                  | all(i == [1, 2, 3])                                    |
-| any(i == [2, 2, 3])                                  | any(i == [2, 2, 3])                                    |
+| print(all(i == [1, 2, 3]))                           | print *, all(i == [1, 2, 3])                           |
+| print(any(i == [2, 2, 3]))                           | print *, any(i == [2, 2, 3])                           |
+|                                                      |                                                        |
+|Output::                                              |Output (whitespace trimmed)::                           |
+|                                                      |                                                        |
+| True                                                 | T                                                      |
+| True                                                 | T                                                      |
 +------------------------------------------------------+--------------------------------------------------------+
 |::                                                    |::                                                      |
 |                                                      |                                                        |
-| from numpy import array, empty                       | integer :: a(10), b(10)                                |
+| from numpy import array, zeros_like                  | integer :: a(10), b(10)                                |
 | a = array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])           | a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]                    |
-| b = empty(10)                                        | where (a > 5)                                          |
-| b[:] = 0                                             |     b = a - 3                                          |
-| b[a > 2] = 1                                         | elsewhere (a > 2)                                      |
-| b[a > 5] = a[a > 5] - 3                              |     b = 1                                              |
-|                                                      | elsewhere                                              |
+| b = zeros_like(a)                                    | where (a > 5)                                          |
+| b[a > 2] = 1                                         |     b = a - 3                                          |
+| b[a > 5] = a[a > 5] - 3                              | elsewhere (a > 2)                                      |
+| print(a)                                             |     b = 1                                              |
+| print(b)                                             | elsewhere                                              |
 |                                                      |     b = 0                                              |
 |                                                      | end where                                              |
+|                                                      | print "10i5", a                                        |
+|                                                      | print "10i5", b                                        |
+|                                                      |                                                        |
+|Output (whitespace trimmed)::                         |Output (whitespace trimmed)::                           |
+|                                                      |                                                        |
+| [1 2 3 4 5 6 7 8 9 10]                               | 1 2 3 4 5 6 7 8 9 10                                   |
+| [0 0 1 1 1 3 4 5 6 7]                                | 0 0 1 1 1 3 4 5 6 7                                    |
 +------------------------------------------------------+--------------------------------------------------------+
 |::                                                    |::                                                      |
 |                                                      |                                                        |
-| from numpy import array, empty                       | integer :: a(10), b(10)                                |
+| from numpy import array, zeros_like                  | integer :: a(10), b(10)                                |
 | a = array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])           | a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]                    |
-| b = empty(10)                                        | where (a > 5)                                          |
-| for i in range(len(a)):                              |     b = a - 3                                          |
-|     if a[i] > 5:                                     | elsewhere (a > 2)                                      |
-|         b[i] = a[i] - 3                              |     b = 1                                              |
-|     elif a[i] > 2:                                   | elsewhere                                              |
+| b = zeros_like(a)                                    | where (a > 5)                                          |
+| for i, ai in enumerate(a):                           |     b = a - 3                                          |
+|     if ai > 5:                                       | elsewhere (a > 2)                                      |
+|         b[i] = ai - 3                                |     b = 1                                              |
+|     elif ai > 2:                                     | elsewhere                                              |
 |         b[i] = 1                                     |     b = 0                                              |
 |     else:                                            | end where                                              |
-|         b[i] = 0                                     |                                                        |
+|         b[i] = 0                                     | print "10i5", a                                        |
+| print(a)                                             | print "10i5", b                                        |
+| print(b)                                             |                                                        |
+|                                                      |                                                        |
+|Output (whitespace trimmed)::                         |Output (whitespace trimmed)::                           |
+|                                                      |                                                        |
+| [1 2 3 4 5 6 7 8 9 10]                               | 1 2 3 4 5 6 7 8 9 10                                   |
+| [0 0 1 1 1 3 4 5 6 7]                                | 0 0 1 1 1 3 4 5 6 7                                    |
 +------------------------------------------------------+--------------------------------------------------------+
 |::                                                    |::                                                      |
 |                                                      |                                                        |
 | from numpy import array, sum, ones, size             | integer :: a(10)                                       |
 | a = array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])           | a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]                    |
-| print sum(a)                                         | print *, sum(a)                                        |
-| print sum(a[(a > 2) & (a < 6)])                      | print *, sum(a, mask=a > 2 .and. a < 6)                |
+| print(sum(a))                                        | print *, sum(a)                                        |
+| print(sum(a[(a > 2) & (a < 6)]))                     | print *, sum(a, mask=a > 2 .and. a < 6)                |
 | o = ones(size(a), dtype="int")                       | print *, count(a > 2 .and. a < 6)                      |
-| print sum(o[(a > 2) & (a < 6)])                      |                                                        |
+| print(sum(o[(a > 2) & (a < 6)]))                     |                                                        |
+|                                                      |                                                        |
+|Output::                                              |Output (whitespace trimmed)::                           |
+|                                                      |                                                        |
+| 55                                                   | 55                                                     |
+| 12                                                   | 12                                                     |
+| 3                                                    | 3                                                      |
 +------------------------------------------------------+--------------------------------------------------------+
 |::                                                    |::                                                      |
 |                                                      |                                                        |
 | from numpy import array, dot                         | integer :: a(2, 2), b(2, 2)                            |
 | a = array([[1, 2], [3, 4]])                          | a = reshape([1, 2, 3, 4], [2, 2], order=[2, 1])        |
 | b = array([[2, 3], [4, 5]])                          | b = reshape([2, 3, 4, 5], [2, 2], order=[2, 1])        |
-| print a * b                                          | print *, a * b                                         |
-| print dot(a, b)                                      | print *, matmul(a, b)                                  |
+| print(a * b)                                         | print *, a * b                                         |
+| print(dot(a, b))                                     | print *, matmul(a, b)                                  |
 |                                                      |                                                        |
 |Output::                                              |Output::                                                |
 |                                                      |                                                        |
@@ -197,9 +222,12 @@ Everything else is the same, in particular:
 | b = array([(2*i*pi+1)/2 for i in range(1, 7)])       | integer :: a(6), c(18)                                 |
 | c = array([i for i in range(1, 7) \                  | real(dp) :: b(6)                                       |
 |     for j in range(1, 4)])                           | integer :: i, j                                        |
-|                                                      | a = [ (i, i = 1, 6) ]                                  |
-|                                                      | b = [ ((2*i*pi+1)/2, i = 1, 6) ]                       |
-|                                                      | c = [ ((i, j = 1, 3), i = 1, 6) ]                      |
+| print(a)                                             | a = [ (i, i = 1, 6) ]                                  |
+| print(b)                                             | b = [ ((2*i*pi+1)/2, i = 1, 6) ]                       |
+| print(c)                                             | c = [ ((i, j = 1, 3), i = 1, 6) ]                      |
+|                                                      | print "(6i2)", a                                       |
+|                                                      | print "(6f6.2)", b                                     |
+|                                                      | print "(18i2)", c                                      |
 +------------------------------------------------------+--------------------------------------------------------+
 
 .. _rosetta_array_indexing:
@@ -212,20 +240,21 @@ Some indexing examples
 +------------------------------------------------------+--------------------------------------------------------+
 |::                                                    |.. code-block:: fortran                                 |
 |                                                      |                                                        |
-| from numpy import array                              |  integer :: a(3), b(-1:1)                              |
-| a = array([1, 2, 3])                                 |  a = [1, 2, 3]                                         |
+| from numpy import array                              |  integer :: a(10), b(-1:8), n                          |
+| a = array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])           |  a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]                   |
 | b = a                                                |  b = a                                                 |
-| print a[:]                                           |  print *, a(:)                                         |
-| print b[:]                                           |  print *, b(:)                                         |
-| print a[:2]                                          |  print *, a(:2)                                        |
-| print b[:2]                                          |  print *, b(:0)                                        |
+| n = 3                                                |  n = 3                                                 |
+| print(a[:])                                          |  print *, a(:)                                         |
+| print(b[:])                                          |  print *, b(:)                                         |
+| print(a[:2])                                         |  print *, a(:2)                                        |
+| print(b[:2])                                         |  print *, b(:0)                                        |
 |                                                      |                                                        |
-|Output::                                              |Output::                                                |
+|Output::                                              |Output (whitespace trimmed)::                           |
 |                                                      |                                                        |
-| [1 2 3]                                              | 1           2           3                              |
-| [1 2 3]                                              | 1           2           3                              |
-| [1 2]                                                | 1           2                                          |
-| [1 2]                                                | 1           2                                          |
+| [ 1 2 3 4 5 6 7 8 9 10]                              | 1 2 3 4 5 6 7 8 9 10                                   |
+| [ 1 2 3 4 5 6 7 8 9 10]                              | 1 2 3 4 5 6 7 8 9 10                                   |
+| [1 2]                                                | 1 2                                                    |
+| [1 2]                                                | 1 2                                                    |
 +------------------------------------------------------+--------------------------------------------------------+
 
 
@@ -288,8 +317,8 @@ Loop over the whole array:
 |::                                                    |.. code-block:: fortran                                 |
 |                                                      |                                                        |
 | r = 1                                                | r = 1                                                  |
-| for i in range(len(a)):                              | do i = 1, size(a)                                      |
-|     r *= a[i]                                        |     r = r*a(i)                                         |
+| for ai in a:                                         | do i = 1, size(a)                                      |
+|     r *= ai                                          |     r = r*a(i)                                         |
 |                                                      | end do                                                 |
 +------------------------------------------------------+--------------------------------------------------------+
 
@@ -405,13 +434,13 @@ One creates the module:
 |                                                      |                                                        |
 |                                                      |.. code-block:: fortran                                 |
 |                                                      |                                                        |
-| i = 5                                                | module a                                               |
-|                                                      | implicit none                                          |
-| def f(x):                                            |                                                        |
-|     return x + 5                                     | integer :: i = 5                                       |
+| def f(x):                                            | module a                                               |
+|     return x + 5                                     | implicit none                                          |
 |                                                      |                                                        |
-| def g(x):                                            | contains                                               |
+| def g(x):                                            | integer :: i = 5                                       |
 |     return x - 5                                     |                                                        |
+|                                                      | contains                                               |
+| i = 5                                                |                                                        |
 |                                                      | integer function f(x) result(r)                        |
 |                                                      | integer, intent(in) :: x                               |
 |                                                      | r = x + 5                                              |
@@ -436,8 +465,8 @@ And uses it from the main program as follows:
 |                                                      |                                                        |
 | from a import f, i                                   | program main                                           |
 |                                                      | use a, only: f, i                                      |
-| print f(3)                                           | implicit none                                          |
-| print i                                              | print *, f(3)                                          |
+| print(f(3))                                          | implicit none                                          |
+| print(i)                                             | print *, f(3)                                          |
 |                                                      | print *, i                                             |
 |                                                      | end program                                            |
 |                                                      |                                                        |
@@ -555,10 +584,10 @@ Otherwise the usage is identical.
 |                                                      |                                                        |
 | from math import cos, pi, e                          | use constants, only: pi, e                             |
 | I = 1j                                               | complex(dp) :: I = (0, 1)                              |
-| print e**(I*pi) + 1                                  | print *, e**(I*pi) + 1                                 |
-| print cos(pi)                                        | print *, cos(pi)                                       |
-| print 4 + 5j                                         | print *, (4, 5)                                        |
-| print 4 + 5*I                                        | print *, 4 + 5*I                                       |
+| print(e**(I*pi) + 1)                                 | print *, e**(I*pi) + 1                                 |
+| print(cos(pi))                                       | print *, cos(pi)                                       |
+| print(4 + 5j)                                        | print *, (4, 5)                                        |
+| print(4 + 5*I)                                       | print *, 4 + 5*I                                       |
 |                                                      |                                                        |
 |Output::                                              |Output::                                                |
 |                                                      |                                                        |
@@ -591,23 +620,24 @@ only the syntax is a litte different.
 In both Python and Fortran, strings can be delimited by either ``"``
 or ``'``.
 
-There are three general ways to print formatted strings:
+There are three or four general ways to print formatted strings:
 
 +-----------------------------------------------------------+----------------------------------------------------------------------+
 | Python                                                    |           Fortran                                                    |
 +-----------------------------------------------------------+----------------------------------------------------------------------+
 |::                                                         |::                                                                    |
 |                                                           |                                                                      |
-| print "Integer", 5, "and float", 5.5, "works fine."       | use utils, only: str                                                 |
-| print "Integer " + str(5) + " and float " + str(5.5) + "."| print *, "Integer", 5, "and float", 5.5, "works fine."               |
-| print "Integer %d and float %f." % (5, 5.5)               | print *, "Integer " // str(5) // " and float " // str(5.5_dp) // "." |
-|                                                           | print '("Integer ", i0, " and float ", f0.6, ".")', 5, 5.5           |
+|                                                           | use utils, only: str                                                 |
+| print("Integer " + str(5) + " and float " + str(5.5))     | print *, "Integer", 5, "and float", 5.5, "works fine."               |
+| print("Integer %d and float %f." % (5, 5.5))              | print *, "Integer " // str(5) // " and float " // str(5.5_dp) // "." |
+| print("Integer {} and float {}.".format(5, 5.5))          | print '("Integer ", i0, " and float ", f0.6, ".")', 5, 5.5           |
 |                                                           |                                                                      |
 |Output::                                                   |Output::                                                              |
 |                                                           |                                                                      |
-| Integer 5 and float 5.5 works fine.                       |  Integer           5 and float   5.5000000     works fine.           |
-| Integer 5 and float 5.5.                                  |  Integer 5 and float 5.500000.                                       |
-| Integer 5 and float 5.500000.                             | Integer 5 and float 5.500000.                                        |
+|                                                           |  Integer           5 and float   5.5000000     works fine.           |
+| Integer 5 and float 5.5                                   |  Integer 5 and float 5.500000.                                       |
+| Integer 5 and float 5.500000.                             |  Integer 5 and float 5.500000.                                       |
+| Integer 5 and float 5.5.                                  |                                                                      |
 +-----------------------------------------------------------+----------------------------------------------------------------------+
 
 And here are some of the frequently used formats:
@@ -617,11 +647,11 @@ And here are some of the frequently used formats:
 +-----------------------------------------------------------+----------------------------------------------------------------------+
 |::                                                         |::                                                                    |
 |                                                           |                                                                      |
-| print "%3d" % 5                                           | print '(i3)', 5                                                      |
-| print "%03d" % 5                                          | print '(i3.3)', 5                                                    |
-| print "%s" % "text"                                       | print '(a)', "text"                                                  |
-| print "%15.7f" % 5.5                                      | print '(f15.7)', 5.5_dp                                              |
-| print "%23.16e" % -5.5                                    | print '(es23.16)', -5.5_dp                                           |
+| print("%3d" % 5)                                          | print '(i3)', 5                                                      |
+| print("%03d" % 5)                                         | print '(i3.3)', 5                                                    |
+| print("%s" % "text")                                      | print '(a)', "text"                                                  |
+| print("%15.7f" % 5.5)                                     | print '(f15.7)', 5.5_dp                                              |
+| print("%23.16e" % -5.5)                                   | print '(es23.16)', -5.5_dp                                           |
 |                                                           |                                                                      |
 |Output::                                                   |Output::                                                              |
 |                                                           |                                                                      |
@@ -649,7 +679,7 @@ function's namespace:
 | def foo(a, b, c):                                         | subroutine foo(a, b, c)                                              |
 |     def f(x):                                             | real(dp) :: a, b, c                                                  |
 |         return a*x**2 + b*x + c                           | print *, f(1._dp), f(2._dp), f(3._dp)                                |
-|     print f(1), f(2), f(3)                                |                                                                      |
+|     print(f(1), f(2), f(3))                               |                                                                      |
 |                                                           | contains                                                             |
 |                                                           |                                                                      |
 |                                                           | real(dp) function f(x) result(y)                                     |
@@ -690,8 +720,8 @@ You can use the nested functions in callbacks to pass context:
 | def foo(a, k):                                            |     real(dp) function f(x)                                           |
 |     def f(x):                                             |     use types, only: dp                                              |
 |         return a*sin(k*x)                                 |     implicit none                                                    |
-|     print simpson(f, 0., pi)                              |     real(dp), intent(in) :: x                                        |
-|     print simpson(f, 0., 2*pi)                            |     end function                                                     |
+|     print(simpson(f, 0., pi))                             |     real(dp), intent(in) :: x                                        |
+|     print(simpson(f, 0., 2*pi))                           |     end function                                                     |
 |                                                           | end interface                                                        |
 |                                                           | s = (b-a) / 6 * (f(a) + 4*f((a+b)/2) + f(b))                         |
 |                                                           | end function                                                         |
@@ -808,13 +838,13 @@ Here is a real world program written in NumPy and translated to Fortran.
 | fractal = np.zeros(z.shape, dtype=np.uint8) + 255               | integer, dimension(DENSITY, DENSITY) :: fractal                                 |
 |                                                                 | integer :: n                                                                    |
 | for n in range(ITERATIONS):                                     | x_min = -2.68_dp                                                                |
-|     print "Iteration %d" % n                                    | x_max = 1.32_dp                                                                 |
+|     print("Iteration %d" % n)                                   | x_max = 1.32_dp                                                                 |
 |     mask = abs(z) <= 10                                         | y_min = -1.5_dp                                                                 |
 |     z[mask] *= z[mask]                                          | y_max = 1.5_dp                                                                  |
 |     z[mask] += c[mask]                                          |                                                                                 |
 |     fractal[(fractal == 255) & (-mask)] = 254. * n / ITERATIONS | call meshgrid(linspace(x_min, x_max, DENSITY), &                                |
 |                                                                 |     linspace(y_min, y_max, DENSITY), x, y)                                      |
-| print "Saving..."                                               | c = x + I*y                                                                     |
+| print("Saving...")                                              | c = x + I*y                                                                     |
 | np.savetxt("fractal.dat", np.log(fractal))                      | z = c                                                                           |
 | np.savetxt("coord.dat", [x_min, x_max, y_min, y_max])           | fractal = 255                                                                   |
 |                                                                 |                                                                                 |
@@ -945,7 +975,7 @@ find a nonlinear fit of the form ``a*x*log(b + c*x)`` to a list of primes:
 |     37, 41, 43, 47, 53, 59, 61, 67, 71]                         | integer :: i                                                                    |
 | pars = [1., 1., 1.]                                             | pars = [1._dp, 1._dp, 1._dp]                                                    |
 | pars = find_fit(range(1, size(y)+1), y, expression, pars)       | call find_fit([(real(i, dp), i=1,size(y))], y, expression, pars)                |
-| print pars                                                      | print *, pars                                                                   |
+| print(pars)                                                     | print *, pars                                                                   |
 |                                                                 |                                                                                 |
 |                                                                 | contains                                                                        |
 |                                                                 |                                                                                 |
